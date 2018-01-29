@@ -29,8 +29,9 @@
   <script>
     function newQuestion() {
       const choice = pickOne();
-      card.question = choice.hiragana;
-      card.hint = 'hiragana';
+      const whatKind = Math.floor(Math.random() * 2);
+      card.question = whatKind ? choice.hiragana : choice.katakana;
+      card.hint = whatKind ? 'hiragana' : 'katakana';
       card.answer = choice.en;
     }
     window.addEventListener('next-question', function() {
