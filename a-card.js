@@ -49,11 +49,19 @@ class ACard extends LitElement {
          border-radius: 4px;
          cursor: pointer;
        }
+       :host(.yes) {
+        outline: 20px solid #64D989;
+        outline-offset: -20px;
+       }
+       :host(.no) {
+        outline: 20px solid #E9404B;
+        outline-offset: -20px;
+       }
      </style>
      <div class="question">${props.question}</div>
      <input placeholder="answer">
      <div class="hint">${props.hint}</div>
-     <button on-click="${this.submit.bind(this)}">submit</button>
+     <button on-click="${this.submit.bind(this)}">${this.done ? 'next' : 'submit'}</button>
     `;
   }
 
@@ -61,20 +69,40 @@ class ACard extends LitElement {
     return {
       question: String,
       hint: String,
-      answer: String
+      answer: String,
+      done: String,
     }
   }
 
   ready() {
     super.ready();
+    this.done = false;
     this._input = this.shadowRoot.querySelector('input');
   }
 
+  _clear() {
+    this.done = false;
+    this.classList.remove('yes');
+    this.classList.remove('no');
+    this._input.value = '';
+  }
   submit() {
-    if(this._input.value === this.answer) {
-      alert('ok');
-    } else {
-      alert('not ok')
+    if (this.done) {  // next answer
+      this._clear();
+      this.dispatchEvent(new CustomEvent('next-question',
+        {bubbles: true, composed: true}));
+    } else {  // submit answer
+      this.done = true;
+      const correct = this._input.value === this.answer;
+
+      if (correct) {
+        this.classList.add('yes');
+      } else {
+        this._input.value = this.answer;
+        this.classList.add('no');
+      }
+      this.dispatchEvent(new CustomEvent('answered',
+        {bubbles: false, composed: true, detail: {correct: correct}}));
     }
   }
 }

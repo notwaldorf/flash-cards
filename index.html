@@ -16,7 +16,7 @@
         height: 100vh;
         margin: 0;
         padding: 0;
-        background: linear-gradient(160deg, #F7CCE2 50%, white 50%);
+        background: linear-gradient(160deg, #FAE1D6 50%, white 50%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -27,9 +27,16 @@
     <a-card id="card"></a-card>
   </body>
   <script>
-    const choice = pickOne();
-    card.question = choice.hiragana;
-    card.hint = 'hiragana';
-    card.answer = choice.en;
+    function newQuestion() {
+      const choice = pickOne();
+      card.question = choice.hiragana;
+      card.hint = 'hiragana';
+      card.answer = choice.en;
+    }
+    window.addEventListener('next-question', function() {
+      newQuestion();
+    });
+
+    newQuestion();
   </script>
 </html>
