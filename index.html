@@ -7,8 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="module" src="./a-card.js"></script>
     <script src="doit.js"></script>
+
+    <link href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css" rel="stylesheet"/>
+    <style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      font-family: Roboto, sans-serif;
+    }
+    </style>
   </head>
   <body>
-    <a-card></a-card>
+    <a-card id="card"></a-card>
   </body>
+  <script>
+    const choice = pickOne();
+    card.question = choice.hiragana;
+    card.hint = 'hiragana';
+    card.answer = choice.en;
+  </script>
 </html>

@@ -1,4 +1,13 @@
-loadData();
+const data = loadData();
+const choices = data.length;
+const heatmap = {};
+
+function pickOne() {
+  const random = Math.floor(Math.random() * choices);
+  heatmap[random] = heatmap[random] ? heatmap[random] + 1 : 1;
+  return data[random];
+}
+
 
 function loadData() {
   const hiragana = [{en:'n', jp:'ん'}, {en:'wa', jp:'わ'}, {en:'ra', jp:'ら'}, {en:'ya', jp:'や'}, {en:'ma', jp:'ま'}, {en:'ha', jp:'は'}, {en:'na', jp:'な'}, {en:'ta', jp:'た'}, {en:'sa', jp:'さ'}, {en:'ka', jp:'か'}, {en:'a', jp:'あ'}, {en:'ri', jp:'り'}, {en:'mi', jp:'み'}, {en:'hi', jp:'ひ'}, {en:'ni', jp:'に'}, {en:'chi', jp:'ち'}, {en:'shi', jp:'し'}, {en:'ki', jp:'き'}, {en:'i', jp:'い'}, {en:'ru', jp:'る'}, {en:'yu', jp:'ゆ'}, {en:'mu', jp:'む'}, {en:'fu', jp:'ふ'}, {en:'nu', jp:'ぬ'}, {en:'tsu', jp:'つ'}, {en:'su', jp:'す'}, {en:'ku', jp:'く'}, {en:'u', jp:'う'}, {en:'re', jp:'れ'}, {en:'me', jp:'め'}, {en:'he', jp:'へ'}, {en:'ne', jp:'ね'}, {en:'te', jp:'て'}, {en:'se', jp:'せ'}, {en:'ke', jp:'け'}, {en:'e', jp:'え'}, {en:'wo', jp:'を'}, {en:'ro', jp:'ろ'}, {en:'yo', jp:'よ'}, {en:'mo', jp:'も'}, {en:'ho', jp:'ほ'}, {en:'no', jp:'の'}, {en:'to', jp:'と'}, {en:'so', jp:'そ'}, {en:'ko', jp:'こ'}, {en:'o', jp:'お'}];
@@ -10,5 +19,5 @@ function loadData() {
   // Join the two alphabets.
   const alphabet = [{'en':'n','hiragana':'ん','katakana':'ン'},{'en':'wa','hiragana':'わ','katakana':'ワ'},{'en':'ra','hiragana':'ら','katakana':'ラ'},{'en':'ya','hiragana':'や','katakana':'ヤ'},{'en':'ma','hiragana':'ま','katakana':'マ'},{'en':'ha','hiragana':'は','katakana':'ハ'},{'en':'na','hiragana':'な','katakana':'ナ'},{'en':'ta','hiragana':'た','katakana':'タ'},{'en':'sa','hiragana':'さ','katakana':'サ'},{'en':'ka','hiragana':'か','katakana':'カ'},{'en':'a','hiragana':'あ','katakana':'ア'},{'en':'ri','hiragana':'り','katakana':'リ'},{'en':'mi','hiragana':'み','katakana':'ミ'},{'en':'hi','hiragana':'ひ','katakana':'ヒ'},{'en':'ni','hiragana':'に','katakana':'ニ'},{'en':'chi','hiragana':'ち','katakana':'チ'},{'en':'shi','hiragana':'し','katakana':'シ'},{'en':'ki','hiragana':'き','katakana':'キ'},{'en':'i','hiragana':'い','katakana':'イ'},{'en':'ru','hiragana':'る','katakana':'ル'},{'en':'yu','hiragana':'ゆ','katakana':'ユ'},{'en':'mu','hiragana':'む','katakana':'ム'},{'en':'fu','hiragana':'ふ','katakana':'フ'},{'en':'nu','hiragana':'ぬ','katakana':'ヌ'},{'en':'tsu','hiragana':'つ','katakana':'ツ'},{'en':'su','hiragana':'す','katakana':'ス'},{'en':'ku','hiragana':'く','katakana':'ク'},{'en':'u','hiragana':'う','katakana':'ウ'},{'en':'re','hiragana':'れ','katakana':'レ'},{'en':'me','hiragana':'め','katakana':'メ'},{'en':'he','hiragana':'へ','katakana':'ヘ'},{'en':'ne','hiragana':'ね','katakana':'ネ'},{'en':'te','hiragana':'て','katakana':'テ'},{'en':'se','hiragana':'せ','katakana':'セ'},{'en':'ke','hiragana':'け','katakana':'ケ'},{'en':'e','hiragana':'え','katakana':'エ'},{'en':'wo','hiragana':'を','katakana':'ヲ'},{'en':'ro','hiragana':'ろ','katakana':'ロ'},{'en':'yo','hiragana':'よ','katakana':'ヨ'},{'en':'mo','hiragana':'も','katakana':'モ'},{'en':'ho','hiragana':'ほ','katakana':'ホ'},{'en':'no','hiragana':'の','katakana':'ノ'},{'en':'to','hiragana':'と','katakana':'ト'},{'en':'so','hiragana':'そ','katakana':'ソ'},{'en':'ko','hiragana':'こ','katakana':'コ'},{'en':'o','hiragana':'お','katakana':'オ'}];
 
-  return alphabet;       
+  return alphabet;
 }
