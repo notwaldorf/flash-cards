@@ -1,0 +1,22 @@
+{
+  "name": "flash-cards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/notwaldorf/flash-cards.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/notwaldorf/flash-cards/issues"
+  },
+  "homepage": "https://github.com/notwaldorf/flash-cards#readme",
+  "dependencies": {
+    "@polymer/lit-element": "^0.1.0"
+  }
+}
