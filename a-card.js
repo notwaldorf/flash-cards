@@ -6,9 +6,8 @@ class ACard extends LitElement {
     <style>
       :host {
         display: block;
-        max-width: 300px;
+        width: 300px;
         text-align: center;
-        font-size: 40px;
         border-radius: 5px;
         background: white;
         box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
@@ -17,12 +16,12 @@ class ACard extends LitElement {
         padding: 20px;
        }
        .question {
-         font-size: 2em;
+         font-size: 4.5em;
          font-weight: bold;
          font-family: "Noto Sans Japanese";
        }
        .hint {
-         font-size: 0.4em;
+         font-size: 1em;
          color: #499FFA;
        }
        input {
@@ -41,26 +40,41 @@ class ACard extends LitElement {
          color: white;
          box-shadow: none;
          border: none;
-         font-size: 0.3em;
+         font-size: 1em;
          text-transform: uppercase;
          font-weight: bold;
-         letter-spacing: 1;
+         letter-spacing: 1px;
          padding: 8px 18px;
-         margin: 24px;
+         margin: 36px 0;
          border-radius: 4px;
+         cursor: pointer;
        }
      </style>
      <div class="question">${props.question}</div>
      <input placeholder="answer">
      <div class="hint">${props.hint}</div>
-     <button>submit</button>
+     <button on-click="${this.submit.bind(this)}">submit</button>
     `;
   }
 
   static get properties() {
     return {
       question: String,
-      hint: String
+      hint: String,
+      answer: String
+    }
+  }
+
+  ready() {
+    super.ready();
+    this._input = this.shadowRoot.querySelector('input');
+  }
+
+  submit() {
+    if(this._input.value === this.answer) {
+      alert('ok');
+    } else {
+      alert('not ok')
     }
   }
 }
