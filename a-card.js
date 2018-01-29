@@ -1,4 +1,4 @@
-import { LitElement, html } from '../node_modules/@polymer/lit-element/lit-element.js'
+import { LitElement, html } from './node_modules/@polymer/lit-element/lit-element.js'
 
 class ACard extends LitElement {
   render(props) {
