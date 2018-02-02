@@ -20,7 +20,7 @@ store.addReducers({
   alphabet
 });
 
-import { loadHiragana, loadKatakana } from '../actions/alphabet.js';
+import { loadHiragana, loadKatakana, showCard } from '../actions/alphabet.js';
 
 class FlashCards extends connect(store)(LitElement) {
   static get is() {
@@ -29,7 +29,7 @@ class FlashCards extends connect(store)(LitElement) {
 
   static get properties() {
     return {
-      cards: Array,
+      cards: Object,
       card: Object
     }
   }
@@ -61,22 +61,26 @@ class FlashCards extends connect(store)(LitElement) {
     this.cards = state.alphabet.cards;
 
     // If there isn't a choice yet, make one.
-    if (this.cards.length !== 0 && !this.card.question) {
+    if (Object.keys(this.cards).length !== 0 && !this.card.question) {
       this.newQuestion();
     }
   }
 
   newQuestion() {
     // Which kind of alphabet.
-    const whatKind = Math.floor(Math.random() * this.cards.length);
-    const whichOne = Math.floor(Math.random() * this.cards[whatKind].cards.length);
-    const card = this.cards[whatKind].cards[whichOne];
+    const choices = Object.keys(this.cards);
+    const whatKind = Math.floor(Math.random() * choices.length);
+    const availableCards = this.cards[choices[whatKind]];
+    const whichOne = Math.floor(Math.random() * availableCards.length);
+    const card = availableCards[whichOne];
 
     this.card = {
       question: card.jp,
-      hint: this.cards[whatKind].hint,
+      hint: choices[whatKind],
       answer: card.en
     }
+
+    store.dispatch(showCard(this.card));
   }
 }
 
