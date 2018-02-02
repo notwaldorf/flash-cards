@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
 import { SharedStyles } from './shared-styles.js';
-// import './a-card.js'
+import './a-card.js';
 
 class FlashCards extends LitElement {
   static get is() {
@@ -19,7 +19,13 @@ class FlashCards extends LitElement {
 
   render(props) {
     return html`
-      hi
+      <style>${SharedStyles}</style>
+      <style>
+      :host {
+        padding: 60px;
+      }
+      </style>
+      <a-card id="card"></a-card>
     `;
   }
 }

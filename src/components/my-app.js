@@ -55,11 +55,14 @@ class MyApp extends connect(store)(LitElement) {
 
       app-toolbar {
         background: transparent;
+        margin: 0 24px;
       }
+
       [main-title] {
         font-family: 'Pacifico';
         text-transform: lowercase;
         font-size: 30px;
+        text-align: left;
       }
 
       .toolbar-list {
@@ -72,7 +75,8 @@ class MyApp extends connect(store)(LitElement) {
         text-decoration: none;
         line-height: 30px;
         padding: 4px 24px;
-        font-size: 16px;
+        font-size: 14px;
+        font-weight: bold;
         text-transform: uppercase;
       }
 
@@ -148,15 +152,7 @@ class MyApp extends connect(store)(LitElement) {
   ready() {
     super.ready();
     installRouter(this._notifyPathChanged.bind(this));
-
-    // let mql = window.matchMedia(`(min-width: ${responsiveWidth})`);
-    // mql.addListener((e) => this._layoutChange(e.matches));
-    // this._layoutChange(mql.matches);
   }
-
-  // _layoutChange(isWideLayout) {
-  //   // Your code here
-  // }
 
   _notifyPathChanged() {
     store.dispatch(navigate(window.decodeURIComponent(window.location.pathname)));
