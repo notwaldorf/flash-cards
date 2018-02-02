@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
 import { SharedStyles } from './shared-styles.js';
+// import './a-card.js'
 
 class MyView1 extends LitElement {
   static get is() {
@@ -18,24 +19,22 @@ class MyView1 extends LitElement {
 
   render(props) {
     return html`
-      <style>${SharedStyles}</style>
-
-      <section>
-        <h2>Static page</h2>
-        <p>This is a text-only page.</p>
-        <p>It doesn't do anything other than display some static text.</p>
-      </section>
-      <section>
-        <h2>Bacon ipsum</h2>
-        <p>Bacon ipsum dolor amet swine picanha doner pig. Buffalo pastrami ball tip brisket biltong spare ribs, flank pork chop strip steak pork loin venison pig porchetta chuck. Turducken biltong porchetta spare ribs tail. Shoulder jowl shankle kevin, ground round burgdoggen short loin turkey alcatra pork loin buffalo prosciutto beef ribs sirloin. Filet mignon alcatra tail tongue. Leberkas kevin jowl meatloaf.</p>
-        <p>Capicola ham short ribs, strip steak turkey ham hock picanha. Biltong fatback boudin pork chop buffalo venison. Ground round buffalo picanha leberkas doner ribeye tongue kielbasa meatball andouille bacon. Chicken spare ribs corned beef ball tip tri-tip frankfurter chuck.</p>
-      </section>
-      <section>
-        <p>Bacon ipsum dolor amet swine picanha doner pig. Buffalo pastrami ball tip brisket biltong spare ribs, flank pork chop strip steak pork loin venison pig porchetta chuck. Turducken biltong porchetta spare ribs tail. Shoulder jowl shankle kevin, ground round burgdoggen short loin turkey alcatra pork loin buffalo prosciutto beef ribs sirloin. Filet mignon alcatra tail tongue. Leberkas kevin jowl meatloaf.</p>
-        <p>Capicola ham short ribs, strip steak turkey ham hock picanha. Biltong fatback boudin pork chop buffalo venison. Ground round buffalo picanha leberkas doner ribeye tongue kielbasa meatball andouille bacon. Chicken spare ribs corned beef ball tip tri-tip frankfurter chuck.</p>
-      </section>
+      hi
     `;
   }
 }
+
+// function newQuestion() {
+//   const choice = pickOne();
+//   const whatKind = Math.floor(Math.random() * 2);
+//   card.question = whatKind ? choice.hiragana : choice.katakana;
+//   card.hint = whatKind ? 'hiragana' : 'katakana';
+//   card.answer = choice.en;
+// }
+// window.addEventListener('next-question', function() {
+//   newQuestion();
+// });
+//
+// newQuestion();
 
 window.customElements.define(MyView1.is, MyView1);

@@ -52,27 +52,6 @@ class MyApp extends connect(store)(LitElement) {
         --app-drawer-selected-color: #78909C;
       }
 
-      :host(.bright-theme) {
-        --yellow: #F2E579;
-        --pink: #DF5D94;
-
-        --app-primary-color: #78BDF0;  /* light blue */
-        --app-secondary-color: #564B7A;  /* dark purple */
-        --app-dark-text-color: #293237;  /* grey */
-        --app-light-text-color: white;
-        --app-section-even-color: #FFFDE7;
-        --app-section-odd-color: white;
-
-
-        --app-header-background-color: var(--pink);
-        --app-header-text-color: white;
-        --app-header-selected-color: var(--yellow);
-
-        --app-drawer-background-color: var(--app-secondary-color);
-        --app-drawer-text-color: white;
-        --app-drawer-selected-color: var(--yellow);
-      }
-
       app-header {
         position: fixed;
         top: 0;
@@ -155,14 +134,6 @@ class MyApp extends connect(store)(LitElement) {
         display: none;
       }
 
-      footer {
-        box-sizing: border-box;
-        padding: 24px;
-        background: var(--app-drawer-background-color);
-        color: var(--app-drawer-text-color);
-        text-align: center;
-      }
-
       .theme-btn {
         padding: 14px;
         background: var(--app-primary-color);
@@ -209,7 +180,6 @@ class MyApp extends connect(store)(LitElement) {
       <app-toolbar class="toolbar-top">
         <button class="menu-btn" on-click="${_ => this.drawerOpened = true}">${menuIcon}</button>
         <div main-title>${appTitle}</div>
-        <button class="theme-btn" on-click="${_ => this._changeTheme()}">change theme</button>
       </app-toolbar>
 
       <!-- This gets hidden on a small screen-->
@@ -238,10 +208,6 @@ class MyApp extends connect(store)(LitElement) {
       <my-view3 class="page" selected$="${page === 'view3'}"></my-view3>
       <my-view404 class="page" selected$="${page === 'view404'}"></my-view404>
     </div>
-
-    <footer>
-      <p>Made with &lt;3 by the Polymer team</p>
-    </footer>
 `;
   }
 
@@ -288,14 +254,6 @@ class MyApp extends connect(store)(LitElement) {
   // _layoutChange(isWideLayout) {
   //   // Your code here
   // }
-
-  _changeTheme() {
-    if (this.classList.contains('bright-theme')) {
-      this.classList.remove('bright-theme');
-    } else {
-      this.classList.add('bright-theme');
-    }
-  }
 
   _notifyPathChanged() {
     store.dispatch(navigate(window.decodeURIComponent(window.location.pathname)));
