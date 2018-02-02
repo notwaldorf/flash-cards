@@ -13,7 +13,7 @@ import { NAVIGATE, SHOW_404 } from '../actions/app.js';
 const app = (state = {}, action) => {
   switch (action.type) {
     case NAVIGATE:
-      const path = action.path === '/' ? '/view1' : action.path;
+      const path = action.path === '/' ? '/play' : action.path;
       const page = path.slice(1);
       return {
         ...state,

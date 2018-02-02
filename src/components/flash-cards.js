@@ -12,9 +12,9 @@ import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-el
 import { SharedStyles } from './shared-styles.js';
 // import './a-card.js'
 
-class MyView1 extends LitElement {
+class FlashCards extends LitElement {
   static get is() {
-    return 'my-view1';
+    return 'flash-cards';
   }
 
   render(props) {
@@ -37,4 +37,4 @@ class MyView1 extends LitElement {
 //
 // newQuestion();
 
-window.customElements.define(MyView1.is, MyView1);
+window.customElements.define(FlashCards.is, FlashCards);

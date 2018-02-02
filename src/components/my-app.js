@@ -184,28 +184,23 @@ class MyApp extends connect(store)(LitElement) {
 
       <!-- This gets hidden on a small screen-->
       <div class="toolbar-list" role="navigation">
-        <a selected$="${page === 'view1'}" href="${Polymer.rootPath}view1">View One</a>
-        <a selected$="${page === 'view2'}" href="${Polymer.rootPath}view2">View Two</a>
-        <a selected$="${page === 'view3'}" href="${Polymer.rootPath}view3">View Three</a>
+        <a selected$="${page === 'play'}" href="${Polymer.rootPath}play">Play</a>
+        <a selected$="${page === 'stats'}" href="${Polymer.rootPath}stats">Stats</a>
       </div>
     </app-header>
 
     <!-- Drawer content -->
     <app-drawer id="drawer" opened="${drawerOpened}" on-opened-changed="${e => this.drawerOpened = e.target.opened}">
       <div class="drawer-list" role="navigation">
-        <a selected$="${page === 'view1'}" href="${Polymer.rootPath}view1">View One</a>
-        <a selected$="${page === 'view2'}" href="${Polymer.rootPath}view2">View Two</a>
-        <a selected$="${page === 'view3'}" href="${Polymer.rootPath}view3">View Three</a>
-
-        <button class="theme-btn bottom" on-click="${_ => {this._changeTheme(); this.drawerOpened = true}}">change theme</button>
+        <a selected$="${page === 'play'}" href="${Polymer.rootPath}play">Play</a>
+        <a selected$="${page === 'stats'}" href="${Polymer.rootPath}stats">Stats</a>
       </div>
     </app-drawer>
 
     <!-- Main content -->
     <div class="main-content" role="main">
-      <my-view1 class="page" selected$="${page === 'view1'}"></my-view1>
-      <my-view2 class="page" selected$="${page === 'view2'}"></my-view2>
-      <my-view3 class="page" selected$="${page === 'view3'}"></my-view3>
+      <flash-cards class="page" selected$="${page === 'play'}"></flash-cards>
+      <stats-page class="page" selected$="${page === 'stats'}"></stats-page>
       <my-view404 class="page" selected$="${page === 'view404'}"></my-view404>
     </div>
 `;
@@ -269,14 +264,11 @@ class MyApp extends connect(store)(LitElement) {
       return;
     }
     switch(this.page) {
-      case 'view1':
-        loaded = import('./my-view1.js');
+      case 'play':
+        loaded = import('./flash-cards.js');
         break;
-      case 'view2':
-        loaded = import('./my-view2.js');
-        break;
-      case 'view3':
-        loaded = import('./my-view3.js');
+      case 'stats':
+        loaded = import('./stats-page.js');
         break;
       case 'view404':
         loaded = import('./my-view404.js');

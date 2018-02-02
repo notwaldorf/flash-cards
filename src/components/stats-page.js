@@ -27,7 +27,7 @@ store.addReducers({
 // These are the actions needed by this element.
 import { increment, decrement } from '../actions/counter.js';
 
-class MyView2 extends connect(store)(LitElement) {
+class StatsPage extends connect(store)(LitElement) {
   render(props) {
     return html`
       <style>${SharedStyles}</style>
@@ -51,7 +51,7 @@ class MyView2 extends connect(store)(LitElement) {
   }
 
   static get is() {
-    return 'my-view2';
+    return 'stats-page';
   }
 
   static get properties() { return {
@@ -79,4 +79,4 @@ class MyView2 extends connect(store)(LitElement) {
   }
 }
 
-window.customElements.define(MyView2.is, MyView2);
+window.customElements.define(StatsPage.is, StatsPage);
