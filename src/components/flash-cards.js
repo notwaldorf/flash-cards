@@ -29,11 +29,12 @@ class FlashCards extends connect(store)(LitElement) {
 
   static get properties() {
     return {
-      cards: Array
+      cards: Array,
+      card: Object
     }
   }
 
-  render(props) {
+  render({card, cards}) {
     return html`
       <style>${SharedStyles}</style>
       <style>
@@ -41,35 +42,42 @@ class FlashCards extends connect(store)(LitElement) {
         padding: 60px;
       }
       </style>
-      <a-card id="card"></a-card>
+      <a-card id="card" question="${card.question}" answer="${card.answer}" hint="${card.hint}"></a-card>
     `;
   }
 
   ready() {
-    super.ready();
-
-    // Load the data from the redux store.
+    this.card = {};
     store.dispatch(loadHiragana());
     store.dispatch(loadKatakana());
+
+    // Ready to render!
+    super.ready();
+
+    this.addEventListener('next-question', () => this.newQuestion());
   }
 
   update(state) {
     this.cards = state.alphabet.cards;
+
+    // If there isn't a choice yet, make one.
+    if (this.cards.length !== 0 && !this.card.question) {
+      this.newQuestion();
+    }
   }
 
-}
+  newQuestion() {
+    // Which kind of alphabet.
+    const whatKind = Math.floor(Math.random() * this.cards.length);
+    const whichOne = Math.floor(Math.random() * this.cards[whatKind].cards.length);
+    const card = this.cards[whatKind].cards[whichOne];
 
-// function newQuestion() {
-//   const choice = pickOne();
-//   const whatKind = Math.floor(Math.random() * 2);
-//   card.question = whatKind ? choice.hiragana : choice.katakana;
-//   card.hint = whatKind ? 'hiragana' : 'katakana';
-//   card.answer = choice.en;
-// }
-// window.addEventListener('next-question', function() {
-//   newQuestion();
-// });
-//
-// newQuestion();
+    this.card = {
+      question: card.jp,
+      hint: this.cards[whatKind].hint,
+      answer: card.en
+    }
+  }
+}
 
 window.customElements.define(FlashCards.is, FlashCards);
