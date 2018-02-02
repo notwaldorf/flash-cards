@@ -9,12 +9,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { connect } from '../../node_modules/redux-helpers/connect-mixin.js';
 import { SharedStyles } from './shared-styles.js';
+import { store } from '../store.js';
 import './a-card.js';
 
-class FlashCards extends LitElement {
+import alphabet from '../reducers/alphabet.js';
+
+store.addReducers({
+  alphabet
+});
+
+import { loadHiragana, loadKatakana } from '../actions/alphabet.js';
+
+class FlashCards extends connect(store)(LitElement) {
   static get is() {
     return 'flash-cards';
+  }
+
+  static get properties() {
+    return {
+      cards: Array
+    }
   }
 
   render(props) {
@@ -28,6 +44,19 @@ class FlashCards extends LitElement {
       <a-card id="card"></a-card>
     `;
   }
+
+  ready() {
+    super.ready();
+
+    // Load the data from the redux store.
+    store.dispatch(loadHiragana());
+    store.dispatch(loadKatakana());
+  }
+
+  update(state) {
+    this.cards = state.alphabet.cards;
+  }
+
 }
 
 // function newQuestion() {
