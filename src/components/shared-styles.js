@@ -37,15 +37,23 @@ export const SharedStyles = `
     }
 
     .circle {
-      display: block;
+      display: inline-block;
       width: 64px;
       height: 64px;
       margin: 0 auto;
       text-align: center;
       border-radius: 50%;
-      background: var(--app-primary-color);
-      color: var(--app-light-text-color);
       font-size: 30px;
       line-height: 64px;
+      font-weight: bold;
+      color: black;
+    }
+    .circle.right {
+      background: #64D989;
+      color: var(--app-light-text-color);
+    }
+    .circle.wrong {
+      background: #E9404B;
+      color: var(--app-light-text-color);
     }
 `;

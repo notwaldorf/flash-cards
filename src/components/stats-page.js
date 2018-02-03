@@ -11,24 +11,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
 import { SharedStyles } from './shared-styles.js';
 import { connect } from '../../node_modules/redux-helpers/connect-mixin.js';
+import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 
 // This element is connected to the redux store.
 import { store } from '../store.js';
 
 class StatsPage extends connect(store)(LitElement) {
-  render(props) {
+  render({stats}) {
     return html`
       <style>${SharedStyles}</style>
-      <section>
-        <div class="circle">${props.clicks}</div>
-        <div class="circle">${props.clicks}</div>
-        <br><br>
-      </section>
-      <section>
-        <p>
-          <counter-element value="${props.value}" clicks="${props.clicks}"></counter-element>
-        </p>
-      </section>
+      <style>
+        :host {
+          padding-top: 20px;
+        }
+      </style>
+
+      <h1>Stats</h1>
+      <div>hiragana</div>
+      ${repeat(Object.keys(stats.hiragana), entry => html`
+        <div>
+          <div class="circle">${entry}</div>
+          <div class="circle right">${stats.hiragana[entry].right}</div>
+          <div class="circle wrong">${stats.hiragana[entry].wrong}</div>
+        </div>
+      `)}
+
+      <div>katakana</div>
+      <div>
+      ${repeat(Object.keys(stats.katakana), entry => html`
+        <div>
+          <div class="circle">${entry}</div>
+          <div class="circle right">${stats.katakana[entry].right}</div>
+          <div class="circle wrong">${stats.katakana[entry].wrong}</div>
+        </div>
+      `)}
+      </div>
     `;
   }
 
@@ -44,10 +61,14 @@ class StatsPage extends connect(store)(LitElement) {
     super.ready();
   }
 
-  // This is called every time something is updated in the store.
   update(state) {
-    this.stats = state.alphabet.stats;
-    debugger
+    // TODO: Currently if you load the stats page and not the play page,
+    // the stats aren't initialized.
+    if (!state.alphabet) {
+      this.stats = {'katakana': {}, 'hiragana': {}};
+    } else {
+      this.stats = state.alphabet.stats;
+    }
   }
 }
 
