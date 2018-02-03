@@ -77,7 +77,9 @@ class ACard extends LitElement {
   ready() {
     super.ready();
     this.done = false;
+    this._button = this.shadowRoot.querySelector('button');
     this._input = this.shadowRoot.querySelector('input');
+    this._input.addEventListener('change', () => this.submit());
   }
 
   _clear() {
@@ -103,6 +105,8 @@ class ACard extends LitElement {
       }
       this.dispatchEvent(new CustomEvent('answered',
         {bubbles: false, composed: true, detail: {correct: correct}}));
+
+      this._button.focus();
     }
   }
 }
