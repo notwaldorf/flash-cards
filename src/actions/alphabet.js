@@ -28,3 +28,17 @@ export const showCard = (card) => {
     card
   }
 };
+
+export const getRight = (card) => {
+  return {
+    type: GET_RIGHT,
+    card
+  }
+};
+
+export const getWrong = (card) => {
+  return {
+    type: GET_WRONG,
+    card
+  }
+};

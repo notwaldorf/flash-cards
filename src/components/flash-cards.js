@@ -20,7 +20,7 @@ store.addReducers({
   alphabet
 });
 
-import { loadHiragana, loadKatakana, showCard } from '../actions/alphabet.js';
+import { loadHiragana, loadKatakana, showCard, getRight, getWrong } from '../actions/alphabet.js';
 
 class FlashCards extends connect(store)(LitElement) {
   static get is() {
@@ -55,6 +55,13 @@ class FlashCards extends connect(store)(LitElement) {
     super.ready();
 
     this.addEventListener('next-question', () => this.newQuestion());
+    this.addEventListener('answered', (e) => {
+      if (e.detail.correct) {
+        store.dispatch(getRight(this.card));
+      } else {
+        store.dispatch(getWrong(this.card));
+      }
+    });
   }
 
   update(state) {
