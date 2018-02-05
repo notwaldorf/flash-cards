@@ -25,6 +25,14 @@ class StatsPage extends connect(store)(LitElement) {
           padding-top: 20px;
           --box-size: 40px;
         }
+        .columns {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        .column {
+          padding: 10px;
+        }
         h3 {
           text-align: center;
         }
@@ -61,8 +69,10 @@ class StatsPage extends connect(store)(LitElement) {
         .very-bad   { background: #FF5722; }
       </style>
 
+      <div class="columns">
       ${repeat(Object.keys(cards), kind =>
         html`
+        <div class="column">
           <h3>${kind}</h3>
           <div class="list">
             ${repeat(Object.keys(cards[kind]), entry => html`
@@ -72,8 +82,10 @@ class StatsPage extends connect(store)(LitElement) {
               </div>
             `)}
           </div>
+        </div>
         `
       )}
+      </div>
     `;
   }
 
