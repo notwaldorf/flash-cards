@@ -17,35 +17,63 @@ import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 import { store } from '../store.js';
 
 class StatsPage extends connect(store)(LitElement) {
-  render({stats}) {
+  render({cards, stats}) {
     return html`
       <style>${SharedStyles}</style>
       <style>
         :host {
           padding-top: 20px;
+          --box-size: 40px;
         }
+        h3 {
+          text-align: center;
+        }
+        .list {
+          box-sizing: border-box;
+          width: calc(5 * var(--box-size) + 5*8px) ;
+          cursor: pointer;
+          font-family: "Noto Sans Japanese";
+          line-height: 1;
+          text-align: center;
+        }
+        .list > div {
+          box-sizing: border-box;
+          width: var(--box-size);
+          height: var(--box-size);
+          margin: 2px;
+          padding-top: 2px;
+          display: inline-block;
+          border-radius: 1.5px;
+        }
+        .jp {
+          font-size: 20px;
+          font-weight: bold;
+        }
+        .en {
+          font-size: 14px;
+          font-weight: normal;
+        }
+        .not-shown  { background: white; }
+        .very-good  { background: #4CAF50; }
+        .good       { background: #8BC34A; }
+        .average    { background: #CDDC39; }
+        .bad        { background: #FF9800; }
+        .very-bad   { background: #FF5722; }
       </style>
 
-      <h1>Stats</h1>
-      <div>hiragana</div>
-      ${repeat(Object.keys(stats.hiragana), entry => html`
-        <div>
-          <div class="circle">${entry}</div>
-          <div class="circle right">${stats.hiragana[entry].right}</div>
-          <div class="circle wrong">${stats.hiragana[entry].wrong}</div>
-        </div>
-      `)}
-
-      <div>katakana</div>
-      <div>
-      ${repeat(Object.keys(stats.katakana), entry => html`
-        <div>
-          <div class="circle">${entry}</div>
-          <div class="circle right">${stats.katakana[entry].right}</div>
-          <div class="circle wrong">${stats.katakana[entry].wrong}</div>
-        </div>
-      `)}
-      </div>
+      ${repeat(Object.keys(cards), kind =>
+        html`
+          <h3>${kind}</h3>
+          <div class="list">
+            ${repeat(Object.keys(cards[kind]), entry => html`
+              <div class$="${this._getPercent(kind,cards[kind][entry].jp)}">
+                <div class="jp">${cards[kind][entry].jp}</div>
+                <div class="en">${cards[kind][entry].en}</div>
+              </div>
+            `)}
+          </div>
+        `
+      )}
     `;
   }
 
@@ -54,21 +82,43 @@ class StatsPage extends connect(store)(LitElement) {
   }
 
   static get properties() { return {
-    stats: Object
+    stats: Object,
+    cards: Object,
   }}
-
-  ready() {
-    super.ready();
-  }
 
   update(state) {
     // TODO: Currently if you load the stats page and not the play page,
     // the stats aren't initialized.
     if (!state.alphabet) {
       this.stats = {'katakana': {}, 'hiragana': {}};
+      this.cards = {};
     } else {
+      this.cards = state.alphabet.cards;
       this.stats = state.alphabet.stats;
     }
+  }
+
+  _getPercent(kind, jp) {
+    const entry = this.stats[kind][jp];
+    if (!entry) {
+      return 'not-shown';
+    }
+    const score = entry.right/(entry.right + entry.wrong);
+
+    // Technically shown but not answered;
+    if (entry.right + entry.wrong === 0) {
+      return 'not-shown'
+    } else if (score >= 0.9) {
+      return 'very-good';
+    } else if (score >= 0.7) {
+      return 'good';
+    } else if (score >= 0.5) {
+      return 'average';
+    } else if (score >= 0.3) {
+      return 'bad';
+    } else {
+      return 'very-bad';
+    };
   }
 }
 

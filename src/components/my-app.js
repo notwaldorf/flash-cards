@@ -87,7 +87,7 @@ class MyApp extends connect(store)(LitElement) {
 
       .main-content {
         margin-top: 120px;
-        min-height: 100vh;
+        height: 100%;
       }
 
       .main-content .page[selected="true"] {

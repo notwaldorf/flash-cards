@@ -59,6 +59,7 @@ class ACard extends LitElement {
        }
      </style>
      <div class="question">${props.question}</div>
+     <div>${props.answer}</div>
      <input placeholder="answer">
      <div class="hint">${props.hint}</div>
      <button on-click="${this.submit.bind(this)}">${this.done ? 'next' : 'submit'}</button>
