@@ -2,9 +2,47 @@ export const UPDATE_CARDS = 'UPDATE_CARDS';
 export const SHOW_CARD = 'SHOW_CARD';
 export const GET_RIGHT = 'GET_RIGHT';
 export const GET_WRONG = 'GET_WRONG';
+//
+// const order=['a','i','u','e','o',
+// 'ka','ki','ku','ke','ko',
+// 'sa','shi','su','se','so',
+// 'ta','chi','tsu','te','to',
+// 'na','ni','nu','ne','no',
+// 'ha','hi','fu','he','ho',
+// 'ma','mi','mu','me','mo',
+// 'ya','i','yu','e','yo',
+// 'ra','ri','ru','re','ro',
+// 'wa','i','u','e','o',
+// 'n'];
+//
 
-const HIRAGANA = [{en:'n', jp:'ん'}, {en:'wa', jp:'わ'}, {en:'ra', jp:'ら'}, {en:'ya', jp:'や'}, {en:'ma', jp:'ま'}, {en:'ha', jp:'は'}, {en:'na', jp:'な'}, {en:'ta', jp:'た'}, {en:'sa', jp:'さ'}, {en:'ka', jp:'か'}, {en:'a', jp:'あ'}, {en:'ri', jp:'り'}, {en:'mi', jp:'み'}, {en:'hi', jp:'ひ'}, {en:'ni', jp:'に'}, {en:'chi', jp:'ち'}, {en:'shi', jp:'し'}, {en:'ki', jp:'き'}, {en:'i', jp:'い'}, {en:'ru', jp:'る'}, {en:'yu', jp:'ゆ'}, {en:'mu', jp:'む'}, {en:'fu', jp:'ふ'}, {en:'nu', jp:'ぬ'}, {en:'tsu', jp:'つ'}, {en:'su', jp:'す'}, {en:'ku', jp:'く'}, {en:'u', jp:'う'}, {en:'re', jp:'れ'}, {en:'me', jp:'め'}, {en:'he', jp:'へ'}, {en:'ne', jp:'ね'}, {en:'te', jp:'て'}, {en:'se', jp:'せ'}, {en:'ke', jp:'け'}, {en:'e', jp:'え'}, {en:'wo', jp:'を'}, {en:'ro', jp:'ろ'}, {en:'yo', jp:'よ'}, {en:'mo', jp:'も'}, {en:'ho', jp:'ほ'}, {en:'no', jp:'の'}, {en:'to', jp:'と'}, {en:'so', jp:'そ'}, {en:'ko', jp:'こ'}, {en:'o', jp:'お'}];
-const KATAKANA = [{en: 'n', jp:'ン'}, {en: 'wa', jp:'ワ'}, {en: 'ra', jp:'ラ'}, {en: 'ya', jp:'ヤ'}, {en: 'ma', jp:'マ'}, {en: 'ha', jp:'ハ'}, {en: 'na', jp:'ナ'}, {en: 'ta', jp:'タ'}, {en: 'sa', jp:'サ'}, {en: 'ka', jp:'カ'}, {en: 'a', jp:'ア'}, {en: 'ri', jp:'リ'}, {en: 'mi', jp:'ミ'}, {en: 'hi', jp:'ヒ'}, {en: 'ni', jp:'ニ'}, {en: 'chi', jp:'チ'}, {en: 'shi', jp:'シ'}, {en: 'ki', jp:'キ'}, {en: 'i', jp:'イ'}, {en: 'ru', jp:'ル'}, {en: 'yu', jp:'ユ'}, {en: 'mu', jp:'ム'}, {en: 'fu', jp:'フ'}, {en: 'nu', jp:'ヌ'}, {en: 'tsu', jp:'ツ'}, {en: 'su', jp:'ス'}, {en: 'ku', jp:'ク'}, {en: 'u', jp:'ウ'}, {en: 're', jp:'レ'}, {en: 'me', jp:'メ'}, {en: 'he', jp:'ヘ'}, {en: 'ne', jp:'ネ'}, {en: 'te', jp:'テ'}, {en: 'se', jp:'セ'}, {en: 'ke', jp:'ケ'}, {en: 'e', jp:'エ'}, {en: 'wo', jp:'ヲ'}, {en: 'ro', jp:'ロ'}, {en: 'yo', jp:'ヨ'}, {en: 'mo', jp:'モ'}, {en: 'ho', jp:'ホ'}, {en: 'no', jp:'ノ'}, {en: 'to', jp:'ト'}, {en: 'so', jp:'ソ'}, {en: 'ko', jp:'コ'}, {en: 'o', jp:'オ'}];
+const HIRAGANA = [
+  {"en":"a","jp":"あ"},{"en":"i","jp":"い"},{"en":"u","jp":"う"},{"en":"e","jp":"え"},{"en":"o","jp":"お"},
+  {"en":"ka","jp":"か"},{"en":"ki","jp":"き"},{"en":"ku","jp":"く"},{"en":"ke","jp":"け"},{"en":"ko","jp":"こ"},
+  {"en":"sa","jp":"さ"},{"en":"shi","jp":"し"},{"en":"su","jp":"す"},{"en":"se","jp":"せ"},{"en":"so","jp":"そ"},
+  {"en":"ta","jp":"た"},{"en":"chi","jp":"ち"},{"en":"tsu","jp":"つ"},{"en":"te","jp":"て"},{"en":"to","jp":"と"},
+  {"en":"na","jp":"な"},{"en":"ni","jp":"に"},{"en":"nu","jp":"ぬ"},{"en":"ne","jp":"ね"},{"en":"no","jp":"の"},
+  {"en":"ha","jp":"は"},{"en":"hi","jp":"ひ"},{"en":"fu","jp":"ふ"},{"en":"he","jp":"へ"},{"en":"ho","jp":"ほ"},
+  {"en":"ma","jp":"ま"},{"en":"mi","jp":"み"},{"en":"mu","jp":"む"},{"en":"me","jp":"め"},{"en":"mo","jp":"も"},
+  {"en":"ya","jp":"や"},{"en":"i","jp":"い"},{"en":"yu","jp":"ゆ"},{"en":"e","jp":"え"},{"en":"yo","jp":"よ"},
+  {"en":"ra","jp":"ら"},{"en":"ri","jp":"り"},{"en":"ru","jp":"る"},{"en":"re","jp":"れ"},{"en":"ro","jp":"ろ"},
+  {"en":"wa","jp":"わ"},{"en":"i","jp":"い"},{"en":"u","jp":"う"},{"en":"e","jp":"え"},{"en":"o","jp":"お"},
+  {"en":"n","jp":"ん"}
+];
+
+const KATAKANA = [
+  {"en":"a","jp":"ア"},{"en":"i","jp":"イ"},{"en":"u","jp":"ウ"},{"en":"e","jp":"エ"},{"en":"o","jp":"オ"},
+  {"en":"ka","jp":"カ"},{"en":"ki","jp":"キ"},{"en":"ku","jp":"ク"},{"en":"ke","jp":"ケ"},{"en":"ko","jp":"コ"},
+  {"en":"sa","jp":"サ"},{"en":"shi","jp":"シ"},{"en":"su","jp":"ス"},{"en":"se","jp":"セ"},{"en":"so","jp":"ソ"},
+  {"en":"ta","jp":"タ"},{"en":"chi","jp":"チ"},{"en":"tsu","jp":"ツ"},{"en":"te","jp":"テ"},{"en":"to","jp":"ト"},
+  {"en":"na","jp":"ナ"},{"en":"ni","jp":"ニ"},{"en":"nu","jp":"ヌ"},{"en":"ne","jp":"ネ"},{"en":"no","jp":"ノ"},
+  {"en":"ha","jp":"ハ"},{"en":"hi","jp":"ヒ"},{"en":"fu","jp":"フ"},{"en":"he","jp":"ヘ"},{"en":"ho","jp":"ホ"},
+  {"en":"ma","jp":"マ"},{"en":"mi","jp":"ミ"},{"en":"mu","jp":"ム"},{"en":"me","jp":"メ"},{"en":"mo","jp":"モ"},
+  {"en":"ya","jp":"ヤ"},{"en":"i","jp":"イ"},{"en":"yu","jp":"ユ"},{"en":"e","jp":"エ"},{"en":"yo","jp":"ヨ"},
+  {"en":"ra","jp":"ラ"},{"en":"ri","jp":"リ"},{"en":"ru","jp":"ル"},{"en":"re","jp":"レ"},{"en":"ro","jp":"ロ"},
+  {"en":"wa","jp":"ワ"},{"en":"i","jp":"イ"},{"en":"u","jp":"ウ"},{"en":"e","jp":"エ"},{"en":"o","jp":"オ"},
+  {"en":"n","jp":"ン"}
+];
 
 export const loadHiragana = () => {
   return {
