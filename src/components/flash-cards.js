@@ -13,6 +13,7 @@ import { connect } from '../../node_modules/redux-helpers/connect-mixin.js';
 import { SharedStyles } from './shared-styles.js';
 import { store } from '../store.js';
 import './a-card.js';
+import './check-box.js';
 
 import { showCard, getRight, getWrong } from '../actions/alphabet.js';
 
@@ -24,11 +25,12 @@ class FlashCards extends connect(store)(LitElement) {
   static get properties() {
     return {
       cards: Object,
-      card: Object
+      card: Object,
+      showAnswer: Boolean,
     }
   }
 
-  render({card, cards}) {
+  render({card, cards, showAnswer}) {
     return html`
       <style>${SharedStyles}</style>
       <style>
@@ -36,7 +38,13 @@ class FlashCards extends connect(store)(LitElement) {
         padding: 60px;
       }
       </style>
-      <a-card id="card" question="${card.question}" answer="${card.answer}" hint="${card.hint}"></a-card>
+      <check-box label="Show Answer" checked="${showAnswer}"></check-box>
+      <a-card
+        showAnswer="${showAnswer}"
+        question="${card.question}"
+        answer="${card.answer}"
+        hint="${card.hint}">
+      </a-card>
     `;
   }
 
@@ -48,6 +56,7 @@ class FlashCards extends connect(store)(LitElement) {
     // Ready to render!
     super.ready();
 
+    this.addEventListener('checked-changed', (e) => this.showAnswer = e.detail.checked);
     this.addEventListener('next-question', () => this.newQuestion());
     this.addEventListener('answered', (e) => {
       if (e.detail.correct) {

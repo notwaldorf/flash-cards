@@ -58,9 +58,9 @@ class ACard extends LitElement {
         outline-offset: -20px;
        }
      </style>
+
      <div class="question">${props.question}</div>
-     <div>${props.answer}</div>
-     <input placeholder="answer">
+     <input placeholder="${props.showAnswer ? props.answer : 'answer'}">
      <div class="hint">${props.hint}</div>
      <button on-click="${this.submit.bind(this)}">${this.done ? 'next' : 'submit'}</button>
     `;
@@ -72,12 +72,14 @@ class ACard extends LitElement {
       hint: String,
       answer: String,
       done: String,
+      showAnswer: Boolean,
     }
   }
 
   ready() {
     super.ready();
     this.done = false;
+    this.showAnswer = false;
     this._button = this.shadowRoot.querySelector('button');
     this._input = this.shadowRoot.querySelector('input');
     this._input.addEventListener('change', () => this.submit());
