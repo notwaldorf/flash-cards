@@ -81,6 +81,7 @@ class ACard extends LitElement {
     this._button = this.shadowRoot.querySelector('button');
     this._input = this.shadowRoot.querySelector('input');
     this._input.addEventListener('change', () => this.submit());
+    this._input.focus();
   }
 
   _clear() {
@@ -88,6 +89,7 @@ class ACard extends LitElement {
     this.classList.remove('yes');
     this.classList.remove('no');
     this._input.value = '';
+    this._input.focus();
   }
   submit() {
     if (this.done) {  // next answer
