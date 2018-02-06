@@ -1,4 +1,4 @@
-import { LOAD_STATS, UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG } from '../actions/alphabet.js';
+import { LOAD_STATS, UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG } from '../actions/data.js';
 
 const app = (state = {cards:{}, stats:{}}, action) => {
   switch (action.type) {

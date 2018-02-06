@@ -17,7 +17,7 @@ import './a-card.js';
 import './check-box.js';
 
 import { saveShowAnswer } from '../actions/app.js';
-import { showCard, getRight, getWrong } from '../actions/alphabet.js';
+import { showCard, getRight, getWrong } from '../actions/data.js';
 
 class FlashCards extends connect(store)(LitElement) {
   static get is() {

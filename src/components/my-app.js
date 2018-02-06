@@ -17,13 +17,13 @@ import { menuIcon } from './my-icons.js';
 import { store } from '../store.js';
 import { navigate, show404 } from '../actions/app.js';
 
-import alphabet from '../reducers/alphabet.js';
+import alphabet from '../reducers/data.js';
 
 store.addReducers({
   alphabet
 });
 
-import { loadAll } from '../actions/alphabet.js';
+import { loadAll } from '../actions/data.js';
 
 class MyApp extends connect(store)(LitElement) {
   render({page, appTitle, drawerOpened}) {

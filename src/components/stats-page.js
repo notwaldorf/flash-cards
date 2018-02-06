@@ -15,7 +15,7 @@ import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 
 // This element is connected to the redux store.
 import { store } from '../store.js';
-import { loadLocalStats } from '../actions/alphabet.js';
+import { loadLocalStats } from '../actions/data.js';
 
 class StatsPage extends connect(store)(LitElement) {
   render({cards, stats}) {
