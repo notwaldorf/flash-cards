@@ -1,7 +1,9 @@
 export const UPDATE_CARDS = 'UPDATE_CARDS';
+export const LOAD_STATS = 'LOAD_STATS';
 export const SHOW_CARD = 'SHOW_CARD';
 export const GET_RIGHT = 'GET_RIGHT';
 export const GET_WRONG = 'GET_WRONG';
+
 
 const HIRAGANA = [
   {"en":"a","jp":"あ"},{"en":"i","jp":"い"},{"en":"u","jp":"う"},{"en":"e","jp":"え"},{"en":"o","jp":"お"},
@@ -71,6 +73,13 @@ export const loadKatakana = () => {
     cards: KATAKANA,
     hint: 'katakana'
   }
+};
+
+export const loadLocalStats = (stats) => {
+  return {
+    type: LOAD_STATS,
+    stats
+  };
 };
 
 export const showCard = (card) => {

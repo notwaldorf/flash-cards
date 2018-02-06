@@ -19,6 +19,7 @@ import { menuIcon } from './my-icons.js';
 
 import { store } from '../store.js';
 import { navigate, show404 } from '../actions/app.js';
+import { loadLocalStats } from '../actions/alphabet.js';
 
 import alphabet from '../reducers/alphabet.js';
 
@@ -163,11 +164,11 @@ class MyApp extends connect(store)(LitElement) {
     store.dispatch(loadAll());
 
     // If there is local storage data, load it.
-    // localforage.getItem('__learn_japanese__', function(err, value) {
-    //   if (value) {
-    //     store.dispatch(loadLocalStats(value));
-    //   }
-    // })
+    localforage.getItem('__learn_japanese__', function(err, value) {
+      if (value) {
+        store.dispatch(loadLocalStats(value));
+      }
+    });
   }
 
   _notifyPathChanged() {

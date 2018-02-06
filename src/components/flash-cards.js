@@ -43,7 +43,7 @@ class FlashCards extends connect(store)(LitElement) {
   constructor() {
     super();
   }
-  
+
   ready() {
     // Ready to render!
     super.ready();

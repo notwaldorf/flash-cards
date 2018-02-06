@@ -99,14 +99,13 @@ class StatsPage extends connect(store)(LitElement) {
   }}
 
   update(state) {
-    // TODO: Currently if you load the stats page and not the play page,
-    // the stats aren't initialized.
-    if (!state.alphabet) {
-      this.stats = {'katakana': {}, 'hiragana': {}};
-      this.cards = {};
-    } else {
-      this.cards = state.alphabet.cards;
-      this.stats = state.alphabet.stats;
+    this.cards = state.alphabet.cards;
+    this.stats = state.alphabet.stats;
+
+    // Save the stats to local storage. It doesn't matter that we overwrite
+    // the previous state, that's the whole point of Redux :)
+    if (this.stats) {
+      localforage.setItem('__learn_japanese__', this.stats);
     }
   }
 
