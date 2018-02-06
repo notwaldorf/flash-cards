@@ -20,6 +20,14 @@ import { menuIcon } from './my-icons.js';
 import { store } from '../store.js';
 import { navigate, show404 } from '../actions/app.js';
 
+import alphabet from '../reducers/alphabet.js';
+
+store.addReducers({
+  alphabet
+});
+
+import { loadAll } from '../actions/alphabet.js';
+
 class MyApp extends connect(store)(LitElement) {
   render({page, appTitle, drawerOpened}) {
     return html`
@@ -152,6 +160,14 @@ class MyApp extends connect(store)(LitElement) {
   ready() {
     super.ready();
     installRouter(this._notifyPathChanged.bind(this));
+    store.dispatch(loadAll());
+
+    // If there is local storage data, load it.
+    // localforage.getItem('__learn_japanese__', function(err, value) {
+    //   if (value) {
+    //     store.dispatch(loadLocalStats(value));
+    //   }
+    // })
   }
 
   _notifyPathChanged() {

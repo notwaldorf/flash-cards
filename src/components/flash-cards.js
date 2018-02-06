@@ -14,13 +14,7 @@ import { SharedStyles } from './shared-styles.js';
 import { store } from '../store.js';
 import './a-card.js';
 
-import alphabet from '../reducers/alphabet.js';
-
-store.addReducers({
-  alphabet
-});
-
-import { loadAll, showCard, getRight, getWrong } from '../actions/alphabet.js';
+import { showCard, getRight, getWrong } from '../actions/alphabet.js';
 
 class FlashCards extends connect(store)(LitElement) {
   static get is() {
@@ -46,10 +40,11 @@ class FlashCards extends connect(store)(LitElement) {
     `;
   }
 
+  constructor() {
+    super();
+  }
+  
   ready() {
-    this.card = {};
-    store.dispatch(loadAll());
-    
     // Ready to render!
     super.ready();
 
@@ -66,6 +61,11 @@ class FlashCards extends connect(store)(LitElement) {
   update(state) {
     this.cards = state.alphabet.cards;
 
+    // HACK: because of how the redux connect mixin works this is actually
+    // called before the constructor.
+    if (!this.card) {
+      this.card = {};
+    }
     // If there isn't a choice yet, make one.
     if (Object.keys(this.cards).length !== 0 && !this.card.question) {
       this.newQuestion();
