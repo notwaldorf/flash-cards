@@ -15,6 +15,7 @@ import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 
 // This element is connected to the redux store.
 import { store } from '../store.js';
+import { loadLocalStats } from '../actions/alphabet.js';
 
 class StatsPage extends connect(store)(LitElement) {
   render({cards, stats}) {
@@ -98,6 +99,17 @@ class StatsPage extends connect(store)(LitElement) {
     stats: Object,
     cards: Object,
   }}
+
+  ready() {
+    super.ready();
+
+    // If there is local storage data, load it.
+    localforage.getItem('__learn_japanese__', function(err, value) {
+      if (value) {
+        store.dispatch(loadLocalStats(value.stats));
+      }
+    });
+  }
 
   update(state) {
     this.cards = state.alphabet.cards;
