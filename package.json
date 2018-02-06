@@ -6,7 +6,8 @@
   "scripts": {
     "start": "polymer serve --entrypoint index.html",
     "test": "mocha test/ --timeout=10000",
-    "regen-test-baseline": "mocha test/screenshots-baseline/regenerate.js --timeout=10000"
+    "regen-test-baseline": "mocha test/screenshots-baseline/regenerate.js --timeout=10000",
+    "build": "gulp copy"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "@polymer/app-layout": "^3.0.0-pre.7",
     "@polymer/lit-element": "^0.1.0",
     "@webcomponents/webcomponentsjs": "^1.0.0",
+    "gulp": "^3.9.1",
     "localforage": "^1.5.6",
     "redux-helpers": "webcomponents/redux-helpers",
     "redux-thunk": "^2.2.0"
