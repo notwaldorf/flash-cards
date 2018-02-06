@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
 import { connect } from '../../node_modules/redux-helpers/connect-mixin.js';
+import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 import { SharedStyles } from './shared-styles.js';
 import { store } from '../store.js';
 import './a-card.js';
@@ -38,7 +39,14 @@ class FlashCards extends connect(store)(LitElement) {
         padding: 60px;
       }
       </style>
-      <check-box label="Show Answer" checked="${showAnswer}"></check-box>
+      <check-box id="answer" label="show answer" checked="${showAnswer}"></check-box>
+      <br>
+      ${repeat(Object.keys(cards), kind =>
+        html`
+          <check-box label="${kind}" checked="true" class="choices"></check-box>
+        `
+      )}
+
       <a-card
         showAnswer="${showAnswer}"
         question="${card.question}"
@@ -56,7 +64,8 @@ class FlashCards extends connect(store)(LitElement) {
     // Ready to render!
     super.ready();
 
-    this.addEventListener('checked-changed', (e) => this.showAnswer = e.detail.checked);
+    this.shadowRoot.querySelector('check-box#answer').addEventListener('checked-changed',
+        (e) => this.showAnswer = e.detail.checked);
     this.addEventListener('next-question', () => this.newQuestion());
     this.addEventListener('answered', (e) => {
       if (e.detail.correct) {
@@ -82,8 +91,24 @@ class FlashCards extends connect(store)(LitElement) {
   }
 
   newQuestion() {
-    // Which kind of alphabet.
-    const choices = Object.keys(this.cards);
+    // Which kind of alphabet. Look through the checkboxes we have checked
+    // and pick those.
+    let choices = [];
+
+    // HACK: because of how the redux connect mixin works this is actually
+    // called before the constructor.
+    if (this.shadowRoot) {
+      let checkboxes;
+      checkboxes = this.shadowRoot.querySelectorAll('.choices');
+      for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          choices.push(checkboxes[i].label);
+        }
+      }
+    } else {
+      choices = Object.keys(this.cards);
+    }
+
     const whatKind = Math.floor(Math.random() * choices.length);
     const availableCards = this.cards[choices[whatKind]];
     const whichOne = Math.floor(Math.random() * availableCards.length);
