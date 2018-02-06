@@ -11,9 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import { connect } from '../../node_modules/redux-helpers/connect-mixin.js';
 import { installRouter } from '../../node_modules/redux-helpers/router.js';
-import '../../node_modules/@polymer/app-layout/app-header/app-header.js';
-import '../../node_modules/@polymer/app-layout/app-scroll-effects/effects/waterfall.js';
-import '../../node_modules/@polymer/app-layout/app-toolbar/app-toolbar.js';
 import { setPassiveTouchGestures } from '../../node_modules/@polymer/polymer/lib/utils/settings.js';
 import { menuIcon } from './my-icons.js';
 
@@ -47,24 +44,22 @@ class MyApp extends connect(store)(LitElement) {
         --app-section-even-color: #f7f7f7;
         --app-section-odd-color: white;
 
-        --app-header-background-color: transparent;
+        --app-header-background-color: #FAE1D6;
         --app-header-text-color: var(--app-dark-text-color);
         --app-header-selected-color: var(--app-primary-color);
       }
 
-      app-header {
+      header {
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        text-align: center;
+        right: 0;
         background-color: var(--app-header-background-color);
         color: var(--app-header-text-color);
-      }
-
-      app-toolbar {
-        background: transparent;
-        margin: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 24px;
+        box-sizing: border-box;
       }
 
       [main-title] {
@@ -75,7 +70,7 @@ class MyApp extends connect(store)(LitElement) {
       }
 
       .toolbar-list {
-        display: block;
+        display: inline-block;
       }
 
       .toolbar-list a {
@@ -109,15 +104,13 @@ class MyApp extends connect(store)(LitElement) {
     </style>
 
     <!-- Header -->
-    <app-header condenses reveals effects="waterfall">
-      <app-toolbar>
-        <div main-title>${appTitle}</div>
-        <div class="toolbar-list" role="navigation">
-          <a selected$="${page === 'play'}" href="${Polymer.rootPath}play">Play</a>
-          <a selected$="${page === 'stats'}" href="${Polymer.rootPath}stats">Stats</a>
-        </div>
-      </app-toolbar>
-    </app-header>
+    <header>
+      <span main-title>${appTitle}</span>
+      <div class="toolbar-list" role="navigation">
+        <a selected$="${page === 'play'}" href="${Polymer.rootPath}play">Play</a>
+        <a selected$="${page === 'stats'}" href="${Polymer.rootPath}stats">Stats</a>
+      </div>
+    </header>
 
     <!-- Main content -->
     <div class="main-content" role="main">

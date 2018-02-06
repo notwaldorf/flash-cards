@@ -29,6 +29,7 @@ class StatsPage extends connect(store)(LitElement) {
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
+          justify-content: center;
         }
         .column {
           padding: 10px;
