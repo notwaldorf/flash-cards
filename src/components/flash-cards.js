@@ -20,7 +20,7 @@ store.addReducers({
   alphabet
 });
 
-import { loadHiragana, loadKatakana, showCard, getRight, getWrong } from '../actions/alphabet.js';
+import { loadAll, showCard, getRight, getWrong } from '../actions/alphabet.js';
 
 class FlashCards extends connect(store)(LitElement) {
   static get is() {
@@ -48,9 +48,8 @@ class FlashCards extends connect(store)(LitElement) {
 
   ready() {
     this.card = {};
-    store.dispatch(loadHiragana());
-    store.dispatch(loadKatakana());
-
+    store.dispatch(loadAll());
+    
     // Ready to render!
     super.ready();
 

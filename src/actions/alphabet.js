@@ -2,19 +2,6 @@ export const UPDATE_CARDS = 'UPDATE_CARDS';
 export const SHOW_CARD = 'SHOW_CARD';
 export const GET_RIGHT = 'GET_RIGHT';
 export const GET_WRONG = 'GET_WRONG';
-//
-// const order=['a','i','u','e','o',
-// 'ka','ki','ku','ke','ko',
-// 'sa','shi','su','se','so',
-// 'ta','chi','tsu','te','to',
-// 'na','ni','nu','ne','no',
-// 'ha','hi','fu','he','ho',
-// 'ma','mi','mu','me','mo',
-// 'ya','i','yu','e','yo',
-// 'ra','ri','ru','re','ro',
-// 'wa','i','u','e','o',
-// 'n'];
-//
 
 const HIRAGANA = [
   {"en":"a","jp":"あ"},{"en":"i","jp":"い"},{"en":"u","jp":"う"},{"en":"e","jp":"え"},{"en":"o","jp":"お"},
@@ -43,6 +30,32 @@ const KATAKANA = [
   {"en":"wa","jp":"ワ"},{"en":"i","jp":"イ"},{"en":"u","jp":"ウ"},{"en":"e","jp":"エ"},{"en":"o","jp":"オ"},
   {"en":"n","jp":"ン"}
 ];
+
+const NUMBERS = [{en: '0',	jp:'零', say: 'zero'},
+{en: '1',	jp:'一', say: 'ichi'},
+{en: '2',	jp:'二', say: 'ni'},
+{en: '3',	jp:'三', say: 'san'},
+{en: '4',	jp:'四', say: 'yon'},
+{en: '5',	jp:'五', say: 'go'},
+{en: '6',	jp:'六', say: 'roku'},
+{en: '7',	jp:'七', say: 'nana'},
+{en: '8',	jp:'八', say: 'hachi'},
+{en: '9',	jp:'九', say: 'kyū'},
+{en: '10', jp:'十', say: 'jū'}];
+
+export const loadAll = () => (dispatch) => {
+  dispatch(loadHiragana());
+  dispatch(loadKatakana());
+  dispatch(loadNumbers());
+}
+
+export const loadNumbers = () => {
+  return {
+    type: UPDATE_CARDS,
+    cards: NUMBERS,
+    hint: 'numbers'
+  }
+};
 
 export const loadHiragana = () => {
   return {
