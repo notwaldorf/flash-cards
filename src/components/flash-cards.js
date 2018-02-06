@@ -86,7 +86,7 @@ class FlashCards extends connect(store)(LitElement) {
 
   update(state) {
     this.showAnswer = state.app.showAnswer;
-    this.cards = state.alphabet.cards;
+    this.cards = state.data.cards;
 
     localforage.getItem('__learn_japanese__').then(function(data){
       data.showAnswer = this.showAnswer;

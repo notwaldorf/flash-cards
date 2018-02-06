@@ -17,10 +17,10 @@ import { menuIcon } from './my-icons.js';
 import { store } from '../store.js';
 import { navigate, show404 } from '../actions/app.js';
 
-import alphabet from '../reducers/data.js';
+import data from '../reducers/data.js';
 
 store.addReducers({
-  alphabet
+  data
 });
 
 import { loadAll } from '../actions/data.js';

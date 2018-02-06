@@ -112,8 +112,8 @@ class StatsPage extends connect(store)(LitElement) {
   }
 
   update(state) {
-    this.cards = state.alphabet.cards;
-    this.stats = state.alphabet.stats;
+    this.cards = state.data.cards;
+    this.stats = state.data.stats;
 
     // Save the stats to local storage. It doesn't matter that we overwrite
     // the previous state, that's the whole point of Redux :)
