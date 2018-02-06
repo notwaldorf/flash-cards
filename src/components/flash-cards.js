@@ -16,6 +16,7 @@ import { store } from '../store.js';
 import './a-card.js';
 import './check-box.js';
 
+import { saveShowAnswer } from '../actions/app.js';
 import { showCard, getRight, getWrong } from '../actions/alphabet.js';
 
 class FlashCards extends connect(store)(LitElement) {
@@ -27,7 +28,7 @@ class FlashCards extends connect(store)(LitElement) {
     return {
       cards: Object,
       card: Object,
-      showAnswer: Boolean,
+      showAnswer: Boolean
     }
   }
 
@@ -64,8 +65,15 @@ class FlashCards extends connect(store)(LitElement) {
     // Ready to render!
     super.ready();
 
+    // If there is local storage data, load it.
+    localforage.getItem('__learn_japanese__', function(err, value) {
+      if (value) {
+        store.dispatch(saveShowAnswer(value.showAnswer));
+      }
+    });
+
     this.shadowRoot.querySelector('check-box#answer').addEventListener('checked-changed',
-        (e) => this.showAnswer = e.detail.checked);
+        (e) => store.dispatch(saveShowAnswer(e.detail.checked)));
     this.addEventListener('next-question', () => this.newQuestion());
     this.addEventListener('answered', (e) => {
       if (e.detail.correct) {
@@ -77,7 +85,13 @@ class FlashCards extends connect(store)(LitElement) {
   }
 
   update(state) {
+    this.showAnswer = state.app.showAnswer;
     this.cards = state.alphabet.cards;
+
+    localforage.getItem('__learn_japanese__').then(function(data){
+      data.showAnswer = this.showAnswer;
+      localforage.setItem('__learn_japanese__', data);
+    }.bind(this));
 
     // HACK: because of how the redux connect mixin works this is actually
     // called before the constructor.

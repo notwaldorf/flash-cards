@@ -106,12 +106,15 @@ class StatsPage extends connect(store)(LitElement) {
     // Save the stats to local storage. It doesn't matter that we overwrite
     // the previous state, that's the whole point of Redux :)
     if (this.stats) {
-      localforage.setItem('__learn_japanese__', this.stats);
+      localforage.getItem('__learn_japanese__').then(function(data){
+        data.stats = this.stats;
+        localforage.setItem('__learn_japanese__', data);
+      }.bind(this));
     }
   }
 
   _getPercent(kind, jp) {
-    const entry = this.stats[kind][jp];
+    const entry = this.stats[kind] ? this.stats[kind][jp] : null;
     if (!entry) {
       return 'not-shown';
     }

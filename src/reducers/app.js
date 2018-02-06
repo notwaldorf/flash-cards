@@ -8,9 +8,9 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-import { NAVIGATE, SHOW_404 } from '../actions/app.js';
+import { NAVIGATE, SHOW_404, SAVE_SHOW_ANSWER } from '../actions/app.js';
 
-const app = (state = {}, action) => {
+const app = (state = {page:'', showAnswer:false}, action) => {
   switch (action.type) {
     case NAVIGATE:
       const path = action.path === '/' ? '/play' : action.path;
@@ -23,6 +23,11 @@ const app = (state = {}, action) => {
       return {
         ...state,
         page: 'view404'
+      };
+    case SAVE_SHOW_ANSWER:
+      return {
+        ...state,
+        showAnswer: action.shouldShow
       };
     default:
       return state;

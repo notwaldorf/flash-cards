@@ -159,7 +159,7 @@ class MyApp extends connect(store)(LitElement) {
     // If there is local storage data, load it.
     localforage.getItem('__learn_japanese__', function(err, value) {
       if (value) {
-        store.dispatch(loadLocalStats(value));
+        store.dispatch(loadLocalStats(value.stats));
       }
     });
   }
