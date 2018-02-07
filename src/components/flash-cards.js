@@ -71,7 +71,7 @@ class FlashCards extends connect(store)(LitElement) {
           `
         )}
 
-        <h4>Show me ${showSettings}</h4>
+        <h4>Show me</h4>
         <check-box id="onlyNew" class="show-settings"
             label="only cards I haven't seen"
             checked="${showSettings == 'onlyNew'}">

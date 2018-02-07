@@ -44,12 +44,12 @@ class StatsPage extends connect(store)(LitElement) {
           font-family: "Noto Sans Japanese";
           line-height: 1;
           text-align: center;
+          font-size: 0;
         }
         .list > div {
           box-sizing: border-box;
           width: var(--box-size);
           height: var(--box-size);
-          margin: 2px;
           padding-top: 2px;
           display: inline-block;
           border-radius: 1.5px;
@@ -59,10 +59,10 @@ class StatsPage extends connect(store)(LitElement) {
           font-weight: bold;
         }
         .en {
-          font-size: 14px;
+          font-size: 12px;
           font-weight: normal;
         }
-        .not-shown  { background: white; }
+        .not-shown  { background: rgba(255,255,255,0.6); }
         .very-good  { background: #4CAF50; }
         .good       { background: #8BC34A; }
         .average    { background: #CDDC39; }
