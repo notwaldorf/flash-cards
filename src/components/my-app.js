@@ -12,15 +12,13 @@ import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-el
 import { connect } from '../../node_modules/redux-helpers/connect-mixin.js';
 import { installRouter } from '../../node_modules/redux-helpers/router.js';
 import { setPassiveTouchGestures } from '../../node_modules/@polymer/polymer/lib/utils/settings.js';
-import { menuIcon } from './my-icons.js';
 
 import { store } from '../store.js';
 import { navigate, show404, loadInitialState } from '../actions/app.js';
-
 import data from '../reducers/data.js';
+import { loadAll } from '../actions/data.js';
 store.addReducers({data});
 
-import { loadAll } from '../actions/data.js';
 
 class MyApp extends connect(store)(LitElement) {
   render({page, appTitle, drawerOpened}) {

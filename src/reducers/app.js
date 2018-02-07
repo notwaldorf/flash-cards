@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-import { NAVIGATE, SHOW_404, SAVE_SHOW_ANSWER } from '../actions/app.js';
+import { NAVIGATE, SHOW_404, SAVE_SHOW_ANSWER, SAVE_SHOW_SETTINGS } from '../actions/app.js';
 
 const app = (state = {page:'', showAnswer:false}, action) => {
   switch (action.type) {
@@ -25,15 +25,28 @@ const app = (state = {page:'', showAnswer:false}, action) => {
         page: 'view404'
       };
     case SAVE_SHOW_ANSWER:
+      const answer = action.shouldShow;
       // Save to local storage.
-      localforage.getItem('__learn_japanese__').then(function(data){
-        data.showAnswer = action.shouldShow;
-        localforage.setItem('__learn_japanese__', data);
+      localforage.getItem('__learn_japanese__').then(function(value){
+        value.showAnswer = answer;
+        localforage.setItem('__learn_japanese__', value);
       });
       // Save in store.
       return {
         ...state,
-        showAnswer: action.shouldShow
+        showAnswer: answer
+      };
+    case SAVE_SHOW_SETTINGS:
+      const settings = action.showSettings;
+      // Save to local storage.
+      localforage.getItem('__learn_japanese__').then(function(value){
+        value.showSettings = settings;
+        localforage.setItem('__learn_japanese__', value);
+      });
+      // Save in store.
+      return {
+        ...state,
+        showSettings: settings
       };
     default:
       return state;

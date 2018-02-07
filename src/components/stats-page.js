@@ -109,6 +109,9 @@ class StatsPage extends connect(store)(LitElement) {
   }
 
   _getPercent(kind, jp) {
+    if (!this.stats) {
+      return 'not-shown';
+    }
     const entry = this.stats[kind] ? this.stats[kind][jp] : null;
     if (!entry) {
       return 'not-shown';

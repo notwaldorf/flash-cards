@@ -93,8 +93,7 @@ class CheckBox extends LitElement {
     this._input = this.shadowRoot.querySelector('input');
     this._input.addEventListener('change', () => {
       this.checked = this._input.checked;
-      this.dispatchEvent(new CustomEvent('checked-changed',
-        {bubbles: false, composed: true, detail: {checked: this.checked}}));
+      this.dispatchEvent(new CustomEvent('checked-changed', {bubbles: false, composed: true}));
     });
   }
 }

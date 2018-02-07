@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 export const NAVIGATE = 'NAVIGATE';
 export const SHOW_404 = 'SHOW_404';
 export const SAVE_SHOW_ANSWER = 'SAVE_SHOW_ANSWER';
+export const SAVE_SHOW_SETTINGS = 'SAVE_SHOW_SETTINGS';
 export const LOAD_STATS = 'LOAD_STATS';
 import { showNewCard, saveAvailableTypes } from './data.js';
 
@@ -19,6 +20,7 @@ export const loadInitialState = (path) => (dispatch) => {
   localforage.getItem('__learn_japanese__', function(err, value) {
     if (value) {
       dispatch(saveShowAnswer(value.showAnswer));
+      dispatch(saveShowSettings(value.showSettings));
       dispatch({ type: LOAD_STATS, stats: value.stats });
       dispatch(showNewCard(value.activeCard));
       dispatch(saveAvailableTypes(value.choices));
@@ -44,5 +46,12 @@ export const saveShowAnswer = (shouldShow) => {
   return {
     type: SAVE_SHOW_ANSWER,
     shouldShow
+  };
+};
+
+export const saveShowSettings = (showSettings) => {
+  return {
+    type: SAVE_SHOW_SETTINGS,
+    showSettings
   };
 };
