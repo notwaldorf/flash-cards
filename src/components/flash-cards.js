@@ -85,6 +85,11 @@ class FlashCards extends connect(store)(LitElement) {
     const activeCard = state.data.activeCard;  // {hint, index}
 
     if (activeCard) {
+      if (!this.cards[activeCard.hint]) {
+        // Oops, you're in an error state. This card doesn't exist anymore.
+        store.dispatch(showNewCard());
+        return;
+      }
       const activeCardData = this.cards[activeCard.hint][activeCard.index];
       this.card = {
         question: activeCardData.jp,

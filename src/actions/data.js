@@ -80,11 +80,17 @@ export const showNewCard = (card) => (dispatch, getState) => {
   } else {
     const state = getState();
     const cards = state.data.cards;
-    const choices = state.data.choices || Object.keys(cards);
-    const whatKind = Math.floor(Math.random() * choices.length);
-    const availableCards = cards[choices[whatKind]];
+    let choices = state.data.choices || Object.keys(cards);
+    let whatKind = Math.floor(Math.random() * choices.length);
+    let availableCards = cards[choices[whatKind]];
+    // You may be in an error state, where you don't get any available cards.
+    // in that case... get the first card you can?
+    if (!availableCards) {
+      choices = Object.keys(cards);
+      whatKind = Math.floor(Math.random() * choices.length);
+      availableCards = cards[choices[whatKind]];
+    }
     const whichOne = Math.floor(Math.random() * availableCards.length);
-
     dispatch({
       type: SHOW_CARD,
       card: {hint: choices[whatKind], index: whichOne}
