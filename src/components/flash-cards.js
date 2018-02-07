@@ -7,7 +7,7 @@ import './a-card.js';
 import './check-box.js';
 
 import { saveShowAnswer } from '../actions/app.js';
-import { showNewCard, getRight, getWrong } from '../actions/data.js';
+import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
 class FlashCards extends connect(store)(LitElement) {
   static get is() {
@@ -18,11 +18,12 @@ class FlashCards extends connect(store)(LitElement) {
     return {
       cards: Object,
       card: Object,
-      showAnswer: Boolean
+      showAnswer: Boolean,
+      choices: Array
     }
   }
 
-  render({card, cards, showAnswer}) {
+  render({card, cards, showAnswer, choices}) {
     return html`
       <style>${SharedStyles}</style>
       <style>
@@ -34,7 +35,7 @@ class FlashCards extends connect(store)(LitElement) {
       <br>
       ${repeat(Object.keys(cards), kind =>
         html`
-          <check-box label="${kind}" checked="true" class="choices"></check-box>
+          <check-box label="${kind}" checked="${choices.indexOf(kind)!==-1}" class="choices"></check-box>
         `
       )}
 
@@ -50,9 +51,23 @@ class FlashCards extends connect(store)(LitElement) {
   ready() {
     // Ready to render!
     super.ready();
+    this._checkboxes = this.shadowRoot.querySelectorAll('.choices');
 
-    this.shadowRoot.querySelector('check-box#answer').addEventListener('checked-changed',
-        (e) => store.dispatch(saveShowAnswer(e.detail.checked)));
+    this.addEventListener('checked-changed', function(event) {
+      const target = event.composedPath()[0];
+      if (target.id === 'answer') {
+        store.dispatch(saveShowAnswer(e.detail.checked));
+      } else {
+        let choices = [];
+        for (let i = 0; i < this._checkboxes.length; i++) {
+          if (this._checkboxes[i].checked) {
+            choices.push(this._checkboxes[i].label)
+          }
+        }
+        store.dispatch(saveAvailableTypes(choices));
+      }
+    });
+
     this.addEventListener('next-question', () => store.dispatch(showNewCard()));
     this.addEventListener('answered', (e) => {
       if (e.detail.correct) {
@@ -66,6 +81,7 @@ class FlashCards extends connect(store)(LitElement) {
   update(state) {
     this.showAnswer = state.app.showAnswer;
     this.cards = state.data.cards;
+    this.choices = state.data.choices;
     const activeCard = state.data.activeCard;  // {hint, index}
 
     if (activeCard) {

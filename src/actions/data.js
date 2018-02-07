@@ -2,6 +2,7 @@ export const UPDATE_CARDS = 'UPDATE_CARDS';
 export const SHOW_CARD = 'SHOW_CARD';
 export const GET_RIGHT = 'GET_RIGHT';
 export const GET_WRONG = 'GET_WRONG';
+export const SAVE_CHOICES = 'SAVE_CHOICES';
 
 const HIRAGANA = [
   {"en":"a","jp":"あ"},{"en":"i","jp":"い"},{"en":"u","jp":"う"},{"en":"e","jp":"え"},{"en":"o","jp":"お"},
@@ -73,28 +74,22 @@ export const loadKatakana = () => {
   }
 };
 
-export const showCard = (card) => (dispatch) => {
+export const showNewCard = (card) => (dispatch, getState) => {
   if (card) {
     dispatch({ type: SHOW_CARD, card});
   } else {
-    dispatch(showNewCard());
+    const state = getState();
+    const cards = state.data.cards;
+    const choices = state.data.choices || Object.keys(cards);
+    const whatKind = Math.floor(Math.random() * choices.length);
+    const availableCards = cards[choices[whatKind]];
+    const whichOne = Math.floor(Math.random() * availableCards.length);
+
+    dispatch({
+      type: SHOW_CARD,
+      card: {hint: choices[whatKind], index: whichOne}
+    });
   }
-}
-
-export const showNewCard = () => (dispatch, getState) => {
-  const state = getState();
-  const cards = state.data.cards;
-
-  // TODO: should use selected choices here.
-  const choices = Object.keys(cards);
-  const whatKind = Math.floor(Math.random() * choices.length);
-  const availableCards = cards[choices[whatKind]];
-  const whichOne = Math.floor(Math.random() * availableCards.length);
-
-  dispatch({
-    type: SHOW_CARD,
-    card: {hint: choices[whatKind], index: whichOne}
-  });
 };
 
 export const getRight = (card) => {
@@ -108,5 +103,14 @@ export const getWrong = (card) => {
   return {
     type: GET_WRONG,
     card
+  }
+};
+
+export const saveAvailableTypes = (choices) => (dispatch, getState) => {
+  if (choices) {
+    dispatch({type: SAVE_CHOICES, choices});
+  } else {
+    const state = getState();
+    dispatch({type: SAVE_CHOICES, 'choices': Object.keys(state.data.cards)});
   }
 };

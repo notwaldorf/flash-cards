@@ -1,4 +1,4 @@
-import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG } from '../actions/data.js';
+import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG, SAVE_CHOICES } from '../actions/data.js';
 import { LOAD_STATS } from '../actions/app.js';
 
 const app = (state = {cards:{}, stats:{}}, action) => {
@@ -41,6 +41,17 @@ const app = (state = {cards:{}, stats:{}}, action) => {
         activeCard: null
       }
       return state;
+    case SAVE_CHOICES:
+      // Save to local storage.
+      const choices = action.choices;
+      localforage.getItem('__learn_japanese__').then(function(value) {
+        value.choices = choices;
+        localforage.setItem('__learn_japanese__', value);
+      });
+      return {
+        ...state,
+        choices
+      }
     default:
       return state;
   }
