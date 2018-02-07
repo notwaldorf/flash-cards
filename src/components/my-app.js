@@ -15,13 +15,12 @@ import { setPassiveTouchGestures } from '../../node_modules/@polymer/polymer/lib
 import { menuIcon } from './my-icons.js';
 
 import { store } from '../store.js';
-import { navigate, show404 } from '../actions/app.js';
+import { navigate, show404, loadInitialState } from '../actions/app.js';
 
 import data from '../reducers/data.js';
 
-store.addReducers({
-  data
-});
+store.addReducers({data});
+store.dispatch(loadInitialState());
 
 import { loadAll } from '../actions/data.js';
 

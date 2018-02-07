@@ -1,4 +1,5 @@
-import { LOAD_STATS, UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG } from '../actions/data.js';
+import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG } from '../actions/data.js';
+import { LOAD_STATS } from '../actions/app.js';
 
 const app = (state = {cards:{}, stats:{}}, action) => {
   switch (action.type) {
@@ -16,9 +17,16 @@ const app = (state = {cards:{}, stats:{}}, action) => {
     case SHOW_CARD:
     case GET_RIGHT:
     case GET_WRONG:
+      // Save the stats to local storage. It doesn't matter that we overwrite
+      // the previous state, that's the whole point of Redux :)
+      const newStats = stats(state.stats, action);
+      localforage.getItem('__learn_japanese__').then(function(value){
+        value.stats = newStats;
+        localforage.setItem('__learn_japanese__', value);
+      });
       return {
         ...state,
-        stats: stats(state.stats, action)
+        stats: newStats
       }
       return state;
     default:

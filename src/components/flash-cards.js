@@ -65,13 +65,6 @@ class FlashCards extends connect(store)(LitElement) {
     // Ready to render!
     super.ready();
 
-    // If there is local storage data, load it.
-    localforage.getItem('__learn_japanese__', function(err, value) {
-      if (value) {
-        store.dispatch(saveShowAnswer(value.showAnswer));
-      }
-    });
-
     this.shadowRoot.querySelector('check-box#answer').addEventListener('checked-changed',
         (e) => store.dispatch(saveShowAnswer(e.detail.checked)));
     this.addEventListener('next-question', () => this.newQuestion());
@@ -87,11 +80,6 @@ class FlashCards extends connect(store)(LitElement) {
   update(state) {
     this.showAnswer = state.app.showAnswer;
     this.cards = state.data.cards;
-
-    localforage.getItem('__learn_japanese__').then(function(data){
-      data.showAnswer = this.showAnswer;
-      localforage.setItem('__learn_japanese__', data);
-    }.bind(this));
 
     // HACK: because of how the redux connect mixin works this is actually
     // called before the constructor.

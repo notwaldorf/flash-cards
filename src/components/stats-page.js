@@ -15,7 +15,6 @@ import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 
 // This element is connected to the redux store.
 import { store } from '../store.js';
-import { loadLocalStats } from '../actions/data.js';
 
 class StatsPage extends connect(store)(LitElement) {
   render({cards, stats}) {
@@ -102,27 +101,11 @@ class StatsPage extends connect(store)(LitElement) {
 
   ready() {
     super.ready();
-
-    // If there is local storage data, load it.
-    localforage.getItem('__learn_japanese__', function(err, value) {
-      if (value) {
-        store.dispatch(loadLocalStats(value.stats));
-      }
-    });
   }
 
   update(state) {
     this.cards = state.data.cards;
     this.stats = state.data.stats;
-
-    // Save the stats to local storage. It doesn't matter that we overwrite
-    // the previous state, that's the whole point of Redux :)
-    if (this.stats) {
-      localforage.getItem('__learn_japanese__').then(function(data){
-        data.stats = this.stats;
-        localforage.setItem('__learn_japanese__', data);
-      }.bind(this));
-    }
   }
 
   _getPercent(kind, jp) {

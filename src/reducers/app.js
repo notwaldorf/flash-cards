@@ -25,6 +25,12 @@ const app = (state = {page:'', showAnswer:false}, action) => {
         page: 'view404'
       };
     case SAVE_SHOW_ANSWER:
+      // Save to local storage.
+      localforage.getItem('__learn_japanese__').then(function(data){
+        data.showAnswer = action.shouldShow;
+        localforage.setItem('__learn_japanese__', data);
+      });
+      // Save in store.
       return {
         ...state,
         showAnswer: action.shouldShow

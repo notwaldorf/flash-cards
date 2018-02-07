@@ -11,6 +11,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 export const NAVIGATE = 'NAVIGATE';
 export const SHOW_404 = 'SHOW_404';
 export const SAVE_SHOW_ANSWER = 'SAVE_SHOW_ANSWER';
+export const LOAD_STATS = 'LOAD_STATS';
+
+export const loadInitialState = (path) => (dispatch) => {
+  // If there is local storage data, load it.
+  localforage.getItem('__learn_japanese__', function(err, value) {
+    if (value) {
+      dispatch(saveShowAnswer(value.showAnswer));
+      dispatch({ type: LOAD_STATS, stats: value.stats });
+    }
+  });
+};
 
 export const navigate = (path) => {
   return {
