@@ -15,15 +15,15 @@ const app = (state = {cards:{}, stats:{}}, action) => {
         stats: action.stats
       }
     case SHOW_CARD:
-      // Save to local storage
-      const shownCard = action.card;
-      localforage.getItem('__learn_japanese__').then(function(value){
-        value.activeCard = shownCard;
+      // Save to local storage.
+      const activeCard = action.card;
+      localforage.getItem('__learn_japanese__').then(function(value) {
+        value.activeCard = activeCard;
         localforage.setItem('__learn_japanese__', value);
       });
       return {
         ...state,
-        activeCard: shownCard
+        activeCard
       }
     case GET_RIGHT:
     case GET_WRONG:

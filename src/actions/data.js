@@ -47,7 +47,6 @@ export const loadAll = () => (dispatch) => {
   dispatch(loadHiragana());
   dispatch(loadKatakana());
   dispatch(loadNumbers());
-  dispatch(showCard());
 }
 
 export const loadNumbers = () => {
@@ -74,7 +73,15 @@ export const loadKatakana = () => {
   }
 };
 
-export const showCard = () => (dispatch, getState) => {
+export const showCard = (card) => (dispatch) => {
+  if (card) {
+    dispatch({ type: SHOW_CARD, card});
+  } else {
+    dispatch(showNewCard());
+  }
+}
+
+export const showNewCard = () => (dispatch, getState) => {
   const state = getState();
   const cards = state.data.cards;
 

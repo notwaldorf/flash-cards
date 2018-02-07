@@ -12,6 +12,7 @@ export const NAVIGATE = 'NAVIGATE';
 export const SHOW_404 = 'SHOW_404';
 export const SAVE_SHOW_ANSWER = 'SAVE_SHOW_ANSWER';
 export const LOAD_STATS = 'LOAD_STATS';
+import { showCard } from './data.js';
 
 export const loadInitialState = (path) => (dispatch) => {
   // If there is local storage data, load it.
@@ -19,6 +20,7 @@ export const loadInitialState = (path) => (dispatch) => {
     if (value) {
       dispatch(saveShowAnswer(value.showAnswer));
       dispatch({ type: LOAD_STATS, stats: value.stats });
+      dispatch(showCard(value.activeCard));
     }
   });
 };

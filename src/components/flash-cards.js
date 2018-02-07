@@ -7,7 +7,7 @@ import './a-card.js';
 import './check-box.js';
 
 import { saveShowAnswer } from '../actions/app.js';
-import { showCard, getRight, getWrong } from '../actions/data.js';
+import { showNewCard, getRight, getWrong } from '../actions/data.js';
 
 class FlashCards extends connect(store)(LitElement) {
   static get is() {
@@ -53,7 +53,7 @@ class FlashCards extends connect(store)(LitElement) {
 
     this.shadowRoot.querySelector('check-box#answer').addEventListener('checked-changed',
         (e) => store.dispatch(saveShowAnswer(e.detail.checked)));
-    this.addEventListener('next-question', () => store.dispatch(showCard()));
+    this.addEventListener('next-question', () => store.dispatch(showNewCard()));
     this.addEventListener('answered', (e) => {
       if (e.detail.correct) {
         store.dispatch(getRight(this.card));
