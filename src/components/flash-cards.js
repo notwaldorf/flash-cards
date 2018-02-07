@@ -62,7 +62,7 @@ class FlashCards extends connect(store)(LitElement) {
       <button class="settings-btn">${settingsIcon}</button>
 
       <div id="settings" hidden>
-        <check-box id="answer" label="show answer ${showAnswer}" checked="${showAnswer}"></check-box>
+        <check-box id="answer" label="show answer" checked="${showAnswer}"></check-box>
 
         <h4>Pick from</h4>
         ${repeat(Object.keys(cards), kind =>

@@ -17,15 +17,15 @@ import { showNewCard, saveAvailableTypes } from './data.js';
 
 export const loadInitialState = (path) => (dispatch) => {
   // If there is local storage data, load it.
-  localforage.getItem('__learn_japanese__', function(err, value) {
-    if (value) {
-      dispatch(saveShowAnswer(value.showAnswer));
-      dispatch(saveShowSettings(value.showSettings));
-      dispatch({ type: LOAD_STATS, stats: value.stats });
-      dispatch(showNewCard(value.activeCard));
-      dispatch(saveAvailableTypes(value.choices));
-    }
-  });
+  let json = localStorage.getItem('__learn_japanese__') || '{}';
+  let value = JSON.parse(json);
+  if (value) {
+    dispatch(saveShowAnswer(value.showAnswer));
+    dispatch(saveShowSettings(value.showSettings));
+    dispatch({ type: LOAD_STATS, stats: value.stats });
+    dispatch(showNewCard(value.activeCard));
+    dispatch(saveAvailableTypes(value.choices));
+  }
 };
 
 export const navigate = (path) => {

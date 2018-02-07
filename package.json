@@ -24,7 +24,6 @@
     "@polymer/lit-element": "^0.1.0",
     "@webcomponents/webcomponentsjs": "^1.0.0",
     "gulp": "^3.9.1",
-    "localforage": "^1.5.6",
     "redux-helpers": "webcomponents/redux-helpers",
     "redux-thunk": "^2.2.0"
   },

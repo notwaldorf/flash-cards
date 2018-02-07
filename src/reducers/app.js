@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import { NAVIGATE, SHOW_404, SAVE_SHOW_ANSWER, SAVE_SHOW_SETTINGS } from '../actions/app.js';
 
 const app = (state = {page:'', showAnswer:false}, action) => {
+  let json, value;
   switch (action.type) {
     case NAVIGATE:
       const path = action.path === '/' ? '/play' : action.path;
@@ -26,11 +27,10 @@ const app = (state = {page:'', showAnswer:false}, action) => {
       };
     case SAVE_SHOW_ANSWER:
       const answer = action.shouldShow;
-      // Save to local storage.
-      localforage.getItem('__learn_japanese__').then(function(value){
-        value.showAnswer = answer;
-        localforage.setItem('__learn_japanese__', value);
-      });
+      json = localStorage.getItem('__learn_japanese__') || '{}';
+      value = JSON.parse(json);
+      value.showAnswer = answer;
+      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
       // Save in store.
       return {
         ...state,
@@ -38,11 +38,12 @@ const app = (state = {page:'', showAnswer:false}, action) => {
       };
     case SAVE_SHOW_SETTINGS:
       const settings = action.showSettings;
-      // Save to local storage.
-      localforage.getItem('__learn_japanese__').then(function(value){
-        value.showSettings = settings;
-        localforage.setItem('__learn_japanese__', value);
-      });
+
+      json = localStorage.getItem('__learn_japanese__') || '{}';
+      value = JSON.parse(json);
+      value.showSettings = settings;
+      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
+
       // Save in store.
       return {
         ...state,

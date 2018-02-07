@@ -2,6 +2,7 @@ import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG, SAVE_CHOICES } from '../
 import { LOAD_STATS } from '../actions/app.js';
 
 const app = (state = {cards:{}, stats:{}}, action) => {
+  let json, value;
   switch (action.type) {
     case UPDATE_CARDS:
       return {
@@ -17,10 +18,11 @@ const app = (state = {cards:{}, stats:{}}, action) => {
     case SHOW_CARD:
       // Save to local storage.
       const activeCard = action.card;
-      localforage.getItem('__learn_japanese__').then(function(value) {
-        value.activeCard = activeCard;
-        localforage.setItem('__learn_japanese__', value);
-      });
+      json = localStorage.getItem('__learn_japanese__') || '{}';
+      value = JSON.parse(json);
+      value.activeCard = activeCard;
+      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
+
       return {
         ...state,
         activeCard
@@ -30,11 +32,13 @@ const app = (state = {cards:{}, stats:{}}, action) => {
       // Save the stats to local storage. It doesn't matter that we overwrite
       // the previous state, that's the whole point of Redux :)
       const newStats = stats(state.stats, action);
-      localforage.getItem('__learn_japanese__').then(function(value){
-        value.stats = newStats;
-        value.activeCard = null;
-        localforage.setItem('__learn_japanese__', value);
-      });
+
+      json = localStorage.getItem('__learn_japanese__') || '{}';
+      value = JSON.parse(json);
+      value.stats = newStats;
+      value.activeCard = null;
+      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
+
       return {
         ...state,
         stats: newStats,
@@ -44,10 +48,12 @@ const app = (state = {cards:{}, stats:{}}, action) => {
     case SAVE_CHOICES:
       // Save to local storage.
       const choices = action.choices;
-      localforage.getItem('__learn_japanese__').then(function(value) {
-        value.choices = choices;
-        localforage.setItem('__learn_japanese__', value);
-      });
+
+      json = localStorage.getItem('__learn_japanese__') || '{}';
+      value = JSON.parse(json);
+      value.choices = choices;
+      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
+
       return {
         ...state,
         choices

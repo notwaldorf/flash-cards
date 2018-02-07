@@ -19,7 +19,6 @@ import data from '../reducers/data.js';
 import { loadAll } from '../actions/data.js';
 store.addReducers({data});
 
-
 class MyApp extends connect(store)(LitElement) {
   render({page, appTitle, drawerOpened}) {
     return html`
@@ -148,8 +147,8 @@ class MyApp extends connect(store)(LitElement) {
   ready() {
     super.ready();
     installRouter(this._notifyPathChanged.bind(this));
-    store.dispatch(loadInitialState());
     store.dispatch(loadAll());
+    store.dispatch(loadInitialState());
   }
 
   _notifyPathChanged() {
