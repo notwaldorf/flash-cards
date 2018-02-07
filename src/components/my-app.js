@@ -18,9 +18,7 @@ import { store } from '../store.js';
 import { navigate, show404, loadInitialState } from '../actions/app.js';
 
 import data from '../reducers/data.js';
-
 store.addReducers({data});
-store.dispatch(loadInitialState());
 
 import { loadAll } from '../actions/data.js';
 
@@ -152,6 +150,7 @@ class MyApp extends connect(store)(LitElement) {
   ready() {
     super.ready();
     installRouter(this._notifyPathChanged.bind(this));
+    store.dispatch(loadInitialState());
     store.dispatch(loadAll());
   }
 

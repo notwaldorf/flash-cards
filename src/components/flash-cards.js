@@ -47,17 +47,13 @@ class FlashCards extends connect(store)(LitElement) {
     `;
   }
 
-  constructor() {
-    super();
-  }
-
   ready() {
     // Ready to render!
     super.ready();
 
     this.shadowRoot.querySelector('check-box#answer').addEventListener('checked-changed',
         (e) => store.dispatch(saveShowAnswer(e.detail.checked)));
-    this.addEventListener('next-question', () => this.newQuestion());
+    this.addEventListener('next-question', () => store.dispatch(showCard()));
     this.addEventListener('answered', (e) => {
       if (e.detail.correct) {
         store.dispatch(getRight(this.card));
@@ -70,49 +66,16 @@ class FlashCards extends connect(store)(LitElement) {
   update(state) {
     this.showAnswer = state.app.showAnswer;
     this.cards = state.data.cards;
+    const activeCard = state.data.activeCard;  // {hint, index}
 
-    // HACK: because of how the redux connect mixin works this is actually
-    // called before the constructor.
-    if (!this.card) {
-      this.card = {};
-    }
-    // If there isn't a choice yet, make one.
-    if (Object.keys(this.cards).length !== 0 && !this.card.question) {
-      this.newQuestion();
-    }
-  }
-
-  newQuestion() {
-    // Which kind of alphabet. Look through the checkboxes we have checked
-    // and pick those.
-    let choices = [];
-
-    // HACK: because of how the redux connect mixin works this is actually
-    // called before the constructor.
-    if (this.shadowRoot) {
-      let checkboxes;
-      checkboxes = this.shadowRoot.querySelectorAll('.choices');
-      for (let i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].checked) {
-          choices.push(checkboxes[i].label);
-        }
+    if (activeCard) {
+      const activeCardData = this.cards[activeCard.hint][activeCard.index];
+      this.card = {
+        question: activeCardData.jp,
+        answer: activeCardData.en,
+        hint: activeCard.hint
       }
-    } else {
-      choices = Object.keys(this.cards);
     }
-
-    const whatKind = Math.floor(Math.random() * choices.length);
-    const availableCards = this.cards[choices[whatKind]];
-    const whichOne = Math.floor(Math.random() * availableCards.length);
-    const card = availableCards[whichOne];
-
-    this.card = {
-      question: card.jp,
-      hint: choices[whatKind],
-      answer: card.en
-    }
-
-    store.dispatch(showCard(this.card));
   }
 }
 

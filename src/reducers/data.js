@@ -15,6 +15,16 @@ const app = (state = {cards:{}, stats:{}}, action) => {
         stats: action.stats
       }
     case SHOW_CARD:
+      // Save to local storage
+      const shownCard = action.card;
+      localforage.getItem('__learn_japanese__').then(function(value){
+        value.activeCard = shownCard;
+        localforage.setItem('__learn_japanese__', value);
+      });
+      return {
+        ...state,
+        activeCard: shownCard
+      }
     case GET_RIGHT:
     case GET_WRONG:
       // Save the stats to local storage. It doesn't matter that we overwrite
@@ -22,11 +32,13 @@ const app = (state = {cards:{}, stats:{}}, action) => {
       const newStats = stats(state.stats, action);
       localforage.getItem('__learn_japanese__').then(function(value){
         value.stats = newStats;
+        value.activeCard = null;
         localforage.setItem('__learn_japanese__', value);
       });
       return {
         ...state,
-        stats: newStats
+        stats: newStats,
+        activeCard: null
       }
       return state;
     default:
@@ -40,7 +52,6 @@ const app = (state = {cards:{}, stats:{}}, action) => {
 */
 const stats = (state = {}, action) => {
   switch (action.type) {
-    case SHOW_CARD:
     case GET_RIGHT:
     case GET_WRONG:
       var f = {
@@ -57,7 +68,6 @@ const byHint = (state = {}, action) => {
   // example: { も:{right:2,wrong:7}, に:{right:1} }
   const card = action.card;
   switch (action.type) {
-    case SHOW_CARD:
     case GET_RIGHT:
     case GET_WRONG:
       return {

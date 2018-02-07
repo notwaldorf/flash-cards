@@ -47,6 +47,7 @@ export const loadAll = () => (dispatch) => {
   dispatch(loadHiragana());
   dispatch(loadKatakana());
   dispatch(loadNumbers());
+  dispatch(showCard());
 }
 
 export const loadNumbers = () => {
@@ -73,11 +74,20 @@ export const loadKatakana = () => {
   }
 };
 
-export const showCard = (card) => {
-  return {
+export const showCard = () => (dispatch, getState) => {
+  const state = getState();
+  const cards = state.data.cards;
+
+  // TODO: should use selected choices here.
+  const choices = Object.keys(cards);
+  const whatKind = Math.floor(Math.random() * choices.length);
+  const availableCards = cards[choices[whatKind]];
+  const whichOne = Math.floor(Math.random() * availableCards.length);
+
+  dispatch({
     type: SHOW_CARD,
-    card
-  }
+    card: {hint: choices[whatKind], index: whichOne}
+  });
 };
 
 export const getRight = (card) => {
