@@ -72,14 +72,13 @@ class ACard extends LitElement {
       hint: String,
       answer: String,
       done: String,
-      showAnswer: Boolean,
+      showAnswer: Boolean
     }
   }
 
   ready() {
     super.ready();
     this.done = false;
-    this.showAnswer = false;
     this._button = this.shadowRoot.querySelector('button');
     this._input = this.shadowRoot.querySelector('input');
     this._input.addEventListener('change', () => this.submit());
@@ -93,6 +92,7 @@ class ACard extends LitElement {
     this._input.value = '';
     this._input.focus();
   }
+
   submit() {
     if (this.done) {  // next answer
       this._clear();
