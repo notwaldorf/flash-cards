@@ -133,7 +133,7 @@ class FlashCards extends connect(store)(LitElement) {
     });
   }
 
-  update(state) {
+  stateChanged(state) {
     this.showAnswer = state.app.showAnswer;
     this.cards = state.data.cards;
     this.choices = state.data.choices;

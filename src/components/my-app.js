@@ -125,7 +125,7 @@ class MyApp extends connect(store)(LitElement) {
     }
   }
 
-  update(state) {
+  stateChanged(state) {
     this.page = state.app.page;
   }
 

@@ -103,7 +103,7 @@ class StatsPage extends connect(store)(LitElement) {
     super.ready();
   }
 
-  update(state) {
+  stateChanged(state) {
     this.cards = state.data.cards;
     this.stats = state.data.stats;
   }
