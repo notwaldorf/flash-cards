@@ -8,8 +8,10 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-export const NAVIGATE = 'NAVIGATE';
-export const SHOW_404 = 'SHOW_404';
+export const UPDATE_PAGE = 'UPDATE_PAGE';
+export const UPDATE_OFFLINE = 'UPDATE_OFFLINE';
+export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
+export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const SAVE_SHOW_ANSWER = 'SAVE_SHOW_ANSWER';
 export const SAVE_SHOW_SETTINGS = 'SAVE_SHOW_SETTINGS';
 export const LOAD_STATS = 'LOAD_STATS';
@@ -28,17 +30,55 @@ export const loadInitialState = (path) => (dispatch) => {
   }
 };
 
-export const navigate = (path) => {
-  return {
-    type: NAVIGATE,
-    path
-  };
+export const navigate = (path) => (dispatch) => {
+  // Extract the page name from path.
+  const page = path === '/' ? 'view1' : path.slice(1);
+
+  // Any other info you might want to extract from the path (like page type),
+  // you can do here
+  dispatch(loadPage(page));
 };
 
-export const show404 = (path) => {
+const loadPage = (page) => async (dispatch) => {
+  switch(page) {
+    case 'play':
+      await import('../components/flash-cards.js');
+      // Put code here that you want it to run every time when
+      // navigate to view1 page and my-view1.js is loaded
+      break;
+    case 'stats':
+      await import('../components/stats-page.js');
+      break;
+    default:
+      page = 'view404';
+      await import('../components/my-view404.js');
+  }
+
+  dispatch(updatePage(page));
+}
+
+const updatePage = (page) => {
   return {
-    type: SHOW_404,
-    path
+    type: UPDATE_PAGE,
+    page
+  };
+}
+
+let snackbarTimer;
+
+export const showSnackbar = () => (dispatch) => {
+  dispatch({
+    type: OPEN_SNACKBAR
+  });
+  clearTimeout(snackbarTimer);
+  snackbarTimer = setTimeout(() =>
+    dispatch({ type: CLOSE_SNACKBAR }), 3000);
+};
+
+export const updateOffline = (offline) => {
+  return {
+    type: UPDATE_OFFLINE,
+    offline
   };
 };
 

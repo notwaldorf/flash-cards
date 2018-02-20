@@ -8,22 +8,32 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-import { NAVIGATE, SHOW_404, SAVE_SHOW_ANSWER, SAVE_SHOW_SETTINGS } from '../actions/app.js';
+import { UPDATE_PAGE, UPDATE_OFFLINE,
+         OPEN_SNACKBAR, CLOSE_SNACKBAR,
+         SAVE_SHOW_ANSWER, SAVE_SHOW_SETTINGS } from '../actions/app.js';
 
 const app = (state = {page:'', showAnswer:false}, action) => {
   let json, value;
   switch (action.type) {
-    case NAVIGATE:
-      const path = action.path === '/' ? '/play' : action.path;
-      const page = path.slice(1);
+    case UPDATE_PAGE:
       return {
         ...state,
-        page: page
+        page: action.page
       };
-    case SHOW_404:
+    case UPDATE_OFFLINE:
       return {
         ...state,
-        page: 'view404'
+        offline: action.offline
+      };
+    case OPEN_SNACKBAR:
+      return {
+        ...state,
+        snackbarOpened: true
+      };
+    case CLOSE_SNACKBAR:
+      return {
+        ...state,
+        snackbarOpened: false
       };
     case SAVE_SHOW_ANSWER:
       const answer = action.shouldShow;

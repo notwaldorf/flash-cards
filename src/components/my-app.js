@@ -11,16 +11,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { installRouter } from '../../node_modules/pwa-helpers/router.js';
+import { installOfflineWatcher } from '../../node_modules/pwa-helpers/network.js';
+import { updateSEOMetadata } from '../../node_modules/pwa-helpers/seo-metadata.js';
 import { setPassiveTouchGestures } from '../../node_modules/@polymer/polymer/lib/utils/settings.js';
 
 import { store } from '../store.js';
-import { navigate, show404, loadInitialState } from '../actions/app.js';
+import { navigate, updateOffline, showSnackbar, loadInitialState } from '../actions/app.js';
 import data from '../reducers/data.js';
 import { loadAll } from '../actions/data.js';
+import './snack-bar.js'
+
 store.addReducers({data});
 
 class MyApp extends connect(store)(LitElement) {
-  render({page, appTitle, drawerOpened}) {
+  render({page, appTitle, snackbarOpened, offline}) {
+    // Anything that's related to rendering should be done in here.
+
+    if (page && appTitle) {
+      const pageTitle = appTitle + ' - ' + page;
+      updateSEOMetadata({
+          title: pageTitle,
+          description: pageTitle,
+          url: document.location.href,
+          // This object also takes an image property, that points to an img src.
+        });
+    }
+
     return html`
     <style>
       :host {
@@ -104,6 +120,10 @@ class MyApp extends connect(store)(LitElement) {
       <stats-page class="page" selected$="${page === 'stats'}"></stats-page>
       <my-view404 class="page" selected$="${page === 'view404'}"></my-view404>
     </div>
+
+    <snack-bar active$="${snackbarOpened}">
+        You are now ${offline ? 'offline' : 'online'}.
+    </snack-bar>
 `;
   }
 
@@ -114,20 +134,10 @@ class MyApp extends connect(store)(LitElement) {
   static get properties() {
     return {
       page: String,
-      appTitle: String
+      appTitle: String,
+      snackbarOpened: Boolean,
+      offline: Boolean
     }
-  }
-
-  stateChanged(state) {
-    this.page = state.app.page;
-  }
-
-  _propertiesChanged(props, changed, oldProps) {
-    if (changed && 'page' in changed) {
-      this._pageChanged();
-      this._updateMetadata();
-    }
-    super._propertiesChanged(props, changed, oldProps);
   }
 
   constructor() {
@@ -139,69 +149,32 @@ class MyApp extends connect(store)(LitElement) {
 
   ready() {
     super.ready();
-    installRouter(this._notifyPathChanged.bind(this));
+    installRouter(() => this._locationChanged());
+    installOfflineWatcher((offline) => this._offlineChanged(offline));
     store.dispatch(loadAll());
     store.dispatch(loadInitialState());
   }
 
-  _notifyPathChanged() {
-    store.dispatch(navigate(window.decodeURIComponent(window.location.pathname)));
+  stateChanged(state) {
+    this.page = state.app.page;
+    this.offline = state.app.offline;
+    this.snackbarOpened = state.app.snackbarOpened;
   }
 
-  _pageChanged() {
-    // Load page import on demand. Show 404 page if fails
-    let loaded;
-    if (!this.page) {
+  _offlineChanged(offline) {
+    const previousOffline = this.offline;
+    store.dispatch(updateOffline(offline));
+
+    // Don't show the snackbar on the first load of the page.
+    if (previousOffline === undefined) {
       return;
     }
-    switch(this.page) {
-      case 'play':
-        loaded = import('./flash-cards.js');
-        break;
-      case 'stats':
-        loaded = import('./stats-page.js');
-        break;
-      case 'view404':
-        loaded = import('./my-view404.js');
-        break;
-      default:
-        loaded = Promise.reject();
-    }
 
-    loaded.then(
-      _ => {},
-      _ => { store.dispatch(show404()) }
-    );
+    store.dispatch(showSnackbar());
   }
 
-  _updateMetadata() {
-    document.title = this.appTitle + ' - ' + this.page;
-
-    // Set open graph metadata
-    this._setMeta('property', 'og:title', document.title);
-    // You could replace this with a description, if you had one.
-    this._setMeta('property', 'og:description', document.title);
-    this._setMeta('property', 'og:url', document.location.href);
-    // If you have an image that's specific to each page:
-    //this._setMeta('property', 'og:image', ...);
-
-    // Set twitter card metadata
-    this._setMeta('property', 'twitter:title', document.title);
-      // You could replace this with a description, if you had one.
-    this._setMeta('property', 'twitter:description', document.title);
-    this._setMeta('property', 'twitter:url', document.location.href);
-    // If you have an image that's specific to each page:
-    //this._setMeta('property', 'twitter:image:src', ...);
-  }
-
-  _setMeta(attrName, attrValue, content) {
-    let element = document.head.querySelector(`meta[${attrName}="${attrValue}"]`);
-    if (!element) {
-      element = document.createElement('meta');
-      element.setAttribute(attrName, attrValue);
-      document.head.appendChild(element);
-    }
-    element.setAttribute('content', content || '');
+  _locationChanged() {
+    store.dispatch(navigate(window.decodeURIComponent(window.location.pathname)));
   }
 }
 
