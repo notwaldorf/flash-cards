@@ -1,5 +1,5 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
-import { connect } from '../../node_modules/redux-helpers/connect-mixin.js';
+import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 import { SharedStyles } from './shared-styles.js';
 import { store } from '../store.js';

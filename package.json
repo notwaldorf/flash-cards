@@ -24,7 +24,7 @@
     "@polymer/lit-element": "^0.1.0",
     "@webcomponents/webcomponentsjs": "^1.0.0",
     "gulp": "^3.9.1",
-    "redux-helpers": "webcomponents/redux-helpers",
+    "pwa-helpers": "polymerlabs/pwa-helpers",
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
