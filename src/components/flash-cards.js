@@ -1,7 +1,6 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
-import { SharedStyles } from './shared-styles.js';
 import { store } from '../store.js';
 import { settingsIcon } from './my-icons.js';
 import './a-card.js';
@@ -27,12 +26,18 @@ class FlashCards extends connect(store)(LitElement) {
 
   render({card, cards, showAnswer, showSettings, choices}) {
     return html`
-      <style>${SharedStyles}</style>
       <style>
       :host {
+        display: block;
+        box-sizing: border-box;
         padding: 60px;
         position: relative;
       }
+
+      [hidden] {
+        display: none !important;
+      }
+
       .settings-btn {
         position: absolute;
         right: 40px;
@@ -54,9 +59,6 @@ class FlashCards extends connect(store)(LitElement) {
            0 1px 8px 0 rgba(0, 0, 0, 0.12),
            0 3px 3px -2px rgba(0, 0, 0, 0.4);
         padding: 20px;
-      }
-      [hidden] {
-        display: none !important;
       }
       </style>
       <button class="settings-btn">${settingsIcon}</button>

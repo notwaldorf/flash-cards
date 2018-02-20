@@ -34,16 +34,6 @@ class CheckBox extends LitElement {
           border: 2px solid black;
         }
 
-        /* On mouse-over, add a grey background color */
-        /*.container:hover input ~ .checkmark {
-          background-color: white;
-        }*/
-
-        /* When the checkbox is checked, add a blue background */
-        /*.container input:checked ~ .checkmark {
-          background-color: #2196F3;
-        }*/
-
         /* Create the checkmark/indicator (hidden when not checked) */
         .checkmark:after {
           content: "";

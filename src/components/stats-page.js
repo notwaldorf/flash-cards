@@ -1,15 +1,4 @@
-/**
-@license
-Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/
-
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
-import { SharedStyles } from './shared-styles.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 
@@ -19,9 +8,10 @@ import { store } from '../store.js';
 class StatsPage extends connect(store)(LitElement) {
   render({cards, stats}) {
     return html`
-      <style>${SharedStyles}</style>
       <style>
         :host {
+          display: block;
+          box-sizing: border-box;
           padding-top: 20px;
           --box-size: 40px;
         }
@@ -41,7 +31,6 @@ class StatsPage extends connect(store)(LitElement) {
           box-sizing: border-box;
           width: calc(5 * var(--box-size) + 5*8px) ;
           cursor: pointer;
-          font-family: "Noto Sans Japanese";
           line-height: 1;
           text-align: center;
           font-size: 0;

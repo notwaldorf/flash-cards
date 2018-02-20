@@ -27,15 +27,8 @@ class MyApp extends connect(store)(LitElement) {
         --app-drawer-width: 256px;
         display: block;
 
-        /* Default theme */
-        --pink: #E91E63;
-        --gray: #293237;
-        --app-primary-color: var(--pink);
-        --app-secondary-color: var(--gray);
-        --app-dark-text-color: var(--app-secondary-color);
-        --app-light-text-color: white;
-        --app-section-even-color: #f7f7f7;
-        --app-section-odd-color: white;
+        --app-primary-color: #E91E63;
+        --app-dark-text-color: #293237;
 
         --app-header-background-color: #FAE1D6;
         --app-header-text-color: var(--app-dark-text-color);

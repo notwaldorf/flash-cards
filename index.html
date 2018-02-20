@@ -27,12 +27,12 @@
 
     <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="My App">
+    <meta name="application-name" content="Learn Japanese">
 
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="My App">
+    <meta name="apple-mobile-web-app-title" content="Learn Japanese">
 
     <!-- Homescreen icons -->
     <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
@@ -52,8 +52,6 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="my-app">
     <meta property="og:image" content="images/manifest/icon-144x144.png" />
-
-    <link href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css" rel="stylesheet"/>
     <script>
       window.Polymer = {rootPath: '/'};
       // Load and register pre-caching Service Worker
@@ -73,9 +71,6 @@
         font-style: normal;
         font-weight: 400;
         src: local('Pacifico Regular'), local('Pacifico-Regular'), url(https://fonts.gstatic.com/s/pacifico/v12/Q_Z9mv4hySLTMoMjnk_rCXYhjbSpvc47ee6xR_80Hnw.woff2) format('woff2');
-        /* To keep the download small, this unicode range is literally
-        the letters in "my app" */
-        /*unicode-range: U+109,U+121,U+97,U+112;*/
       }
       body {
         margin: 0;
@@ -87,7 +82,6 @@
         height: 100vh;
         margin: 0;
         padding: 0;
-        xbackground: linear-gradient(160deg, #FAE1D6 50%, white 50%);
         background: #FAE1D6;
         display: flex;
         align-items: center;
