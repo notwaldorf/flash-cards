@@ -73,7 +73,7 @@ class ACard extends LitElement {
        ${props.hint}
        <button class="say" id="sayBtn" on-click="${() => this.say()}">${audioIcon}</button>
      </div>
-     <button class="green" on-click="${() => this.submit()}">${this.done ? 'next' : 'submit'}</button>
+     <button class="green" on-click="${() => this.submit()}">${props.done ? 'next' : 'submit'}</button>
     `;
   }
 

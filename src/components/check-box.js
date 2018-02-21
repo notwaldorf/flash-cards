@@ -60,7 +60,7 @@ class CheckBox extends LitElement {
         }
       </style>
       <label class="container">${label}
-        <input type="checkbox" checked="${checked}">
+        <input type="checkbox" checked="${checked}" on-change="${(e) => this._checkedChanged(e) }">
         <span class="checkmark"></span>
       </label>
     `;
@@ -80,11 +80,11 @@ class CheckBox extends LitElement {
 
   ready() {
     super.ready();
-    this._input = this.shadowRoot.querySelector('input');
-    this._input.addEventListener('change', () => {
-      this.checked = this._input.checked;
-      this.dispatchEvent(new CustomEvent('checked-changed', {bubbles: false, composed: true}));
-    });
+  }
+
+  _checkedChanged(event) {
+    this.checked = event.currentTarget.checked
+    this.dispatchEvent(new CustomEvent('checked-changed', {bubbles: false, composed: true}));
   }
 }
 window.customElements.define('check-box', CheckBox);
