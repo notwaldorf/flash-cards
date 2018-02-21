@@ -7,7 +7,7 @@ class MyView404 extends LitElement {
       <style>${SharedStyles}</style>
       <h2>Oops! You hit a 404!</h2>
       <p>This page is not a thing.
-        Head back <a href="http://localhost:8000/">to safety</a>.
+        Head back <a href="/">to safety</a>.
       </p>
     `
   }
