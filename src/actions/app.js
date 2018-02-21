@@ -76,7 +76,7 @@ export const loadInitialState = (path) => (dispatch) => {
     dispatch(saveShowSettings(value.showSettings));
     dispatch({ type: LOAD_STATS, stats: value.stats });
     dispatch(showNewCard(value.activeCard));
-    dispatch(saveAvailableTypes(value.choices));
+    dispatch(saveAvailableTypes(value.categories));
   }
 };
 

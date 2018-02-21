@@ -20,11 +20,11 @@ class FlashCards extends connect(store)(LitElement) {
       card: Object,
       showAnswer: Boolean,
       showSettings: String,
-      choices: Array
+      categories: Array
     }
   }
 
-  render({card, cards, showAnswer, showSettings, choices}) {
+  render({card, cards, showAnswer, showSettings, categories}) {
     return html`
       <style>
       :host {
@@ -69,7 +69,7 @@ class FlashCards extends connect(store)(LitElement) {
         <h4>Pick from</h4>
         ${repeat(Object.keys(cards), kind =>
           html`
-            <check-box label="${kind}" checked="${choices.indexOf(kind)!==-1}" class="choices"></check-box>
+            <check-box label="${kind}" checked="${categories.indexOf(kind)!==-1}" class="categories"></check-box>
           `
         )}
 
@@ -109,7 +109,7 @@ class FlashCards extends connect(store)(LitElement) {
   ready() {
     // Ready to render!
     super.ready();
-    this._checkboxes = this.shadowRoot.querySelectorAll('.choices');
+    this._checkboxes = this.shadowRoot.querySelectorAll('.categories');
     this._settings = this.shadowRoot.querySelector('#settings');
     this._card = this.shadowRoot.querySelector('a-card');
 
@@ -125,13 +125,13 @@ class FlashCards extends connect(store)(LitElement) {
       } if (target.classList.contains('show-settings')) {
         store.dispatch(saveShowSettings(target.id, target.checked));
       } else {
-        let choices = [];
+        let categories = [];
         for (let i = 0; i < this._checkboxes.length; i++) {
           if (this._checkboxes[i].checked) {
-            choices.push(this._checkboxes[i].label)
+            categories.push(this._checkboxes[i].label)
           }
         }
-        store.dispatch(saveAvailableTypes(choices));
+        store.dispatch(saveAvailableTypes(categories));
       }
     });
     this.addEventListener('next-question', () => store.dispatch(showNewCard()));
@@ -147,7 +147,7 @@ class FlashCards extends connect(store)(LitElement) {
   stateChanged(state) {
     this.showAnswer = state.app.showAnswer;
     this.cards = state.data.cards;
-    this.choices = state.data.choices;
+    this.categories = state.data.categories;
     this.showSettings = state.app.showSettings;
     const activeCard = state.data.activeCard;  // {hint, index}
 

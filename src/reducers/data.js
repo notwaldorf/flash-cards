@@ -2,7 +2,7 @@ import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG, SAVE_CHOICES } from '../
 import { LOAD_STATS } from '../actions/app.js';
 import { saveToLocalStorage } from './app.js';
 
-const app = (state = {cards:{}, stats:{}, choices:[]}, action) => {
+const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_CARDS:
@@ -36,10 +36,10 @@ const app = (state = {cards:{}, stats:{}, choices:[]}, action) => {
       }
       return state;
     case SAVE_CHOICES:
-      saveToLocalStorage('choices', action.choices);
+      saveToLocalStorage('categories', action.categories);
       return {
         ...state,
-        choices: action.choices
+        categories: action.categories
       }
     default:
       return state;

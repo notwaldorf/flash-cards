@@ -46,29 +46,31 @@ export const getWrong = (card) => {
   }
 };
 
-export const saveAvailableTypes = (choices) => (dispatch, getState) => {
-  if (choices) {
-    dispatch({type: SAVE_CHOICES, choices});
+export const saveAvailableTypes = (categories) => (dispatch, getState) => {
+  if (categories) {
+    dispatch({type: SAVE_CHOICES, categories});
   } else {
     const state = getState();
-    dispatch({type: SAVE_CHOICES, 'choices': Object.keys(state.data.cards)});
+    dispatch({type: SAVE_CHOICES, 'categories': Object.keys(state.data.cards)});
   }
 };
 
 function getNewCard(state) {
   const cards = state.data.cards;
-  let choices = state.data.choices || Object.keys(cards);
-  let whatKind = Math.floor(Math.random() * choices.length); // i.e. hiragana or katakana.
-  let availableCards = cards[choices[whatKind]];
+
+  // What kind of categories we can pick from (i.e. hiragana or katakana etc).
+  let categories = state.data.categories || Object.keys(cards);
+  let pickedCategory = Math.floor(Math.random() * categories.length);
+  let cardsForCategory = cards[categories[pickedCategory]];
 
   // You may be in an error state, where you don't get any available cards.
   // in that case... get the first card you can?
-  if (!availableCards) {
-    choices = Object.keys(cards);
-    whatKind = Math.floor(Math.random() * choices.length);
-    availableCards = cards[choices[whatKind]];
+  if (!cardsForCategory) {
+    categories = Object.keys(cards);
+    whatKind = Math.floor(Math.random() * categories.length);
+    cardsForCategory = cards[categories[pickedCategory]];
   }
 
-  const whichOne = Math.floor(Math.random() * availableCards.length);
-  return {hint: choices[whatKind], index: whichOne};
+  const whichOne = Math.floor(Math.random() * cardsForCategory.length);
+  return {hint: categories[pickedCategory], index: whichOne};
 }
