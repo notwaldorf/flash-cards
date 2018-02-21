@@ -51,12 +51,6 @@ class StatsPage extends connect(store)(LitElement) {
           font-size: 12px;
           font-weight: normal;
         }
-        .not-shown  { background: rgba(255,255,255,0.6); }
-        .very-good  { background: #4CAF50; }
-        .good       { background: #8BC34A; }
-        .average    { background: #CDDC39; }
-        .bad        { background: #FF9800; }
-        .very-bad   { background: #FF5722; }
       </style>
 
       <div class="columns">
@@ -66,7 +60,7 @@ class StatsPage extends connect(store)(LitElement) {
           <h3>${kind}</h3>
           <div class="list">
             ${repeat(Object.keys(cards[kind]), entry => html`
-              <div class$="${this._getPercent(kind,cards[kind][entry].jp)}">
+              <div style$="${this._getColor(kind,cards[kind][entry].jp)}">
                 <div class="jp">${cards[kind][entry].jp}</div>
                 <div class="en">${cards[kind][entry].en}</div>
               </div>
@@ -97,30 +91,25 @@ class StatsPage extends connect(store)(LitElement) {
     this.stats = state.data.stats;
   }
 
-  _getPercent(kind, jp) {
+  _getColor(kind, jp) {
+    const backgroundNone = 'background: rgba(255,255,255,0.6)';
     if (!this.stats) {
-      return 'not-shown';
+      return backgroundNone;
     }
     const entry = this.stats[kind] ? this.stats[kind][jp] : null;
     if (!entry) {
-      return 'not-shown';
+      return backgroundNone;
     }
     const score = entry.right/(entry.right + entry.wrong);
 
     // Technically shown but not answered;
     if (entry.right + entry.wrong === 0) {
-      return 'not-shown'
-    } else if (score >= 0.9) {
-      return 'very-good';
-    } else if (score >= 0.7) {
-      return 'good';
+      return backgroundNone;
     } else if (score >= 0.5) {
-      return 'average';
-    } else if (score >= 0.3) {
-      return 'bad';
+      return `background: rgba(76, 175, 80,${score})`;
     } else {
-      return 'very-bad';
-    };
+      return `background: rgba(255, 87, 34,${1-score})`;
+    }
   }
 }
 
