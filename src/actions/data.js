@@ -102,7 +102,7 @@ function pickCardFromCategories(cards, stats, categories, showSettings) {
   let pickedCategory = Math.floor(Math.random() * categories.length);
   let hint = categories[pickedCategory];
   let cardsForCategory = cards[hint];
-  let statsForCategory = stats[hint];
+  let statsForCategory = stats ? stats[hint] : [];
 
   let filteredCards;
   if (showSettings === 'onlyNew') {
