@@ -82,7 +82,7 @@ class MyApp extends connect(store)(LitElement) {
         text-transform: uppercase;
       }
 
-      .toolbar-list a[selected="true"] {
+      .toolbar-list a[selected] {
         color: var(--app-header-selected-color);
         border-bottom: 4px solid var(--app-header-selected-color);
       }
@@ -92,11 +92,11 @@ class MyApp extends connect(store)(LitElement) {
         height: 100%;
       }
 
-      .main-content .page[selected="true"] {
+      .main-content .page[selected] {
         display: block;
       }
 
-      .main-content .page[selected="false"] {
+      .main-content .page {
         display: none;
       }
     </style>
@@ -105,16 +105,16 @@ class MyApp extends connect(store)(LitElement) {
     <header>
       <span main-title>${appTitle}</span>
       <nav class="toolbar-list" role="navigation">
-        <a selected$="${page === 'play'}" href="${Polymer.rootPath}play">Play</a>
-        <a selected$="${page === 'stats'}" href="${Polymer.rootPath}stats">Stats</a>
+        <a selected?="${page === 'play'}" href="/play">Play</a>
+        <a selected?="${page === 'stats'}" href="/stats">Stats</a>
       </nav>
     </header>
 
     <!-- Main content -->
     <main class="main-content" role="main">
-      <flash-cards class="page" selected$="${page === 'play'}"></flash-cards>
-      <stats-page class="page" selected$="${page === 'stats'}"></stats-page>
-      <my-view404 class="page" selected$="${page === 'view404'}"></my-view404>
+      <flash-cards class="page" selected?="${page === 'play'}"></flash-cards>
+      <stats-page class="page" selected?="${page === 'stats'}"></stats-page>
+      <my-view404 class="page" selected?="${page === 'view404'}"></my-view404>
     </main>
 
     <snack-bar active$="${snackbarOpened}">
