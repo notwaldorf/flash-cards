@@ -13,7 +13,6 @@ import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { installRouter } from '../../node_modules/pwa-helpers/router.js';
 import { installOfflineWatcher } from '../../node_modules/pwa-helpers/network.js';
 import { updateSEOMetadata } from '../../node_modules/pwa-helpers/seo-metadata.js';
-import { setPassiveTouchGestures } from '../../node_modules/@polymer/polymer/lib/utils/settings.js';
 
 import { store } from '../store.js';
 import { navigate, updateOffline, showSnackbar } from '../actions/app.js';
@@ -148,13 +147,6 @@ class MyApp extends connect(store)(LitElement) {
       snackbarOpened: Boolean,
       offline: Boolean
     }
-  }
-
-  constructor() {
-    super();
-    // To force all event listeners for gestures to be passive.
-    // See https://www.polymer-project.org/2.0/docs/devguide/gesture-events#use-passive-gesture-listeners
-    setPassiveTouchGestures(true);
   }
 
   ready() {

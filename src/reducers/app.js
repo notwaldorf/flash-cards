@@ -36,7 +36,6 @@ const app = (state = {page:'', showAnswer:false}, action) => {
         snackbarOpened: false
       };
     case SAVE_SHOW_ANSWER:
-      saveToLocalStorage('showAnswer', action.shouldShow);
       return {
         ...state,
         showAnswer: action.shouldShow
@@ -48,7 +47,6 @@ const app = (state = {page:'', showAnswer:false}, action) => {
           showSettings !== 'mostlyRight' && showSettings !== 'mostlyWrong') {
         showSettings = 'all';
       }
-      saveToLocalStorage('showSettings', showSettings);
       return {
         ...state,
         showSettings
@@ -59,10 +57,3 @@ const app = (state = {page:'', showAnswer:false}, action) => {
 }
 
 export default app;
-
-export const saveToLocalStorage = function(key, value) {
-  const json = localStorage.getItem('__learn_japanese__') || '{}';
-  let data = JSON.parse(json);
-  data[key] = value;
-  localStorage.setItem('__learn_japanese__', JSON.stringify(data));
-}

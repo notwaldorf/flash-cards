@@ -1,6 +1,5 @@
 import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG, SAVE_CHOICES } from '../actions/data.js';
 import { LOAD_STATS } from '../actions/app.js';
-import { saveToLocalStorage } from './app.js';
 
 const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
   let json, value;
@@ -17,7 +16,6 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
         stats: action.stats
       }
     case SHOW_CARD:
-      saveToLocalStorage('activeCard', action.card);
       return {
         ...state,
         activeCard: action.card
@@ -27,8 +25,6 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
       // Save the stats to local storage. It doesn't matter that we overwrite
       // the previous state, that's the whole point of Redux :)
       const newStats = stats(state.stats, action);
-      saveToLocalStorage('stats', newStats);
-      saveToLocalStorage('activeCard', null);
       return {
         ...state,
         stats: newStats,
@@ -36,7 +32,6 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
       }
       return state;
     case SAVE_CHOICES:
-      saveToLocalStorage('categories', action.categories);
       return {
         ...state,
         categories: action.categories
