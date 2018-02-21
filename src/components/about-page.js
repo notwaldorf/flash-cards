@@ -1,22 +1,10 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { SharedStyles } from './shared-styles.js';
 
 class AboutPage extends LitElement {
   render(props) {
     return html`
-      <style>
-        :host {
-          display: block;
-          box-sizing: border-box;
-          margin: 0 auto;
-          padding: 40px;
-          max-width: 600px;
-        }
-        a:link, a:visited {
-          color: var(--app-header-selected-color);
-          text-decoration: none;
-          font-weight: bold;
-        }
-      </style>
+      <style>${SharedStyles}</style>
       <h2>About</h2>
       <p>
         <b>Theory</b>: much like presentation-slides-in-javascript libraries, every

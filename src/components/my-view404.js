@@ -1,21 +1,10 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { SharedStyles } from './shared-styles.js';
 
 class MyView404 extends LitElement {
   render(props) {
     return html`
-      <style>
-        :host {
-          display: block;
-          box-sizing: border-box;
-          margin: 0 auto;
-          padding: 40px;
-        }
-        a:link, a:visited {
-          color: var(--app-header-selected-color);
-          text-decoration: none;
-          font-weight: bold;
-        }
-      </style>
+      <style>${SharedStyles}</style>
       <h2>Oops! You hit a 404!</h2>
       <p>This page is not a thing.
         Head back <a href="http://localhost:8000/">to safety</a>.
