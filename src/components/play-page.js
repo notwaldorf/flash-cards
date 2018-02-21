@@ -11,7 +11,7 @@ import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/
 
 class FlashCards extends connect(store)(LitElement) {
   static get is() {
-    return 'flash-cards';
+    return 'play-page';
   }
 
   static get properties() {

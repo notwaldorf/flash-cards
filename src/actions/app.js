@@ -29,10 +29,13 @@ export const navigate = (path) => (dispatch) => {
 const loadPage = (page) => async (dispatch) => {
   switch(page) {
     case 'play':
-      await import('../components/flash-cards.js');
+      await import('../components/play-page.js');
       break;
     case 'stats':
       await import('../components/stats-page.js');
+      break;
+    case 'about':
+      await import('../components/about-page.js');
       break;
     default:
       page = 'view404';

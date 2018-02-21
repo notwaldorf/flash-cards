@@ -7,9 +7,13 @@ class MyView404 extends LitElement {
         :host {
           display: block;
           box-sizing: border-box;
-          max-width: 400px;
           margin: 0 auto;
-          padding-top: 40px;
+          padding: 40px;
+        }
+        a:link, a:visited {
+          color: var(--app-header-selected-color);
+          text-decoration: none;
+          font-weight: bold;
         }
       </style>
       <h2>Oops! You hit a 404!</h2>

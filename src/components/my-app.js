@@ -22,6 +22,7 @@ import { loadAll } from '../actions/data.js';
 import './snack-bar.js'
 
 store.addReducers({data});
+const responsiveWidth = '460px';
 
 class MyApp extends connect(store)(LitElement) {
   render({page, appTitle, snackbarOpened, offline}) {
@@ -76,7 +77,7 @@ class MyApp extends connect(store)(LitElement) {
         color: var(--app-header-text-color);
         text-decoration: none;
         line-height: 30px;
-        padding: 4px 24px;
+        padding: 4px 16px;
         font-size: 14px;
         font-weight: bold;
         text-transform: uppercase;
@@ -99,6 +100,17 @@ class MyApp extends connect(store)(LitElement) {
       .main-content .page {
         display: none;
       }
+
+      /* Small layout */
+      @media (max-width: ${responsiveWidth}) {
+        [main-title] {
+          font-size: 26px;
+        }
+        .toolbar-list a {
+          font-size: 12px;
+          padding: 2px 4px;
+        }
+      }
     </style>
 
     <!-- Header -->
@@ -107,13 +119,15 @@ class MyApp extends connect(store)(LitElement) {
       <nav class="toolbar-list" role="navigation">
         <a selected?="${page === 'play'}" href="/play">Play</a>
         <a selected?="${page === 'stats'}" href="/stats">Stats</a>
+        <a selected?="${page === 'about'}" href="/about">About</a>
       </nav>
     </header>
 
     <!-- Main content -->
     <main class="main-content" role="main">
-      <flash-cards class="page" selected?="${page === 'play'}"></flash-cards>
+      <play-page class="page" selected?="${page === 'play'}"></play-page>
       <stats-page class="page" selected?="${page === 'stats'}"></stats-page>
+      <about-page class="page" selected?="${page === 'about'}"></about-page>
       <my-view404 class="page" selected?="${page === 'view404'}"></my-view404>
     </main>
 
