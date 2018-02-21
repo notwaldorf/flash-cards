@@ -12,6 +12,7 @@ export const loadAll = () => async (dispatch) => {
   dispatch(await loadFile('numbers'));
 
   dispatch(loadInitialState());
+  //dispatch(showNewCard());
 }
 
 async function loadFile(name) {
@@ -26,7 +27,7 @@ async function loadFile(name) {
 
 export const showNewCard = (card) => (dispatch, getState) => {
   // Generate a new card if there's none to show.
-  if (!card) {
+  if (!card || !card.index) {
     card = getNewCard(getState());
   }
   dispatch({ type: SHOW_CARD, card});
@@ -60,17 +61,65 @@ function getNewCard(state) {
 
   // What kind of categories we can pick from (i.e. hiragana or katakana etc).
   let categories = state.data.categories || Object.keys(cards);
-  let pickedCategory = Math.floor(Math.random() * categories.length);
-  let cardsForCategory = cards[categories[pickedCategory]];
+  let showSettings = state.app.showSettings;  // onlyNew, mostlyRight, mostlyWrong.
 
-  // You may be in an error state, where you don't get any available cards.
-  // in that case... get the first card you can?
-  if (!cardsForCategory) {
-    categories = Object.keys(cards);
-    whatKind = Math.floor(Math.random() * categories.length);
-    cardsForCategory = cards[categories[pickedCategory]];
+  let randomCard = pickCardFromCategories(cards, state.data.stats, categories, showSettings);
+
+  // If we didn't have any cards from this category, try again from
+  while (randomCard.index === null && categories.length !== 0) {
+    categories = categories.filter(item => item !== randomCard.hint);
+    if (categories.length !== 0)
+      randomCard = pickCardFromCategories(cards, state.data.stats, categories, showSettings);
   }
 
-  const whichOne = Math.floor(Math.random() * cardsForCategory.length);
-  return {hint: categories[pickedCategory], index: whichOne};
+  if (randomCard.index !== null) {
+    return randomCard;
+  }
+
+  // If we ran out of categories to pick from and we _still_ don't have
+  // a card, then we may be in an error state, or don't have any available cards.
+  // in that case... get the first card you can?
+  if (categories.length === 0) {
+    categories = Object.keys(cards);
+    const pickedCategory = Math.floor(Math.random() * categories.length);
+    const hint = categories[pickedCategory];
+    const filteredCards = cards[hint];
+    const whichOne = Math.floor(Math.random() * filteredCards.length);
+    const index = getIndexOfCard(filteredCards[whichOne], cards[hint]);
+    return {hint: hint, index:index};
+  }
+}
+
+function getIndexOfCard(card, cards) {
+  for (let i = 0; i < cards.length; i++) {
+    if (card == cards[i]) {
+      return i;
+    }
+  }
+}
+
+function pickCardFromCategories(cards, stats, categories, showSettings) {
+  let pickedCategory = Math.floor(Math.random() * categories.length);
+  let hint = categories[pickedCategory];
+  let cardsForCategory = cards[hint];
+  let statsForCategory = stats[hint];
+
+  let filteredCards;
+  if (showSettings === 'onlyNew') {
+    filteredCards = cardsForCategory.filter(card => statsForCategory[card.jp] === undefined);
+  } else if (showSettings === 'mostlyRight') {
+    filteredCards = cardsForCategory.filter(card => statsForCategory[card.jp] && statsForCategory[card.jp].right > statsForCategory[card.jp].wrong);
+  } else if (showSettings === 'mostlyWrong') {
+    filteredCards = cardsForCategory.filter(card => statsForCategory[card.jp] && statsForCategory[card.jp].right < statsForCategory[card.jp].wrong);
+  }
+
+  // If there are no available cards, return the category so that we can try
+  // again from a different category.
+  if (filteredCards.length === 0) {
+    return {hint: hint, index:null};
+  }
+
+  const whichOne = Math.floor(Math.random() * filteredCards.length);
+  const index = getIndexOfCard(filteredCards[whichOne], cardsForCategory);
+  return {hint: hint, index:index};
 }

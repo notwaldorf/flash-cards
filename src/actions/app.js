@@ -74,9 +74,10 @@ export const loadInitialState = (path) => (dispatch) => {
   if (value) {
     dispatch(saveShowAnswer(value.showAnswer));
     dispatch(saveShowSettings(value.showSettings));
-    dispatch({ type: LOAD_STATS, stats: value.stats });
-    dispatch(showNewCard(value.activeCard));
     dispatch(saveAvailableTypes(value.categories));
+    dispatch({ type: LOAD_STATS, stats: value.stats });
+    // Always do this last since it depends on everything else in the state.
+    dispatch(showNewCard(value.activeCard));
   }
 };
 

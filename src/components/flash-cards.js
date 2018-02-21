@@ -78,13 +78,13 @@ class FlashCards extends connect(store)(LitElement) {
             label="only cards I haven't seen"
             checked="${showSettings == 'onlyNew'}">
         </check-box><br>
-        <check-box id="onlyWrong" class="show-settings"
-            label="only cards I've gotten wrong"
-            checked="${showSettings == 'onlyWrong'}">
+        <check-box id="mostlyWrong" class="show-settings"
+            label="only cards I've gotten mostly wrong"
+            checked="${showSettings == 'mostlyWrong'}">
         </check-box><br>
-        <check-box id="onlyRight" class="show-settings"
-            label="only cards I've gotten right"
-            checked="${showSettings == 'onlyRight'}">
+        <check-box id="mostlyRight" class="show-settings"
+            label="only cards I've gotten mostly right"
+            checked="${showSettings == 'mostlyRight'}">
         </check-box>
       </div>
 
@@ -99,11 +99,7 @@ class FlashCards extends connect(store)(LitElement) {
 
   constructor() {
     super();
-    this.card = {
-      question: '',
-      answer: '',
-      hint: ''
-    }
+    this.card = {question: '', answer: '', hint: ''}
   }
 
   ready() {
