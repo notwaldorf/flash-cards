@@ -51,6 +51,11 @@ class StatsPage extends connect(store)(LitElement) {
           font-size: 12px;
           font-weight: normal;
         }
+        .ellipsis {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       </style>
 
       <div class="columns">
@@ -61,8 +66,8 @@ class StatsPage extends connect(store)(LitElement) {
           <div class="list">
             ${repeat(Object.keys(cards[kind]), entry => html`
               <div style$="${this._getColor(kind,cards[kind][entry].jp)}">
-                <div class="jp">${cards[kind][entry].jp}</div>
-                <div class="en">${cards[kind][entry].en}</div>
+                <div class="jp ellipsis" title="${cards[kind][entry].jp}">${cards[kind][entry].jp}</div>
+                <div class="en ellipsis" title="${cards[kind][entry].en}">${cards[kind][entry].en}</div>
               </div>
             `)}
           </div>
