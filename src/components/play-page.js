@@ -122,7 +122,6 @@ class FlashCards extends connect(store)(LitElement) {
         this._card.hidden = !this._card.hidden;
       });
     this.addEventListener('checked-changed', (e) => {
-      debugger
       const target = e.composedPath()[0];
       if (target.id === 'answer') {
         store.dispatch(saveShowAnswer(target.checked));

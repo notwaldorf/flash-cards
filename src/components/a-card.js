@@ -1,4 +1,5 @@
 import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { audioIcon } from './my-icons.js';
 
 class ACard extends LitElement {
   render(props) {
@@ -19,7 +20,7 @@ class ACard extends LitElement {
        .question {
          font-size: 4.5em;
          font-weight: bold;
-         font-family: "Noto Sans Japanese";
+         xfont-family: "Noto Sans Japanese";
        }
        .hint {
          font-size: 1em;
@@ -37,10 +38,13 @@ class ACard extends LitElement {
          text-align: center;
        }
        button {
-         background: #4CAF50;
-         color: white;
          box-shadow: none;
          border: none;
+         cursor: pointer;
+       }
+       button.green {
+         background: #4CAF50;
+         color: white;
          font-size: 1em;
          text-transform: uppercase;
          font-weight: bold;
@@ -48,7 +52,10 @@ class ACard extends LitElement {
          padding: 8px 18px;
          margin: 36px 0;
          border-radius: 4px;
-         cursor: pointer;
+       }
+       button.say {
+         background: transparent;
+         vertical-align: middle;
        }
        :host(.yes) {
         outline: 20px solid #64D989;
@@ -62,8 +69,11 @@ class ACard extends LitElement {
 
      <div class="question">${props.question}</div>
      <input autofocus placeholder="${props.showAnswer ? props.answer : 'answer'}">
-     <div class="hint">${props.hint}</div>
-     <button on-click="${this.submit.bind(this)}">${this.done ? 'next' : 'submit'}</button>
+     <div class="hint">
+       ${props.hint}
+       <button class="say" id="sayBtn" on-click="${() => this.say()}">${audioIcon}</button>
+     </div>
+     <button class="green" on-click="${() => this.submit()}">${this.done ? 'next' : 'submit'}</button>
     `;
   }
 
@@ -81,9 +91,31 @@ class ACard extends LitElement {
     super.ready();
     this.done = false;
     this._button = this.shadowRoot.querySelector('button');
+    this._sayBtn = this.shadowRoot.getElementById('sayBtn');
     this._input = this.shadowRoot.querySelector('input');
     this._input.addEventListener('change', () => this.submit());
     this._input.focus();
+
+    if (!'speechSynthesis' in window) {
+      this._sayBtn.hidden = true;
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        this.__voice = this._getVoice(speechSynthesis.getVoices());
+      }
+      this.__voice = this._getVoice(speechSynthesis.getVoices());
+    }
+  }
+
+  _getVoice(voices) {
+    this._sayBtn.hidden = false;
+    // In Chrome?
+    let voice = speechSynthesis.getVoices().filter((voice) => voice.name === 'Google 日本語')[0];
+    if (voice) return voice;
+    // On a Mac?
+    voice = speechSynthesis.getVoices().filter((voice) => voice.name === 'Kyoko')[0];
+    if (voice) return voice;
+    // I can't find a voice that reads Japanese on Windows
+    this._sayBtn.hidden = true;
   }
 
   _clear() {
@@ -114,6 +146,15 @@ class ACard extends LitElement {
 
       this._button.focus();
     }
+  }
+
+  say() {
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = this.question;
+    msg.lang = 'jp';
+    msg.voice = this.__voice;
+
+    window.speechSynthesis.speak(msg);
   }
 }
 window.customElements.define('a-card', ACard);
