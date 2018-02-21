@@ -10,7 +10,7 @@ export const loadAll = () => async (dispatch) => {
   dispatch(await loadFile('hiragana'));
   dispatch(await loadFile('katakana'));
   dispatch(await loadFile('numbers'));
-  //dispatch(showNewCard());
+
   dispatch(loadInitialState());
 }
 
@@ -25,28 +25,11 @@ async function loadFile(name) {
 }
 
 export const showNewCard = (card) => (dispatch, getState) => {
-  if (card) {
-    dispatch({ type: SHOW_CARD, card});
-  } else {
-    const state = getState();
-    const cards = state.data.cards;
-    let choices = state.data.choices || Object.keys(cards);
-    let whatKind = Math.floor(Math.random() * choices.length);
-    let availableCards = cards[choices[whatKind]];
-    // You may be in an error state, where you don't get any available cards.
-    // in that case... get the first card you can?
-    if (!availableCards) {
-      choices = Object.keys(cards);
-      whatKind = Math.floor(Math.random() * choices.length);
-      availableCards = cards[choices[whatKind]];
-    }
-
-    const whichOne = Math.floor(Math.random() * availableCards.length);
-    dispatch({
-      type: SHOW_CARD,
-      card: {hint: choices[whatKind], index: whichOne}
-    });
+  // Generate a new card if there's none to show.
+  if (!card) {
+    card = getNewCard(getState());
   }
+  dispatch({ type: SHOW_CARD, card});
 };
 
 export const getRight = (card) => {
@@ -71,3 +54,21 @@ export const saveAvailableTypes = (choices) => (dispatch, getState) => {
     dispatch({type: SAVE_CHOICES, 'choices': Object.keys(state.data.cards)});
   }
 };
+
+function getNewCard(state) {
+  const cards = state.data.cards;
+  let choices = state.data.choices || Object.keys(cards);
+  let whatKind = Math.floor(Math.random() * choices.length); // i.e. hiragana or katakana.
+  let availableCards = cards[choices[whatKind]];
+
+  // You may be in an error state, where you don't get any available cards.
+  // in that case... get the first card you can?
+  if (!availableCards) {
+    choices = Object.keys(cards);
+    whatKind = Math.floor(Math.random() * choices.length);
+    availableCards = cards[choices[whatKind]];
+  }
+
+  const whichOne = Math.floor(Math.random() * availableCards.length);
+  return {hint: choices[whatKind], index: whichOne};
+}

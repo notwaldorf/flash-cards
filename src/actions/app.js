@@ -30,8 +30,6 @@ const loadPage = (page) => async (dispatch) => {
   switch(page) {
     case 'play':
       await import('../components/flash-cards.js');
-      // Put code here that you want it to run every time when
-      // navigate to view1 page and my-view1.js is loaded
       break;
     case 'stats':
       await import('../components/stats-page.js');
@@ -39,8 +37,8 @@ const loadPage = (page) => async (dispatch) => {
     default:
       page = 'view404';
       await import('../components/my-view404.js');
+      break;
   }
-
   dispatch(updatePage(page));
 }
 
