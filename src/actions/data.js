@@ -61,7 +61,7 @@ function getNewCard(state) {
 
   // What kind of categories we can pick from (i.e. hiragana or katakana etc).
   let categories = state.data.categories || Object.keys(cards);
-  let showSettings = state.app.showSettings;  // onlyNew, mostlyRight, mostlyWrong.
+  let showSettings = state.app.showSettings;  // all, onlyNew, mostlyRight, mostlyWrong.
 
   let randomCard = pickCardFromCategories(cards, state.data.stats, categories, showSettings);
 
@@ -111,6 +111,9 @@ function pickCardFromCategories(cards, stats, categories, showSettings) {
     filteredCards = cardsForCategory.filter(card => statsForCategory[card.jp] && statsForCategory[card.jp].right > statsForCategory[card.jp].wrong);
   } else if (showSettings === 'mostlyWrong') {
     filteredCards = cardsForCategory.filter(card => statsForCategory[card.jp] && statsForCategory[card.jp].right < statsForCategory[card.jp].wrong);
+  } else {
+    // This includes 'all' or like, invalid settings.
+    filteredCards = cardsForCategory;
   }
 
   // If there are no available cards, return the category so that we can try

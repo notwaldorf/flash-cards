@@ -52,13 +52,16 @@ class FlashCards extends connect(store)(LitElement) {
       }
       #settings {
         width: 300px;
-        height: 300px;
+        height: 340px;
         border-radius: 3px;
         background: white;
         box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
            0 1px 8px 0 rgba(0, 0, 0, 0.12),
            0 3px 3px -2px rgba(0, 0, 0, 0.4);
         padding: 20px;
+      }
+      h4 {
+        line-height: 1;
       }
       </style>
       <button class="settings-btn">${settingsIcon}</button>
@@ -73,7 +76,11 @@ class FlashCards extends connect(store)(LitElement) {
           `
         )}
 
-        <h4>Show me</h4>
+        <h4>Type of card</h4>
+        <check-box id="all" class="show-settings"
+            label="all cards"
+            checked="${showSettings == 'all'}">
+        </check-box><br>
         <check-box id="onlyNew" class="show-settings"
             label="only cards I haven't seen"
             checked="${showSettings == 'onlyNew'}">

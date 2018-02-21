@@ -42,10 +42,16 @@ const app = (state = {page:'', showAnswer:false}, action) => {
         showAnswer: action.shouldShow
       };
     case SAVE_SHOW_SETTINGS:
-      saveToLocalStorage('showSettings', action.showSettings);
+      let showSettings;
+      // If we saved a garbage value (from an old version of the app), reset.
+      if (action.showSettings !== 'onlyNew' || action.showSettings !== 'all' ||
+          action.showSettings !== 'mostlyRight' || action.showSettings !== 'mostlyWrong') {
+        showSettings = 'all';
+      }
+      saveToLocalStorage('showSettings', showSettings);
       return {
         ...state,
-        showSettings: action.showSettings
+        showSettings
       };
     default:
       return state;
