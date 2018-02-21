@@ -25,18 +25,14 @@ store.addReducers({data});
 
 class MyApp extends connect(store)(LitElement) {
   render({page, appTitle, snackbarOpened, offline}) {
-    // Anything that's related to rendering should be done in here.
-
     if (page && appTitle) {
       const pageTitle = appTitle + ' - ' + page;
       updateSEOMetadata({
-          title: pageTitle,
-          description: pageTitle,
-          url: document.location.href,
-          // This object also takes an image property, that points to an img src.
-        });
+        title: pageTitle,
+        description: pageTitle,
+        url: document.location.href,
+      });
     }
-
     return html`
     <style>
       :host {
@@ -108,18 +104,18 @@ class MyApp extends connect(store)(LitElement) {
     <!-- Header -->
     <header>
       <span main-title>${appTitle}</span>
-      <div class="toolbar-list" role="navigation">
+      <nav class="toolbar-list" role="navigation">
         <a selected$="${page === 'play'}" href="${Polymer.rootPath}play">Play</a>
         <a selected$="${page === 'stats'}" href="${Polymer.rootPath}stats">Stats</a>
-      </div>
+      </nav>
     </header>
 
     <!-- Main content -->
-    <div class="main-content" role="main">
+    <main class="main-content" role="main">
       <flash-cards class="page" selected$="${page === 'play'}"></flash-cards>
       <stats-page class="page" selected$="${page === 'stats'}"></stats-page>
       <my-view404 class="page" selected$="${page === 'view404'}"></my-view404>
-    </div>
+    </main>
 
     <snack-bar active$="${snackbarOpened}">
         You are now ${offline ? 'offline' : 'online'}.

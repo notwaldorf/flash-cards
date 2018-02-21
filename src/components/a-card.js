@@ -61,7 +61,7 @@ class ACard extends LitElement {
      </style>
 
      <div class="question">${props.question}</div>
-     <input placeholder="${props.showAnswer ? props.answer : 'answer'}">
+     <input autofocus placeholder="${props.showAnswer ? props.answer : 'answer'}">
      <div class="hint">${props.hint}</div>
      <button on-click="${this.submit.bind(this)}">${this.done ? 'next' : 'submit'}</button>
     `;
