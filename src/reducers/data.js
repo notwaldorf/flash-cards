@@ -1,5 +1,6 @@
 import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG, SAVE_CHOICES } from '../actions/data.js';
 import { LOAD_STATS } from '../actions/app.js';
+import { saveToLocalStorage } from './app.js';
 
 const app = (state = {cards:{}, stats:{}, choices:[]}, action) => {
   let json, value;
@@ -16,29 +17,18 @@ const app = (state = {cards:{}, stats:{}, choices:[]}, action) => {
         stats: action.stats
       }
     case SHOW_CARD:
-      // Save to local storage.
-      const activeCard = action.card;
-      json = localStorage.getItem('__learn_japanese__') || '{}';
-      value = JSON.parse(json);
-      value.activeCard = activeCard;
-      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
-
+      saveToLocalStorage('activeCard', action.card);
       return {
         ...state,
-        activeCard
+        activeCard: action.card
       }
     case GET_RIGHT:
     case GET_WRONG:
       // Save the stats to local storage. It doesn't matter that we overwrite
       // the previous state, that's the whole point of Redux :)
       const newStats = stats(state.stats, action);
-
-      json = localStorage.getItem('__learn_japanese__') || '{}';
-      value = JSON.parse(json);
-      value.stats = newStats;
-      value.activeCard = null;
-      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
-
+      saveToLocalStorage('stats', newStats);
+      saveToLocalStorage('activeCard', null);
       return {
         ...state,
         stats: newStats,
@@ -46,17 +36,10 @@ const app = (state = {cards:{}, stats:{}, choices:[]}, action) => {
       }
       return state;
     case SAVE_CHOICES:
-      // Save to local storage.
-      const choices = action.choices;
-
-      json = localStorage.getItem('__learn_japanese__') || '{}';
-      value = JSON.parse(json);
-      value.choices = choices;
-      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
-
+      saveToLocalStorage('choices', action.choices);
       return {
         ...state,
-        choices
+        choices: action.choices
       }
     default:
       return state;
@@ -112,6 +95,5 @@ const question = (state = {right: 0, wrong: 0}, action) => {
       return state;
   }
 }
-
 
 export default app;

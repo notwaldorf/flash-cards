@@ -36,28 +36,16 @@ const app = (state = {page:'', showAnswer:false}, action) => {
         snackbarOpened: false
       };
     case SAVE_SHOW_ANSWER:
-      const answer = action.shouldShow;
-      json = localStorage.getItem('__learn_japanese__') || '{}';
-      value = JSON.parse(json);
-      value.showAnswer = answer;
-      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
-      // Save in store.
+      saveToLocalStorage('showAnswer', action.shouldShow);
       return {
         ...state,
-        showAnswer: answer
+        showAnswer: action.shouldShow
       };
     case SAVE_SHOW_SETTINGS:
-      const settings = action.showSettings;
-
-      json = localStorage.getItem('__learn_japanese__') || '{}';
-      value = JSON.parse(json);
-      value.showSettings = settings;
-      localStorage.setItem('__learn_japanese__', JSON.stringify(value));
-
-      // Save in store.
+      saveToLocalStorage('showSettings', action.showSettings);
       return {
         ...state,
-        showSettings: settings
+        showSettings: action.showSettings
       };
     default:
       return state;
@@ -65,3 +53,10 @@ const app = (state = {page:'', showAnswer:false}, action) => {
 }
 
 export default app;
+
+export const saveToLocalStorage = function(key, value) {
+  const json = localStorage.getItem('__learn_japanese__') || '{}';
+  let data = JSON.parse(json);
+  data[key] = value;
+  localStorage.setItem('__learn_japanese__', JSON.stringify(data));
+}
