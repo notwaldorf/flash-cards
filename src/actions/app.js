@@ -17,19 +17,6 @@ export const SAVE_SHOW_SETTINGS = 'SAVE_SHOW_SETTINGS';
 export const LOAD_STATS = 'LOAD_STATS';
 import { showNewCard, saveAvailableTypes } from './data.js';
 
-export const loadInitialState = (path) => (dispatch) => {
-  // If there is local storage data, load it.
-  let json = localStorage.getItem('__learn_japanese__') || '{}';
-  let value = JSON.parse(json);
-  if (value) {
-    dispatch(saveShowAnswer(value.showAnswer));
-    dispatch(saveShowSettings(value.showSettings));
-    dispatch({ type: LOAD_STATS, stats: value.stats });
-    dispatch(showNewCard(value.activeCard));
-    dispatch(saveAvailableTypes(value.choices));
-  }
-};
-
 export const navigate = (path) => (dispatch) => {
   // Extract the page name from path.
   const page = path === '/' ? 'view1' : path.slice(1);
@@ -80,6 +67,19 @@ export const updateOffline = (offline) => {
     type: UPDATE_OFFLINE,
     offline
   };
+};
+
+export const loadInitialState = (path) => (dispatch) => {
+  // If there is local storage data, load it.
+  let json = localStorage.getItem('__learn_japanese__') || '{}';
+  let value = JSON.parse(json);
+  if (value) {
+    dispatch(saveShowAnswer(value.showAnswer));
+    dispatch(saveShowSettings(value.showSettings));
+    dispatch({ type: LOAD_STATS, stats: value.stats });
+    dispatch(showNewCard(value.activeCard));
+    dispatch(saveAvailableTypes(value.choices));
+  }
 };
 
 export const saveShowAnswer = (shouldShow) => {

@@ -1,7 +1,7 @@
 import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG, SAVE_CHOICES } from '../actions/data.js';
 import { LOAD_STATS } from '../actions/app.js';
 
-const app = (state = {cards:{}, stats:{}}, action) => {
+const app = (state = {cards:{}, stats:{}, choices:[]}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_CARDS:

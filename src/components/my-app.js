@@ -16,7 +16,7 @@ import { updateSEOMetadata } from '../../node_modules/pwa-helpers/seo-metadata.j
 import { setPassiveTouchGestures } from '../../node_modules/@polymer/polymer/lib/utils/settings.js';
 
 import { store } from '../store.js';
-import { navigate, updateOffline, showSnackbar, loadInitialState } from '../actions/app.js';
+import { navigate, updateOffline, showSnackbar } from '../actions/app.js';
 import data from '../reducers/data.js';
 import { loadAll } from '../actions/data.js';
 import './snack-bar.js'
@@ -152,7 +152,6 @@ class MyApp extends connect(store)(LitElement) {
     installRouter(() => this._locationChanged());
     installOfflineWatcher((offline) => this._offlineChanged(offline));
     store.dispatch(loadAll());
-    store.dispatch(loadInitialState());
   }
 
   stateChanged(state) {

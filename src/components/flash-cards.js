@@ -97,6 +97,15 @@ class FlashCards extends connect(store)(LitElement) {
     `;
   }
 
+  constructor() {
+    super();
+    this.card = {
+      question: '',
+      answer: '',
+      hint: ''
+    }
+  }
+
   ready() {
     // Ready to render!
     super.ready();
@@ -142,7 +151,7 @@ class FlashCards extends connect(store)(LitElement) {
     this.showSettings = state.app.showSettings;
     const activeCard = state.data.activeCard;  // {hint, index}
 
-    if (activeCard) {
+    if (activeCard && activeCard.index) {
       if (!this.cards[activeCard.hint]) {
         // Oops, you're in an error state. This card doesn't exist anymore.
         store.dispatch(showNewCard());
