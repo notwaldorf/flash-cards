@@ -112,7 +112,6 @@ class FlashCards extends connect(store)(LitElement) {
   ready() {
     // Ready to render!
     super.ready();
-    this._checkboxes = this.shadowRoot.querySelectorAll('.categories');
     this._settings = this.shadowRoot.querySelector('#settings');
     this._card = this.shadowRoot.querySelector('a-card');
 
@@ -129,9 +128,10 @@ class FlashCards extends connect(store)(LitElement) {
         store.dispatch(saveShowSettings(target.id, target.checked));
       } else {
         let categories = [];
-        for (let i = 0; i < this._checkboxes.length; i++) {
-          if (this._checkboxes[i].checked) {
-            categories.push(this._checkboxes[i].label)
+        const checkboxes = this.shadowRoot.querySelectorAll('.categories');
+        for (let i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].checked) {
+            categories.push(checkboxes[i].label)
           }
         }
         store.dispatch(saveAvailableTypes(categories));

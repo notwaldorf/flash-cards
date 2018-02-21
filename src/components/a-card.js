@@ -7,8 +7,8 @@ class ACard extends LitElement {
     <style>
       :host {
         display: block;
-        width: 300px;
-        height: 300px;
+        width: 400px;
+        min-height: 300px;
         text-align: center;
         border-radius: 3px;
         background: white;
@@ -34,7 +34,7 @@ class ACard extends LitElement {
          border: 0;
          padding: 0;
          border-bottom: 2px solid #E4E4E4;
-         width: 150px;
+         width: 100%;
          text-align: center;
        }
        button {
@@ -90,7 +90,7 @@ class ACard extends LitElement {
   ready() {
     super.ready();
     this.done = false;
-    this._button = this.shadowRoot.querySelector('button');
+    this._button = this.shadowRoot.querySelector('button.green');
     this._sayBtn = this.shadowRoot.getElementById('sayBtn');
     this._input = this.shadowRoot.querySelector('input');
     this._input.addEventListener('change', () => this.submit());

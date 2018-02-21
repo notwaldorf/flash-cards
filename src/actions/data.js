@@ -10,6 +10,7 @@ export const loadAll = () => async (dispatch) => {
   dispatch(await loadFile('hiragana'));
   dispatch(await loadFile('katakana'));
   dispatch(await loadFile('numbers'));
+  dispatch(await loadFile('basic-phrases'));
 
   dispatch(loadInitialState());
   //dispatch(showNewCard());
@@ -60,7 +61,7 @@ function getNewCard(state) {
   const cards = state.data.cards;
 
   // What kind of categories we can pick from (i.e. hiragana or katakana etc).
-  let categories = state.data.categories || Object.keys(cards);
+  let categories = state.data.categories.length !== 0 ? state.data.categories : Object.keys(cards);
   let showSettings = state.app.showSettings;  // all, onlyNew, mostlyRight, mostlyWrong.
 
   let randomCard = pickCardFromCategories(cards, state.data.stats, categories, showSettings);
