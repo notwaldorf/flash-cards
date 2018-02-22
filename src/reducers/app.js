@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { UPDATE_PAGE, UPDATE_OFFLINE,
          OPEN_SNACKBAR, CLOSE_SNACKBAR,
-         SAVE_SHOW_ANSWER, SAVE_SHOW_SETTINGS } from '../actions/app.js';
+         SAVE_SHOW_ANSWER, SAVE_SHOW_SETTINGS, SAVE_SAY_SETTINGS } from '../actions/app.js';
 
 const app = (state = {}, action) => {
   let json, value;
@@ -50,6 +50,17 @@ const app = (state = {}, action) => {
       return {
         ...state,
         showSettings
+      };
+    case SAVE_SAY_SETTINGS:
+      let saySettings = action.saySettings;
+      // If we saved a garbage value (from an old version of the app), reset.
+      if (saySettings !== 'demand' && saySettings !== 'start' &&
+          saySettings !== 'end') {
+        saySettings = 'demand';
+      }
+      return {
+        ...state,
+        saySettings
       };
     default:
       return state;

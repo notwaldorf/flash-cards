@@ -71,7 +71,7 @@ class ACard extends LitElement {
      <input autofocus placeholder="${props.showAnswer ? props.answer : 'answer'}">
      <div class="hint">
        ${props.hint}
-       <button class="say" id="sayBtn" on-click="${() => this.say()}">${audioIcon}</button>
+       <button class="say" id="sayBtn" on-click="${() => this._say()}">${audioIcon}</button>
      </div>
      <button class="green" on-click="${() => this.submit()}">${props.done ? 'next' : 'submit'}</button>
     `;
@@ -83,7 +83,8 @@ class ACard extends LitElement {
       hint: String,
       answer: String,
       done: String,
-      showAnswer: Boolean
+      showAnswer: Boolean,
+      say: String,
     }
   }
 
@@ -100,9 +101,18 @@ class ACard extends LitElement {
       this._sayBtn.hidden = true;
     } else {
       speechSynthesis.onvoiceschanged = () => {
-        this.__voice = this._getVoice(speechSynthesis.getVoices());
+        this._voice = this._getVoice(speechSynthesis.getVoices());
       }
-      this.__voice = this._getVoice(speechSynthesis.getVoices());
+      this._voice = this._getVoice(speechSynthesis.getVoices());
+    }
+  }
+
+  didRender() {
+    if (!this._voice || !this._input) {
+      return;
+    }
+    if (this.say === 'start' && this._previousQuestion !== this.question) {
+      this._say();
     }
   }
 
@@ -127,6 +137,8 @@ class ACard extends LitElement {
   }
 
   submit() {
+    this._previousQuestion = this.question;
+
     if (this.done) {  // next answer
       this._clear();
       this.dispatchEvent(new CustomEvent('next-question',
@@ -134,6 +146,10 @@ class ACard extends LitElement {
     } else {  // submit answer
       this.done = true;
       const correct = this._input.value === this.answer;
+
+      if (this.say === 'end') {
+        this._say();
+      }
 
       if (correct) {
         this.classList.add('yes');
@@ -148,12 +164,11 @@ class ACard extends LitElement {
     }
   }
 
-  say() {
+  _say() {
     var msg = new SpeechSynthesisUtterance();
     msg.text = this.question;
     msg.lang = 'jp';
-    msg.voice = this.__voice;
-
+    msg.voice = this._voice;
     window.speechSynthesis.speak(msg);
   }
 }

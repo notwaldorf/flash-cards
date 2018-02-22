@@ -6,7 +6,7 @@ import { settingsIcon } from './my-icons.js';
 import './a-card.js';
 import './check-box.js';
 
-import { saveShowAnswer, saveShowSettings } from '../actions/app.js';
+import { saveShowAnswer, saveShowSettings, saveSaySettings } from '../actions/app.js';
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
 class FlashCards extends connect(store)(LitElement) {
@@ -20,11 +20,12 @@ class FlashCards extends connect(store)(LitElement) {
       card: Object,
       showAnswer: Boolean,
       showSettings: String,
+      saySettings: String,
       categories: Array
     }
   }
 
-  render({card, cards, showAnswer, showSettings, categories}) {
+  render({card, cards, showAnswer, showSettings, saySettings, categories}) {
     return html`
       <style>
       :host {
@@ -51,8 +52,8 @@ class FlashCards extends connect(store)(LitElement) {
         z-index: 1;
       }
       #settings {
-        width: 300px;
-        height: 340px;
+        width: 400px;
+        min-height: 540px;
         border-radius: 3px;
         background: white;
         box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
@@ -76,7 +77,7 @@ class FlashCards extends connect(store)(LitElement) {
           `
         )}
 
-        <h4>Type of card</h4>
+        <h4>Ask me...</h4>
         <check-box id="all" class="show-settings"
             label="all cards"
             checked="${showSettings == 'all'}">
@@ -93,13 +94,28 @@ class FlashCards extends connect(store)(LitElement) {
             label="only cards I've gotten mostly right"
             checked="${showSettings == 'mostlyRight'}">
         </check-box>
+
+        <h4>Read answer...</h4>
+        <check-box id="start" class="say-settings"
+            label="when card is shown"
+            checked="${saySettings == 'start'}">
+        </check-box><br>
+        <check-box id="end" class="say-settings"
+            label="before next card is shown"
+            checked="${saySettings == 'end'}">
+        </check-box><br>
+        <check-box id="demand" class="say-settings"
+            label="only when I want to"
+            checked="${saySettings == 'demand'}">
+
       </div>
 
       <a-card
         showAnswer="${showAnswer}"
         question="${card.question}"
         answer="${card.answer}"
-        hint="${card.hint}">
+        hint="${card.hint}"
+        say="${saySettings}">
       </a-card>
     `;
   }
@@ -126,6 +142,8 @@ class FlashCards extends connect(store)(LitElement) {
         store.dispatch(saveShowAnswer(target.checked));
       } if (target.classList.contains('show-settings')) {
         store.dispatch(saveShowSettings(target.id, target.checked));
+      } if (target.classList.contains('say-settings')) {
+        store.dispatch(saveSaySettings(target.id, target.checked));
       } else {
         let categories = [];
         const checkboxes = this.shadowRoot.querySelectorAll('.categories');
@@ -139,11 +157,7 @@ class FlashCards extends connect(store)(LitElement) {
     });
     this.addEventListener('next-question', () => store.dispatch(showNewCard()));
     this.addEventListener('answered', (e) => {
-      if (e.detail.correct) {
-        store.dispatch(getRight(this.card));
-      } else {
-        store.dispatch(getWrong(this.card));
-      }
+      store.dispatch(e.detail.correct ? getRight(this.card) : getWrong(this.card));
     });
   }
 
@@ -152,9 +166,11 @@ class FlashCards extends connect(store)(LitElement) {
     this.cards = state.data.cards;
     this.categories = state.data.categories;
     this.showSettings = state.app.showSettings;
-    const activeCard = state.data.activeCard;  // {hint, index}
+    this.saySettings = state.app.saySettings;
 
-    if (activeCard && activeCard.index) {
+    const activeCard = state.data.activeCard;  // {hint, index}
+    
+    if (activeCard && activeCard.index !== undefined) {
       if (!this.cards[activeCard.hint]) {
         // Oops, you're in an error state. This card doesn't exist anymore.
         store.dispatch(showNewCard());

@@ -64,6 +64,9 @@ const byHint = (state = {}, action) => {
   switch (action.type) {
     case GET_RIGHT:
     case GET_WRONG:
+      if (card.question === '') {
+        return state;
+      }
       return {
         ...state,
         [card.question]: question(state[card.question], action)

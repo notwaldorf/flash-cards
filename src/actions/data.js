@@ -4,11 +4,14 @@ export const GET_RIGHT = 'GET_RIGHT';
 export const GET_WRONG = 'GET_WRONG';
 export const SAVE_CHOICES = 'SAVE_CHOICES';
 
-export const loadAll = () => async (dispatch) => {
+export const loadAll = () => async (dispatch, getState) => {
   dispatch(await loadFile('hiragana'));
   dispatch(await loadFile('katakana'));
   dispatch(await loadFile('numbers'));
   dispatch(await loadFile('basic-phrases'));
+
+  const state = getState();
+  dispatch(showNewCard(state.data.activeCard));
 }
 
 async function loadFile(name) {
@@ -23,7 +26,7 @@ async function loadFile(name) {
 
 export const showNewCard = (card) => (dispatch, getState) => {
   // Generate a new card if there's none to show.
-  if (!card || !card.index) {
+  if (!card || card.index === undefined) {
     card = getNewCard(getState());
   }
   dispatch({ type: SHOW_CARD, card});
