@@ -78,10 +78,6 @@ class CheckBox extends LitElement {
     this.checked = false;
   }
 
-  ready() {
-    super.ready();
-  }
-
   _checkedChanged(event) {
     this.checked = event.currentTarget.checked
     this.dispatchEvent(new CustomEvent('checked-changed', {bubbles: false, composed: true}));

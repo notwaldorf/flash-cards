@@ -68,7 +68,9 @@ class ACard extends LitElement {
      </style>
 
      <div class="question">${props.question}</div>
-     <input autofocus placeholder="${props.showAnswer ? props.answer : 'answer'}">
+     <input autofocus
+        placeholder="${props.showAnswer ? props.answer : 'answer'}"
+        on-change="${() => this.submit()}">
      <div class="hint">
        ${props.hint}
        <button class="say" id="sayBtn" on-click="${() => this._say()}">${audioIcon}</button>
@@ -94,7 +96,6 @@ class ACard extends LitElement {
     this._button = this.shadowRoot.querySelector('button.green');
     this._sayBtn = this.shadowRoot.getElementById('sayBtn');
     this._input = this.shadowRoot.querySelector('input');
-    this._input.addEventListener('change', () => this.submit());
     this._input.focus();
 
     if (!'speechSynthesis' in window) {
