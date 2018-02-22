@@ -13,6 +13,7 @@ export const loadState = () => {
   let state = JSON.parse(json);
 
   if (state) {
+    state.app.snackbarOpened = false;
     return state;
   } else {
     return undefined;

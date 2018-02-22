@@ -90,9 +90,14 @@ class ACard extends LitElement {
     }
   }
 
+  constructor() {
+    super();
+    this.done = false;
+  }
   ready() {
     super.ready();
-    this.done = false;
+
+    // Save these for later;
     this._button = this.shadowRoot.querySelector('button.green');
     this._sayBtn = this.shadowRoot.getElementById('sayBtn');
     this._input = this.shadowRoot.querySelector('input');
@@ -108,11 +113,11 @@ class ACard extends LitElement {
     }
   }
 
-  didRender() {
-    if (!this._voice || !this._input) {
+  didRender(properties, changeList) {
+    if (!this._voice || !this._input || this.say !== 'start') {
       return;
     }
-    if (this.say === 'start' && this._previousQuestion !== this.question) {
+    if ('question' in changeList) {
       this._say();
     }
   }
@@ -138,8 +143,6 @@ class ACard extends LitElement {
   }
 
   submit() {
-    this._previousQuestion = this.question;
-
     if (this.done) {  // next answer
       this._clear();
       this.dispatchEvent(new CustomEvent('next-question',
