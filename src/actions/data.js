@@ -59,7 +59,8 @@ function getNewCard(state) {
   const cards = state.data.cards;
 
   // What kind of categories we can pick from (i.e. hiragana or katakana etc).
-  let categories = state.data.categories.length !== 0 ? state.data.categories : Object.keys(cards);
+  let categories = (state.data.categories && state.data.categories.length !== 0)
+      ? state.data.categories : Object.keys(cards);
   let showSettings = state.app.showSettings;  // all, onlyNew, mostlyRight, mostlyWrong.
 
   let randomCard = pickCardFromCategories(cards, state.data.stats, categories, showSettings);

@@ -13,7 +13,13 @@ export const loadState = () => {
   let state = JSON.parse(json);
 
   if (state) {
-    state.app.snackbarOpened = false;
+    // Some sane defaults
+    if (state.app) {
+      state.app.snackbarOpened = false;
+    }
+    if (state.data && !state.data.categories) {
+      state.data.categories = [];
+    }
     return state;
   } else {
     return undefined;
