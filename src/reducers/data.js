@@ -5,13 +5,11 @@ const app = (state = {}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_CARDS:
-    debugger
       return {
         ...state,
         cards: {...state.cards, [action.hint]: action.cards}
       }
     case LOAD_STATS:
-    debugger
       return {
         ...state,
         stats: action.stats
