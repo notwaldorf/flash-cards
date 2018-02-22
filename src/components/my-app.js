@@ -130,7 +130,7 @@ class MyApp extends connect(store)(LitElement) {
       <my-view404 class="page" selected?="${page === 'view404'}"></my-view404>
     </main>
 
-    <snack-bar active$="${snackbarOpened}">
+    <snack-bar active?="${snackbarOpened}">
         You are now ${offline ? 'offline' : 'online'}.
     </snack-bar>
 `;
