@@ -1,8 +1,8 @@
 {
-  "name": "My App",
-  "short_name": "My App",
-  "description": "My App description",
-  "start_url": "/",
+  "name": "Learn Japanese",
+  "short_name": "Learn Japanese",
+  "description": "Flash cards app to learn Japanese",
+  "start_url": "/index.html",
   "display": "standalone",
   "theme_color": "#3f51b5",
   "background_color": "#3f51b5",
