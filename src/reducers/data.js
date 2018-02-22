@@ -1,16 +1,17 @@
 import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG, SAVE_CHOICES } from '../actions/data.js';
 import { LOAD_STATS } from '../actions/app.js';
 
-const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
+const app = (state = {}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_CARDS:
+    debugger
       return {
         ...state,
-        cards: {...state.cards, [action.hint]: action.cards},
-        stats: {...state.stats, [action.hint]: {}}
+        cards: {...state.cards, [action.hint]: action.cards}
       }
     case LOAD_STATS:
+    debugger
       return {
         ...state,
         stats: action.stats

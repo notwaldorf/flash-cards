@@ -4,16 +4,11 @@ export const GET_RIGHT = 'GET_RIGHT';
 export const GET_WRONG = 'GET_WRONG';
 export const SAVE_CHOICES = 'SAVE_CHOICES';
 
-import { loadInitialState } from './app.js';
-
 export const loadAll = () => async (dispatch) => {
   dispatch(await loadFile('hiragana'));
   dispatch(await loadFile('katakana'));
   dispatch(await loadFile('numbers'));
   dispatch(await loadFile('basic-phrases'));
-
-  dispatch(loadInitialState());
-  //dispatch(showNewCard());
 }
 
 async function loadFile(name) {

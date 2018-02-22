@@ -70,20 +70,6 @@ export const updateOffline = (offline) => {
   };
 };
 
-export const loadInitialState = (path) => (dispatch) => {
-  // If there is local storage data, load it.
-  let json = localStorage.getItem('__learn_japanese__') || '{}';
-  let value = JSON.parse(json);
-  if (value) {
-    dispatch(saveShowAnswer(value.showAnswer));
-    dispatch(saveShowSettings(value.showSettings));
-    dispatch(saveAvailableTypes(value.categories));
-    dispatch({ type: LOAD_STATS, stats: value.stats });
-    // Always do this last since it depends on everything else in the state.
-    dispatch(showNewCard(value.activeCard));
-  }
-};
-
 export const saveShowAnswer = (shouldShow) => {
   return {
     type: SAVE_SHOW_ANSWER,

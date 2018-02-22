@@ -164,7 +164,9 @@ class MyApp extends connect(store)(LitElement) {
 
   _offlineChanged(offline) {
     const previousOffline = this.offline;
-    store.dispatch(updateOffline(offline));
+    if (this.offline !== offline) {
+      store.dispatch(updateOffline(offline));
+    }
 
     // Don't show the snackbar on the first load of the page.
     if (previousOffline === undefined) {

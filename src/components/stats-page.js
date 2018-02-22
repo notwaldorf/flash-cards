@@ -92,6 +92,7 @@ class StatsPage extends connect(store)(LitElement) {
   }
 
   stateChanged(state) {
+    debugger
     this.cards = state.data.cards;
     this.stats = state.data.stats;
   }

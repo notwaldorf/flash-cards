@@ -12,7 +12,7 @@ import { UPDATE_PAGE, UPDATE_OFFLINE,
          OPEN_SNACKBAR, CLOSE_SNACKBAR,
          SAVE_SHOW_ANSWER, SAVE_SHOW_SETTINGS } from '../actions/app.js';
 
-const app = (state = {page:'', showAnswer:false}, action) => {
+const app = (state = {}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_PAGE:
