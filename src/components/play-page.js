@@ -21,11 +21,12 @@ class FlashCards extends connect(store)(LitElement) {
       showAnswer: Boolean,
       showSettings: String,
       saySettings: String,
-      categories: Array
+      categories: Array,
+      showSettingsPage: Boolean
     }
   }
 
-  render({card, cards, showAnswer, showSettings, saySettings, categories}) {
+  render({card, cards, showAnswer, showSettings, saySettings, categories, showSettingsPage}) {
     return html`
       <style>
       :host {
@@ -65,9 +66,9 @@ class FlashCards extends connect(store)(LitElement) {
         line-height: 1;
       }
       </style>
-      <button class="settings-btn">${settingsIcon}</button>
+      <button class="settings-btn" on-click=${() => this._toggleShowSettings()}">${settingsIcon}</button>
 
-      <div id="settings" hidden>
+      <div id="settings" hidden?="${!showSettingsPage}">
         <check-box id="answer" label="show answer" checked="${showAnswer}"></check-box>
 
         <h4>Pick from</h4>
@@ -110,7 +111,7 @@ class FlashCards extends connect(store)(LitElement) {
 
       </div>
 
-      <a-card
+      <a-card hidden?="${showSettingsPage}"
         showAnswer="${showAnswer}"
         question="${card.question}"
         answer="${card.answer}"
@@ -122,39 +123,16 @@ class FlashCards extends connect(store)(LitElement) {
 
   constructor() {
     super();
-    this.card = {question: '', answer: '', hint: ''}
+    this.card = {question: '', answer: '', hint: ''};
+    this.showSettingsPage = false;
   }
 
   ready() {
     // Ready to render!
     super.ready();
-    this._settings = this.shadowRoot.querySelector('#settings');
     this._card = this.shadowRoot.querySelector('a-card');
 
-    this.shadowRoot.querySelector('button.settings-btn').addEventListener('click',
-      (event) => {
-        this._settings.hidden = !this._settings.hidden;
-        this._card.hidden = !this._card.hidden;
-      });
-    this.addEventListener('checked-changed', (e) => {
-      const target = e.composedPath()[0];
-      if (target.id === 'answer') {
-        store.dispatch(saveShowAnswer(target.checked));
-      } if (target.classList.contains('show-settings')) {
-        store.dispatch(saveShowSettings(target.id, target.checked));
-      } if (target.classList.contains('say-settings')) {
-        store.dispatch(saveSaySettings(target.id, target.checked));
-      } else {
-        let categories = [];
-        const checkboxes = this.shadowRoot.querySelectorAll('.categories');
-        for (let i = 0; i < checkboxes.length; i++) {
-          if (checkboxes[i].checked) {
-            categories.push(checkboxes[i].label)
-          }
-        }
-        store.dispatch(saveAvailableTypes(categories));
-      }
-    });
+    this.addEventListener('checked-changed', (e) => this._checkedChanged(e.composedPath()[0]))
     this.addEventListener('next-question', () => store.dispatch(showNewCard()));
     this.addEventListener('answered', (e) => {
       store.dispatch(e.detail.correct ? getRight(this.card) : getWrong(this.card));
@@ -169,7 +147,7 @@ class FlashCards extends connect(store)(LitElement) {
     this.saySettings = state.app.saySettings;
 
     const activeCard = state.data.activeCard;  // {hint, index}
-    
+
     if (activeCard && activeCard.index !== undefined) {
       if (!this.cards[activeCard.hint]) {
         // Oops, you're in an error state. This card doesn't exist anymore.
@@ -183,6 +161,29 @@ class FlashCards extends connect(store)(LitElement) {
         hint: activeCard.hint
       }
     }
+  }
+
+  _checkedChanged(target) {
+    if (target.id === 'answer') {
+      store.dispatch(saveShowAnswer(target.checked));
+    } if (target.classList.contains('show-settings')) {
+      store.dispatch(saveShowSettings(target.id, target.checked));
+    } if (target.classList.contains('say-settings')) {
+      store.dispatch(saveSaySettings(target.id, target.checked));
+    } else {
+      let categories = [];
+      const checkboxes = this.shadowRoot.querySelectorAll('.categories');
+      for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          categories.push(checkboxes[i].label)
+        }
+      }
+      store.dispatch(saveAvailableTypes(categories));
+    }
+  }
+  
+  _toggleShowSettings() {
+    this.showSettingsPage = !this.showSettingsPage;
   }
 }
 
