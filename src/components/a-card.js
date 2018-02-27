@@ -73,7 +73,11 @@ class ACard extends LitElement {
         on-change="${() => this.submit()}">
      <div class="hint">
        ${props.hint}
-       <button class="say" id="sayBtn" on-click="${() => this._say()}">${audioIcon}</button>
+       <button class="say"
+          hidden?="${!props._hasSpeechSynthesis}"
+          on-click="${() => this._say()}">
+          ${audioIcon}
+      </button>
      </div>
      <button class="green" on-click="${() => this.submit()}">${props.done ? 'next' : 'submit'}</button>
     `;
@@ -87,6 +91,7 @@ class ACard extends LitElement {
       done: String,
       showAnswer: Boolean,
       say: String,
+      _hasSpeechSynthesis: Boolean
     }
   }
 
@@ -99,12 +104,11 @@ class ACard extends LitElement {
 
     // Save these for later;
     this._button = this.shadowRoot.querySelector('button.green');
-    this._sayBtn = this.shadowRoot.getElementById('sayBtn');
     this._input = this.shadowRoot.querySelector('input');
     this._input.focus();
 
     if (!'speechSynthesis' in window) {
-      this._sayBtn.hidden = true;
+      this._hasSpeechSynthesis = false;
     } else {
       speechSynthesis.onvoiceschanged = () => {
         this._voice = this._getVoice(speechSynthesis.getVoices());
@@ -123,15 +127,17 @@ class ACard extends LitElement {
   }
 
   _getVoice(voices) {
-    this._sayBtn.hidden = false;
+    this._hasSpeechSynthesis = true;
+
     // In Chrome?
     let voice = speechSynthesis.getVoices().filter((voice) => voice.name === 'Google 日本語')[0];
     if (voice) return voice;
     // On a Mac?
     voice = speechSynthesis.getVoices().filter((voice) => voice.name === 'Kyoko')[0];
     if (voice) return voice;
+    
     // I can't find a voice that reads Japanese on Windows
-    this._sayBtn.hidden = true;
+    this._hasSpeechSynthesis = false;
   }
 
   _clear() {
