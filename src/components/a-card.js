@@ -5,9 +5,15 @@ class ACard extends LitElement {
   render(props) {
 
    //  renderAttributes(this, {
-   //   yes: props.done && props.correct,
-   //   no: props.done && !props.correct
+   //   yes: props.isAnswered && props.correct,
+   //   no: props.isAnswered && !props.correct
    // });
+
+   if (props.isAnswered && props.correct) {
+     this.classList.add('yes');
+   } else if (props.isAnswered && !props.correct) {
+     this.classList.add('no');
+   }
 
     return html`
     <style>
@@ -86,7 +92,7 @@ class ACard extends LitElement {
           ${audioIcon}
       </button>
      </div>
-     <button class="green" on-click="${() => this.submit()}">${props.done ? 'next' : 'submit'}</button>
+     <button class="green" on-click="${() => this.submit()}">${props.isAnswered ? 'next' : 'submit'}</button>
     `;
   }
 
@@ -96,12 +102,12 @@ class ACard extends LitElement {
       question: String,
       hint: String,
       answer: String,
-      say: String,
       // State of the card.
-      done: String,
+      isAnswered: String,
       correct: Boolean,
       // App settings.
       showAnswer: Boolean,
+      saySettings: String,
       // Private vars to make things easier.
       _hasSpeechSynthesis: Boolean,
       _inputValue: String
@@ -110,7 +116,7 @@ class ACard extends LitElement {
 
   constructor() {
     super();
-    this.done = false;
+    this.isAnswered = false;
   }
   ready() {
     super.ready();
@@ -131,7 +137,7 @@ class ACard extends LitElement {
   }
 
   didRender(properties, changeList) {
-    if (!this._voice || !this._input || this.say !== 'start') {
+    if (!this._voice || !this._input || this.saySettings !== 'start') {
       return;
     }
     if ('question' in changeList) {
@@ -153,33 +159,18 @@ class ACard extends LitElement {
     this._hasSpeechSynthesis = false;
   }
 
-  _clear() {
-    this.done = false;
-    this.classList.remove('yes');
-    this.classList.remove('no');
-    this._inputValue = '';
-    this._input.focus();
-  }
-
   submit() {
-    if (this.done) {  // next answer
-      this.done = false;
-      this._clear();
+    if (this.isAnswered) {  // next answer
+      this._inputValue = '';
+      this._input.focus();
       this.dispatchEvent(new CustomEvent('next-question',
         {bubbles: true, composed: true}));
     } else {  // submit answer
-      this.done = true;
       this.correct = this._inputValue === this.answer;
       this._inputValue = this.answer;
 
-      if (this.say === 'end') {
+      if (this.saySettings === 'end') {
         this._say();
-      }
-
-      if (this.correct) {
-        this.classList.add('yes');
-      } else {
-        this.classList.add('no');
       }
 
       this.dispatchEvent(new CustomEvent('answered',
@@ -187,6 +178,7 @@ class ACard extends LitElement {
 
       this._button.focus();
     }
+    this.isAnswered = !this.isAnswered;
   }
 
   _say() {

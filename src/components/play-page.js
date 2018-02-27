@@ -108,11 +108,11 @@ class FlashCards extends connect(store)(LitElement) {
       </div>
 
       <a-card hidden?="${showSettingsPage}"
-        showAnswer="${showAnswer}"
         question="${card.question}"
         answer="${card.answer}"
         hint="${card.hint}"
-        say="${saySettings}">
+        showAnswer="${showAnswer}"
+        saySettings="${saySettings}">
       </a-card>
     `;
   }
