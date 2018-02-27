@@ -1,19 +1,12 @@
-import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { LitElement, html, renderAttributes } from '../../node_modules/@polymer/lit-element/lit-element.js'
 import { audioIcon } from './my-icons.js';
 
 class ACard extends LitElement {
   render(props) {
-
-   //  renderAttributes(this, {
-   //   yes: props.isAnswered && props.correct,
-   //   no: props.isAnswered && !props.correct
-   // });
-
-   if (props.isAnswered && props.correct) {
-     this.classList.add('yes');
-   } else if (props.isAnswered && !props.correct) {
-     this.classList.add('no');
-   }
+    renderAttributes(this, {
+     'correct': props.isAnswered && props.correct,
+     'incorrect': props.isAnswered && !props.correct
+   });
 
     return html`
     <style>
@@ -69,11 +62,11 @@ class ACard extends LitElement {
          background: transparent;
          vertical-align: middle;
        }
-       :host(.yes) {
+       :host([correct]) {
         outline: 20px solid #64D989;
         outline-offset: -20px;
        }
-       :host(.no) {
+       :host([incorrect]) {
         outline: 20px solid #E9404B;
         outline-offset: -20px;
        }
@@ -166,7 +159,7 @@ class ACard extends LitElement {
       this.dispatchEvent(new CustomEvent('next-question',
         {bubbles: true, composed: true}));
     } else {  // submit answer
-      this.correct = this._inputValue === this.answer;
+      this.correct = this._input.value === this.answer;
       this._inputValue = this.answer;
 
       if (this.saySettings === 'end') {
