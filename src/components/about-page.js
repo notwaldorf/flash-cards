@@ -18,10 +18,6 @@ class AboutPage extends LitElement {
       <p>🐣💫🎊 by <a href="https://twitter.com/notwaldorf">Monica</a></p>
     `
   }
-
-  static get is() {
-    return 'about-page';
-  }
 }
 
-window.customElements.define(AboutPage.is, AboutPage);
+window.customElements.define('about-page', AboutPage);

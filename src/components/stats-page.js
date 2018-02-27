@@ -77,11 +77,6 @@ class StatsPage extends connect(store)(LitElement) {
       </div>
     `;
   }
-
-  static get is() {
-    return 'stats-page';
-  }
-
   static get properties() { return {
     stats: Object,
     cards: Object,
@@ -114,4 +109,4 @@ class StatsPage extends connect(store)(LitElement) {
   }
 }
 
-window.customElements.define(StatsPage.is, StatsPage);
+window.customElements.define('stats-page', StatsPage);

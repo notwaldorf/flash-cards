@@ -135,11 +135,6 @@ class MyApp extends connect(store)(LitElement) {
     </snack-bar>
 `;
   }
-
-  static get is() {
-    return 'my-app';
-  }
-
   static get properties() {
     return {
       page: String,
@@ -176,4 +171,4 @@ class MyApp extends connect(store)(LitElement) {
   }
 }
 
-window.customElements.define(MyApp.is, MyApp);
+window.customElements.define('my-app', MyApp);

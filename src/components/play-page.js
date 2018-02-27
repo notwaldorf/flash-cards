@@ -10,10 +10,6 @@ import { saveShowAnswer, saveShowSettings, saveSaySettings } from '../actions/ap
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
 class FlashCards extends connect(store)(LitElement) {
-  static get is() {
-    return 'play-page';
-  }
-
   static get properties() {
     return {
       cards: Object,
@@ -181,10 +177,10 @@ class FlashCards extends connect(store)(LitElement) {
       store.dispatch(saveAvailableTypes(categories));
     }
   }
-  
+
   _toggleShowSettings() {
     this.showSettingsPage = !this.showSettingsPage;
   }
 }
 
-window.customElements.define(FlashCards.is, FlashCards);
+window.customElements.define('play-page', FlashCards);
