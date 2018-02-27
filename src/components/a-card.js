@@ -3,6 +3,12 @@ import { audioIcon } from './my-icons.js';
 
 class ACard extends LitElement {
   render(props) {
+
+   //  renderAttributes(this, {
+   //   yes: props.done && props.correct,
+   //   no: props.done && !props.correct
+   // });
+
     return html`
     <style>
       :host {
@@ -70,7 +76,8 @@ class ACard extends LitElement {
      <div class="question">${props.question}</div>
      <input autofocus
         placeholder="${props.showAnswer ? props.answer : 'answer'}"
-        on-change="${() => this.submit()}">
+        on-change="${() => this.submit()}"
+        value="${props._inputValue}">
      <div class="hint">
        ${props.hint}
        <button class="say"
@@ -85,13 +92,19 @@ class ACard extends LitElement {
 
   static get properties() {
     return {
+      // What's being displayed.
       question: String,
       hint: String,
       answer: String,
-      done: String,
-      showAnswer: Boolean,
       say: String,
-      _hasSpeechSynthesis: Boolean
+      // State of the card.
+      done: String,
+      correct: Boolean,
+      // App settings.
+      showAnswer: Boolean,
+      // Private vars to make things easier.
+      _hasSpeechSynthesis: Boolean,
+      _inputValue: String
     }
   }
 
@@ -135,7 +148,7 @@ class ACard extends LitElement {
     // On a Mac?
     voice = speechSynthesis.getVoices().filter((voice) => voice.name === 'Kyoko')[0];
     if (voice) return voice;
-    
+
     // I can't find a voice that reads Japanese on Windows
     this._hasSpeechSynthesis = false;
   }
@@ -144,31 +157,33 @@ class ACard extends LitElement {
     this.done = false;
     this.classList.remove('yes');
     this.classList.remove('no');
-    this._input.value = '';
+    this._inputValue = '';
     this._input.focus();
   }
 
   submit() {
     if (this.done) {  // next answer
+      this.done = false;
       this._clear();
       this.dispatchEvent(new CustomEvent('next-question',
         {bubbles: true, composed: true}));
     } else {  // submit answer
       this.done = true;
-      const correct = this._input.value === this.answer;
+      this.correct = this._inputValue === this.answer;
+      this._inputValue = this.answer;
 
       if (this.say === 'end') {
         this._say();
       }
 
-      if (correct) {
+      if (this.correct) {
         this.classList.add('yes');
       } else {
-        this._input.value = this.answer;
         this.classList.add('no');
       }
+
       this.dispatchEvent(new CustomEvent('answered',
-        {bubbles: false, composed: true, detail: {correct: correct}}));
+        {bubbles: false, composed: true, detail: {correct: this.correct}}));
 
       this._button.focus();
     }
