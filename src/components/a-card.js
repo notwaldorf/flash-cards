@@ -4,9 +4,9 @@ import { audioIcon } from './my-icons.js';
 class ACard extends LitElement {
   render(props) {
     renderAttributes(this, {
-     'correct': props.isAnswered && props.correct,
-     'incorrect': props.isAnswered && !props.correct
-   });
+      'correct': props.isAnswered && props.correct,
+      'incorrect': props.isAnswered && !props.correct
+    });
 
     return html`
     <style>
@@ -161,6 +161,7 @@ class ACard extends LitElement {
     } else {  // submit answer
       this.correct = this._input.value === this.answer;
       this._inputValue = this.answer;
+      this._button.focus();
 
       if (this.saySettings === 'end') {
         this._say();
@@ -168,8 +169,6 @@ class ACard extends LitElement {
 
       this.dispatchEvent(new CustomEvent('answered',
         {bubbles: false, composed: true, detail: {correct: this.correct}}));
-
-      this._button.focus();
     }
     this.isAnswered = !this.isAnswered;
   }
