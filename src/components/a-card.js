@@ -116,7 +116,6 @@ class ACard extends LitElement {
     // Save these for later;
     this._button = this.shadowRoot.querySelector('button.green');
     this._input = this.shadowRoot.querySelector('input');
-    this._input.focus();
 
     if (!'speechSynthesis' in window) {
       this._hasSpeechSynthesis = false;
