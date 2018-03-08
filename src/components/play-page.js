@@ -10,10 +10,6 @@ import { saveShowAnswer, saveShowSettings, saveSaySettings } from '../actions/ap
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
 class FlashCards extends connect(store)(LitElement) {
-  static get is() {
-    return 'play-page';
-  }
-
   static get properties() {
     return {
       cards: Object,
@@ -32,7 +28,7 @@ class FlashCards extends connect(store)(LitElement) {
       :host {
         display: block;
         box-sizing: border-box;
-        padding: 60px;
+        padding: 60px 20px;
         position: relative;
       }
 
@@ -53,7 +49,6 @@ class FlashCards extends connect(store)(LitElement) {
         z-index: 1;
       }
       #settings {
-        width: 400px;
         min-height: 540px;
         border-radius: 3px;
         background: white;
@@ -61,6 +56,11 @@ class FlashCards extends connect(store)(LitElement) {
            0 1px 8px 0 rgba(0, 0, 0, 0.12),
            0 3px 3px -2px rgba(0, 0, 0, 0.4);
         padding: 20px;
+      }
+      a-card, #settings {
+        box-sizing: border-box;
+        max-width: 400px;
+        width: 100%;
       }
       h4 {
         line-height: 1;
@@ -112,11 +112,11 @@ class FlashCards extends connect(store)(LitElement) {
       </div>
 
       <a-card hidden?="${showSettingsPage}"
-        showAnswer="${showAnswer}"
         question="${card.question}"
         answer="${card.answer}"
         hint="${card.hint}"
-        say="${saySettings}">
+        showAnswer="${showAnswer}"
+        saySettings="${saySettings}">
       </a-card>
     `;
   }
@@ -181,10 +181,10 @@ class FlashCards extends connect(store)(LitElement) {
       store.dispatch(saveAvailableTypes(categories));
     }
   }
-  
+
   _toggleShowSettings() {
     this.showSettingsPage = !this.showSettingsPage;
   }
 }
 
-window.customElements.define(FlashCards.is, FlashCards);
+window.customElements.define('play-page', FlashCards);

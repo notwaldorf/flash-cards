@@ -12,7 +12,7 @@ import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-el
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { installRouter } from '../../node_modules/pwa-helpers/router.js';
 import { installOfflineWatcher } from '../../node_modules/pwa-helpers/network.js';
-import { updateSEOMetadata } from '../../node_modules/pwa-helpers/seo-metadata.js';
+import { updateMetadata } from '../../node_modules/pwa-helpers/metadata.js';
 
 import { store } from '../store.js';
 import { navigate, updateOffline, showSnackbar } from '../actions/app.js';
@@ -27,7 +27,7 @@ class MyApp extends connect(store)(LitElement) {
   render({page, appTitle, snackbarOpened, offline}) {
     if (page && appTitle) {
       const pageTitle = appTitle + ' - ' + page;
-      updateSEOMetadata({
+      updateMetadata({
         title: pageTitle,
         description: pageTitle,
         url: document.location.href,
@@ -45,6 +45,8 @@ class MyApp extends connect(store)(LitElement) {
         --app-header-background-color: #FAE1D6;
         --app-header-text-color: var(--app-dark-text-color);
         --app-header-selected-color: var(--app-primary-color);
+
+        height: 100vh;
       }
 
       header {
@@ -88,11 +90,10 @@ class MyApp extends connect(store)(LitElement) {
       }
 
       .main-content {
-        margin-top: 120px;
-        height: 100%;
+        padding-top: 20px;
       }
 
-      .main-content .page[selected] {
+      .main-content .page[active] {
         display: block;
       }
 
@@ -124,10 +125,10 @@ class MyApp extends connect(store)(LitElement) {
 
     <!-- Main content -->
     <main class="main-content" role="main">
-      <play-page class="page" selected?="${page === 'play'}"></play-page>
-      <stats-page class="page" selected?="${page === 'stats'}"></stats-page>
-      <about-page class="page" selected?="${page === 'about'}"></about-page>
-      <my-view404 class="page" selected?="${page === 'view404'}"></my-view404>
+      <play-page class="page" active?="${page === 'play'}"></play-page>
+      <stats-page class="page" active?="${page === 'stats'}"></stats-page>
+      <about-page class="page" active?="${page === 'about'}"></about-page>
+      <my-view404 class="page" active?="${page === 'view404'}"></my-view404>
     </main>
 
     <snack-bar active?="${snackbarOpened}">
@@ -135,11 +136,6 @@ class MyApp extends connect(store)(LitElement) {
     </snack-bar>
 `;
   }
-
-  static get is() {
-    return 'my-app';
-  }
-
   static get properties() {
     return {
       page: String,
@@ -176,4 +172,4 @@ class MyApp extends connect(store)(LitElement) {
   }
 }
 
-window.customElements.define(MyApp.is, MyApp);
+window.customElements.define('my-app', MyApp);

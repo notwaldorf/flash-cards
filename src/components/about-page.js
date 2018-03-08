@@ -1,7 +1,8 @@
-import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { html } from '../../node_modules/@polymer/lit-element/lit-element.js';
+import { PageViewElement } from './page-view-element.js';
 import { SharedStyles } from './shared-styles.js';
 
-class AboutPage extends LitElement {
+class AboutPage extends PageViewElement {
   render(props) {
     return html`
       <style>${SharedStyles}</style>
@@ -18,10 +19,6 @@ class AboutPage extends LitElement {
       <p>🐣💫🎊 by <a href="https://twitter.com/notwaldorf">Monica</a></p>
     `
   }
-
-  static get is() {
-    return 'about-page';
-  }
 }
 
-window.customElements.define(AboutPage.is, AboutPage);
+window.customElements.define('about-page', AboutPage);

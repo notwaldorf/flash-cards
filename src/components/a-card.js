@@ -1,13 +1,17 @@
-import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { LitElement, html, renderAttributes } from '../../node_modules/@polymer/lit-element/lit-element.js'
 import { audioIcon } from './my-icons.js';
 
 class ACard extends LitElement {
   render(props) {
+    renderAttributes(this, {
+      'correct': props.isAnswered && props.correct,
+      'incorrect': props.isAnswered && !props.correct
+    });
+
     return html`
     <style>
       :host {
         display: block;
-        width: 400px;
         min-height: 300px;
         text-align: center;
         border-radius: 3px;
@@ -57,11 +61,11 @@ class ACard extends LitElement {
          background: transparent;
          vertical-align: middle;
        }
-       :host(.yes) {
+       :host([correct]) {
         outline: 20px solid #64D989;
         outline-offset: -20px;
        }
-       :host(.no) {
+       :host([incorrect]) {
         outline: 20px solid #E9404B;
         outline-offset: -20px;
        }
@@ -70,41 +74,51 @@ class ACard extends LitElement {
      <div class="question">${props.question}</div>
      <input autofocus
         placeholder="${props.showAnswer ? props.answer : 'answer'}"
-        on-change="${() => this.submit()}">
+        on-keypress="${(e) => this._inputKeypress(e)}"
+        value="${props._inputValue}">
      <div class="hint">
        ${props.hint}
-       <button class="say" id="sayBtn" on-click="${() => this._say()}">${audioIcon}</button>
+       <button class="say"
+          hidden?="${!props._hasSpeechSynthesis}"
+          on-click="${() => this._say()}">
+          ${audioIcon}
+      </button>
      </div>
-     <button class="green" on-click="${() => this.submit()}">${props.done ? 'next' : 'submit'}</button>
+     <button class="green" on-click="${() => this.submit()}">${props.isAnswered ? 'next' : 'submit'}</button>
     `;
   }
 
   static get properties() {
     return {
+      // What's being displayed.
       question: String,
       hint: String,
       answer: String,
-      done: String,
+      // State of the card.
+      isAnswered: String,
+      correct: Boolean,
+      // App settings.
       showAnswer: Boolean,
-      say: String,
+      saySettings: String,
+      // Private vars to make things easier.
+      _hasSpeechSynthesis: Boolean,
+      _inputValue: String
     }
   }
 
   constructor() {
     super();
-    this.done = false;
+    this.isAnswered = false;
   }
   ready() {
     super.ready();
 
     // Save these for later;
     this._button = this.shadowRoot.querySelector('button.green');
-    this._sayBtn = this.shadowRoot.getElementById('sayBtn');
     this._input = this.shadowRoot.querySelector('input');
-    this._input.focus();
 
     if (!'speechSynthesis' in window) {
-      this._sayBtn.hidden = true;
+      this._hasSpeechSynthesis = false;
     } else {
       speechSynthesis.onvoiceschanged = () => {
         this._voice = this._getVoice(speechSynthesis.getVoices());
@@ -114,66 +128,61 @@ class ACard extends LitElement {
   }
 
   didRender(properties, changeList) {
-    if (!this._voice || !this._input || this.say !== 'start') {
-      return;
-    }
-    if ('question' in changeList) {
+    if ('question' in changeList && this.saySettings === 'start') {
       this._say();
     }
   }
 
   _getVoice(voices) {
-    this._sayBtn.hidden = false;
+    this._hasSpeechSynthesis = true;
+
     // In Chrome?
     let voice = speechSynthesis.getVoices().filter((voice) => voice.name === 'Google 日本語')[0];
     if (voice) return voice;
     // On a Mac?
     voice = speechSynthesis.getVoices().filter((voice) => voice.name === 'Kyoko')[0];
     if (voice) return voice;
-    // I can't find a voice that reads Japanese on Windows
-    this._sayBtn.hidden = true;
-  }
 
-  _clear() {
-    this.done = false;
-    this.classList.remove('yes');
-    this.classList.remove('no');
-    this._input.value = '';
-    this._input.focus();
+    // I can't find a voice that reads Japanese on Windows
+    this._hasSpeechSynthesis = false;
   }
 
   submit() {
-    if (this.done) {  // next answer
-      this._clear();
+    if (this.isAnswered) {  // next answer
+      this._inputValue = '';
+      this._input.focus();
       this.dispatchEvent(new CustomEvent('next-question',
         {bubbles: true, composed: true}));
     } else {  // submit answer
-      this.done = true;
-      const correct = this._input.value === this.answer;
+      this.correct = this._input.value === this.answer;
+      this._inputValue = this.answer;
+      this._button.focus();
 
-      if (this.say === 'end') {
+      if (this.saySettings === 'end') {
         this._say();
       }
 
-      if (correct) {
-        this.classList.add('yes');
-      } else {
-        this._input.value = this.answer;
-        this.classList.add('no');
-      }
       this.dispatchEvent(new CustomEvent('answered',
-        {bubbles: false, composed: true, detail: {correct: correct}}));
-
-      this._button.focus();
+        {bubbles: false, composed: true, detail: {correct: this.correct}}));
     }
+    this.isAnswered = !this.isAnswered;
   }
 
   _say() {
+    if (!this._voice) {
+      return;
+    }
     var msg = new SpeechSynthesisUtterance();
     msg.text = this.question;
     msg.lang = 'jp';
     msg.voice = this._voice;
     window.speechSynthesis.speak(msg);
+  }
+
+  _inputKeypress(e) {
+    if (e.keyCode == 13) { // enter key
+      this.submit();
+    }
   }
 }
 window.customElements.define('a-card', ACard);

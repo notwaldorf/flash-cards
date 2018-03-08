@@ -1,11 +1,12 @@
-import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { html } from '../../node_modules/@polymer/lit-element/lit-element.js';
+import { PageViewElement } from './page-view-element.js';
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
 
 // This element is connected to the redux store.
 import { store } from '../store.js';
 
-class StatsPage extends connect(store)(LitElement) {
+class StatsPage extends connect(store)(PageViewElement) {
   render({cards, stats}) {
     return html`
       <style>
@@ -77,11 +78,6 @@ class StatsPage extends connect(store)(LitElement) {
       </div>
     `;
   }
-
-  static get is() {
-    return 'stats-page';
-  }
-
   static get properties() { return {
     stats: Object,
     cards: Object,
@@ -114,4 +110,4 @@ class StatsPage extends connect(store)(LitElement) {
   }
 }
 
-window.customElements.define(StatsPage.is, StatsPage);
+window.customElements.define('stats-page', StatsPage);
