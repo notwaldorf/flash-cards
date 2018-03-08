@@ -92,7 +92,7 @@ class MyApp extends connect(store)(LitElement) {
         height: 100%;
       }
 
-      .main-content .page[selected] {
+      .main-content .page[active] {
         display: block;
       }
 
@@ -124,10 +124,10 @@ class MyApp extends connect(store)(LitElement) {
 
     <!-- Main content -->
     <main class="main-content" role="main">
-      <play-page class="page" selected?="${page === 'play'}"></play-page>
-      <stats-page class="page" selected?="${page === 'stats'}"></stats-page>
-      <about-page class="page" selected?="${page === 'about'}"></about-page>
-      <my-view404 class="page" selected?="${page === 'view404'}"></my-view404>
+      <play-page class="page" active?="${page === 'play'}"></play-page>
+      <stats-page class="page" active?="${page === 'stats'}"></stats-page>
+      <about-page class="page" active?="${page === 'about'}"></about-page>
+      <my-view404 class="page" active?="${page === 'view404'}"></my-view404>
     </main>
 
     <snack-bar active?="${snackbarOpened}">

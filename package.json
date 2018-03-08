@@ -21,7 +21,7 @@
   "homepage": "https://github.com/notwaldorf/flash-cards#readme",
   "dependencies": {
     "@0xcda7a/redux-es6": "^3.7.2",
-    "@polymer/lit-element": "^0.1.1",
+    "@polymer/lit-element": "^0.2.2",
     "@webcomponents/webcomponentsjs": "^1.0.0",
     "gulp": "^3.9.1",
     "pwa-helpers": "polymerlabs/pwa-helpers",

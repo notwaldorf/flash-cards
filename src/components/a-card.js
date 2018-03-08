@@ -75,7 +75,7 @@ class ACard extends LitElement {
      <div class="question">${props.question}</div>
      <input autofocus
         placeholder="${props.showAnswer ? props.answer : 'answer'}"
-        on-change="${() => this.submit()}"
+        on-keypress="${(e) => this._inputKeypress(e)}"
         value="${props._inputValue}">
      <div class="hint">
        ${props.hint}
@@ -180,5 +180,11 @@ class ACard extends LitElement {
     msg.voice = this._voice;
     window.speechSynthesis.speak(msg);
   }
+
+  _inputKeypress(e) {
+    if (e.keyCode == 13) { // enter key
+      this.submit();
+    }
+  } 
 }
 window.customElements.define('a-card', ACard);
