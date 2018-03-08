@@ -1,7 +1,8 @@
-import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { html } from '../../node_modules/@polymer/lit-element/lit-element.js';
+import { PageViewElement } from './page-view-element.js';
 import { SharedStyles } from './shared-styles.js';
 
-class MyView404 extends LitElement {
+class MyView404 extends PageViewElement {
   render(props) {
     return html`
       <style>${SharedStyles}</style>

@@ -12,7 +12,7 @@ import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-el
 import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
 import { installRouter } from '../../node_modules/pwa-helpers/router.js';
 import { installOfflineWatcher } from '../../node_modules/pwa-helpers/network.js';
-import { updateSEOMetadata } from '../../node_modules/pwa-helpers/seo-metadata.js';
+import { updateMetadata } from '../../node_modules/pwa-helpers/metadata.js';
 
 import { store } from '../store.js';
 import { navigate, updateOffline, showSnackbar } from '../actions/app.js';
@@ -27,7 +27,7 @@ class MyApp extends connect(store)(LitElement) {
   render({page, appTitle, snackbarOpened, offline}) {
     if (page && appTitle) {
       const pageTitle = appTitle + ' - ' + page;
-      updateSEOMetadata({
+      updateMetadata({
         title: pageTitle,
         description: pageTitle,
         url: document.location.href,
