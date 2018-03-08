@@ -13,7 +13,7 @@
     "copy-polyfills": "cp -r node_modules/@webcomponents/webcomponentsjs ./dist",
     "copy-other-shit": "cp index.html ./dist/ && cp manifest.json ./dist/ && cp -r ./src/data ./dist/src/ && cp -r ./images ./dist/",
     "clean": "rm -rf bundled dist",
-    "setup-hell": "cd ./hell/polymer-bundler && npm install && npm run test",
+    "setup-hell": "cd ./hell/polymer-bundler && npm install",
     "build": "npm run clean && npm run setup-hell && npm run bundle && npm run minify && npm run copy-other-shit"
   },
   "repository": {
