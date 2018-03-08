@@ -1,4 +1,0 @@
---ui tdd
---require source-map-support/register
---timeout 10000
-lib/test

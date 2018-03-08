@@ -8,7 +8,7 @@
     "test": "mocha test/ --timeout=10000",
     "regen-test-baseline": "mocha test/screenshots-baseline/regenerate.js --timeout=10000",
     "old-build": "gulp copy",
-    "bundle": "node hell/polymer-bundler/lib/bin/polymer-bundler.js --out-dir bundled --shell src/components/my-app.js src/components/my-app.js",
+    "bundle": "node ./hell/polymer-bundler/lib/bin/polymer-bundler.js --out-dir bundled --shell src/components/my-app.js src/components/my-app.js",
     "minify": "babel bundled --out-dir dist",
     "copy-polyfills": "cp -r node_modules/@webcomponents/webcomponentsjs ./dist",
     "copy-other-shit": "cp index.html ./dist/ && cp manifest.json ./dist/ && cp -r ./src/data ./dist/src/ && cp -r ./images ./dist/",
