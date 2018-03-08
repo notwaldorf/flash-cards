@@ -12,7 +12,6 @@ class ACard extends LitElement {
     <style>
       :host {
         display: block;
-        width: 400px;
         min-height: 300px;
         text-align: center;
         border-radius: 3px;

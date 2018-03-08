@@ -28,7 +28,7 @@ class FlashCards extends connect(store)(LitElement) {
       :host {
         display: block;
         box-sizing: border-box;
-        padding: 60px;
+        padding: 60px 20px;
         position: relative;
       }
 
@@ -49,7 +49,6 @@ class FlashCards extends connect(store)(LitElement) {
         z-index: 1;
       }
       #settings {
-        width: 400px;
         min-height: 540px;
         border-radius: 3px;
         background: white;
@@ -57,6 +56,11 @@ class FlashCards extends connect(store)(LitElement) {
            0 1px 8px 0 rgba(0, 0, 0, 0.12),
            0 3px 3px -2px rgba(0, 0, 0, 0.4);
         padding: 20px;
+      }
+      a-card, #settings {
+        box-sizing: border-box;
+        max-width: 400px;
+        width: 100%;
       }
       h4 {
         line-height: 1;

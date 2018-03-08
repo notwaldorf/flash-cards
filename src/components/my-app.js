@@ -45,6 +45,8 @@ class MyApp extends connect(store)(LitElement) {
         --app-header-background-color: #FAE1D6;
         --app-header-text-color: var(--app-dark-text-color);
         --app-header-selected-color: var(--app-primary-color);
+
+        height: 100vh;
       }
 
       header {
@@ -88,8 +90,7 @@ class MyApp extends connect(store)(LitElement) {
       }
 
       .main-content {
-        margin-top: 120px;
-        height: 100%;
+        padding-top: 20px;
       }
 
       .main-content .page[active] {
