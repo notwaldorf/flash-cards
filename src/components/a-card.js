@@ -130,10 +130,7 @@ class ACard extends LitElement {
   }
 
   didRender(properties, changeList) {
-    if (!this._voice || !this._input || this.saySettings !== 'start') {
-      return;
-    }
-    if ('question' in changeList) {
+    if ('question' in changeList && this.saySettings === 'start') {
       this._say();
     }
   }
@@ -174,6 +171,9 @@ class ACard extends LitElement {
   }
 
   _say() {
+    if (!this._voice) {
+      return;
+    }
     var msg = new SpeechSynthesisUtterance();
     msg.text = this.question;
     msg.lang = 'jp';
@@ -185,6 +185,6 @@ class ACard extends LitElement {
     if (e.keyCode == 13) { // enter key
       this.submit();
     }
-  } 
+  }
 }
 window.customElements.define('a-card', ACard);
