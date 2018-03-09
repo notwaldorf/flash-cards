@@ -29,6 +29,8 @@ const analyzer_utils_1 = require("./analyzer-utils");
 const bundleManifestLib = require("./bundle-manifest");
 const bundle_manifest_1 = require("./bundle-manifest");
 const depsIndexLib = require("./deps-index");
+const es6_module_bundler_1 = require("./es6-module-bundler");
+const es6_module_utils_1 = require("./es6-module-utils");
 const html_bundler_1 = require("./html-bundler");
 const url_utils_1 = require("./url-utils");
 __export(require("./bundle-manifest"));
@@ -65,12 +67,21 @@ class Bundler {
      * Analyze a URL using the given contents in place of what would otherwise
      * have been loaded.
      */
-    analyzeContents(url, contents) {
+    analyzeContents(url, contents, permanent) {
         return __awaiter(this, void 0, void 0, function* () {
             this._overlayUrlLoader.urlContentsMap.set(url, contents);
             yield this.analyzer.filesChanged([url]);
             const analysis = yield this.analyzer.analyze([url]);
-            return analyzer_utils_1.getAnalysisDocument(analysis, url);
+            const document = analyzer_utils_1.getAnalysisDocument(analysis, url);
+            // Unless we explicitly want to make this analysis permanent, we remove the
+            // entry from the overlay and tell analyzer to forget what it just analyzed.
+            // This is because logic in many parts of the bundler assume the documents
+            // and features will be of the original content.
+            if (!permanent) {
+                this._overlayUrlLoader.urlContentsMap.delete(url);
+                yield this.analyzer.filesChanged([url]);
+            }
+            return document;
         });
     }
     /**
@@ -84,11 +95,17 @@ class Bundler {
         return __awaiter(this, void 0, void 0, function* () {
             const documents = new Map();
             manifest = manifest.fork();
-            for (const bundleEntry of manifest.bundles) {
-                const bundleUrl = bundleEntry[0];
-                const bundle = { url: bundleUrl, bundle: bundleEntry[1] };
-                if (bundle.url.endsWith('.html')) {
-                    documents.set(bundleUrl, yield (new html_bundler_1.HtmlBundler(this, bundle, manifest).bundle()));
+            es6_module_utils_1.reserveBundleModuleExportNames(this.analyzer, manifest);
+            for (const [url, bundle] of manifest.bundles) {
+                const assignedBundle = { url, bundle };
+                switch (bundle.type) {
+                    case 'html-fragment':
+                        documents.set(url, yield (new html_bundler_1.HtmlBundler(this, assignedBundle, manifest).bundle()));
+                        break;
+                    case 'es6-module':
+                        documents.set(url, yield (new es6_module_bundler_1.Es6ModuleBundler(this, assignedBundle, manifest)
+                            .bundle()));
+                        break;
                 }
             }
             return { manifest, documents };
@@ -109,7 +126,12 @@ class Bundler {
     generateManifest(entrypoints) {
         return __awaiter(this, void 0, void 0, function* () {
             const dependencyIndex = yield depsIndexLib.buildDepsIndex(entrypoints, this.analyzer);
-            let bundles = bundleManifestLib.generateBundles(dependencyIndex.entrypointToDeps);
+            let bundles = bundleManifestLib.generateBundles(dependencyIndex);
+            // Merge single-entrypoint sub-bundles into their containing documents so
+            // that inlining code can knows which module scripts can be inlined.
+            if (this.enableScriptInlining) {
+                bundleManifestLib.mergeSingleEntrypointSubBundles(bundles);
+            }
             this._filterExcludesFromBundles(bundles);
             bundles = this.strategy(bundles);
             return new bundle_manifest_1.BundleManifest(bundles, this.urlMapper);

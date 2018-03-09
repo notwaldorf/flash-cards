@@ -1,9 +1,24 @@
 import { FileRelativeUrl, ResolvedUrl } from 'polymer-analyzer';
 /**
+ * Given a string representing a relative path of some form, ensure a `./`
+ * leader if it doesn't already start with dot-based path leader or a scheme
+ * (like, you wouldn't want to change `file:///example.js` into
+ * `./file:///example.js`)
+ */
+export declare function ensureLeadingDot<T>(href: T): T;
+/**
  * Given a string representing a URL or path of some form, append a `/`
  * character if it doesn't already end with one.
  */
 export declare function ensureTrailingSlash<T>(href: T): T;
+/**
+ * Parses the URL and returns the extname of the path.
+ */
+export declare function getFileExtension(url_: string): string;
+/**
+ * Parses the URL and returns only the filename part of the path.
+ */
+export declare function getFileName(url_: string): string;
 /**
  * Returns a WHATWG ResolvedURL for a filename on local filesystem.
  */

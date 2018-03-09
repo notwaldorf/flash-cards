@@ -27,6 +27,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chai = require("chai");
 const polymer_analyzer_1 = require("polymer-analyzer");
 const deps_index_1 = require("../deps-index");
+const test_utils_1 = require("./test-utils");
 chai.config.showDiff = true;
 suite('Bundler', () => {
     function serializeMap(map) {
@@ -64,7 +65,7 @@ suite('Bundler', () => {
                 [endpoint2, new Set([common, dep2, endpoint1, endpoint2, dep1])],
             ]);
             const index = yield deps_index_1.buildDepsIndex([common, endpoint1, endpoint2], analyzer);
-            chai.assert.deepEqual(serializeMap(index.entrypointToDeps), serializeMap(expectedEntrypointsToDeps));
+            chai.assert.deepEqual(serializeMap(index), serializeMap(expectedEntrypointsToDeps));
         }));
         // Deps index currently treats lazy imports as eager imports.
         test('with lazy imports', () => __awaiter(this, void 0, void 0, function* () {
@@ -97,7 +98,7 @@ suite('Bundler', () => {
                 [deeply1, new Set([deeply1, deeply2])],
             ]);
             const index = yield deps_index_1.buildDepsIndex([entrypoint], analyzer);
-            chai.assert.deepEqual(serializeMap(index.entrypointToDeps), serializeMap(expectedEntrypointsToDeps));
+            chai.assert.deepEqual(serializeMap(index), serializeMap(expectedEntrypointsToDeps));
         }));
         test('when an entrypoint imports an entrypoint', () => __awaiter(this, void 0, void 0, function* () {
             analyzer = new polymer_analyzer_1.Analyzer({
@@ -108,18 +109,110 @@ suite('Bundler', () => {
             });
             const entrypoint = resolve('eagerly-importing-a-fragment.html');
             const fragmentA = resolve('importing-fragments/fragment-a.html');
-            const fragmentB = resolve('importing-fragments/fragment-a.html');
+            const fragmentB = resolve('importing-fragments/fragment-b.html');
             const util = resolve('importing-fragments/shared-util.html');
             const shell = resolve('importing-fragments/shell.html');
             const expectedEntrypointsToDeps = new Map([
-                [entrypoint, new Set([entrypoint, fragmentA, shell, util])],
+                [entrypoint, new Set([entrypoint, shell])],
                 [fragmentA, new Set([fragmentA, util])],
                 [fragmentB, new Set([fragmentB, util])],
-                [shell, new Set([shell, fragmentA, util])],
+                [shell, new Set([shell])],
             ]);
             const index = yield deps_index_1.buildDepsIndex([entrypoint, fragmentA, fragmentB, shell], analyzer);
-            chai.assert.deepEqual(serializeMap(index.entrypointToDeps), serializeMap(expectedEntrypointsToDeps));
+            chai.assert.deepEqual(serializeMap(index), serializeMap(expectedEntrypointsToDeps));
         }));
+        suite('module imports', () => {
+            setup(() => {
+                analyzer = test_utils_1.inMemoryAnalyzer({
+                    'multiple-external-modules.html': `
+            <script type="module" src="abc.js"></script>
+            <script type="module" src="abc.js"></script>
+            <script type="module" src="def.js"></script>
+          `,
+                    'multiple-inline-modules.html': `
+            <script type="module">
+              import {A, B} from './abc.js';
+              console.log(A,B);
+            </script>
+
+            <script type="module">
+              import {B, C} from './abc.js';
+              import {Y} from './xyz.js';
+              console.log(B,C,Y);
+            </script>
+
+            <script type="module">
+              import {D,F} from './def.js';
+              console.log(D,F);
+            </script>
+          `,
+                    'abc.js': `
+            import { upcase } from './upcase.js';
+            export const A = upcase('a');
+            export const B = upcase('b');
+            export const C = upcase('c');
+          `,
+                    'def.js': `
+            import { X, Y, Z } from './xyz.js';
+            const D = X + X;
+            const E = Y + Y;
+            const F = Z + Z;
+            export { D, E, F }
+          `,
+                    'omgz.js': `
+            import { upcase } from './upcase.js';
+            export const Z = upcase('omgz');
+          `,
+                    'upcase.js': `
+            export function upcase(str) {
+              return str.toUpperCase();
+            }
+          `,
+                    'xyz.js': `
+            import { upcase } from './upcase.js';
+            export const X = upcase('x');
+            export const Y = upcase('y');
+            export const Z = upcase('z');
+          `,
+                });
+            });
+            test('when external html script type module imports', () => __awaiter(this, void 0, void 0, function* () {
+                const entrypoint = resolve('multiple-external-modules.html');
+                const module1 = entrypoint + '>external#1>abc.js>es6-module';
+                const module2 = entrypoint + '>external#2>abc.js>es6-module';
+                const module3 = entrypoint + '>external#3>def.js>es6-module';
+                const abc = resolve('abc.js');
+                const def = resolve('def.js');
+                const xyz = resolve('xyz.js');
+                const upcase = resolve('upcase.js');
+                const index = yield deps_index_1.buildDepsIndex([entrypoint], analyzer);
+                const expectedEntrypointsToDeps = new Map([
+                    [entrypoint, new Set([entrypoint])],
+                    [module1, new Set([abc, upcase])],
+                    [module2, new Set([abc, upcase])],
+                    [module3, new Set([def, xyz, upcase])],
+                ]);
+                chai.assert.deepEqual(serializeMap(index), serializeMap(expectedEntrypointsToDeps));
+            }));
+            test('when inline html script type module imports', () => __awaiter(this, void 0, void 0, function* () {
+                const entrypoint = resolve('multiple-inline-modules.html');
+                const module1 = entrypoint + '>inline#1>es6-module';
+                const module2 = entrypoint + '>inline#2>es6-module';
+                const module3 = entrypoint + '>inline#3>es6-module';
+                const abc = resolve('abc.js');
+                const def = resolve('def.js');
+                const xyz = resolve('xyz.js');
+                const upcase = resolve('upcase.js');
+                const index = yield deps_index_1.buildDepsIndex([entrypoint], analyzer);
+                const expectedEntrypointsToDeps = new Map([
+                    [entrypoint, new Set([entrypoint])],
+                    [module1, new Set([abc, upcase])],
+                    [module2, new Set([abc, xyz, upcase])],
+                    [module3, new Set([def, xyz, upcase])],
+                ]);
+                chai.assert.deepEqual(serializeMap(index), serializeMap(expectedEntrypointsToDeps));
+            }));
+        });
     });
 });
 //# sourceMappingURL=deps-index_test.js.map

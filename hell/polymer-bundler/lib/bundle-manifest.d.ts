@@ -18,6 +18,7 @@ export declare type TransitiveDependenciesMap = Map<ResolvedUrl, Set<ResolvedUrl
  * The output format of the bundle.
  */
 export declare type BundleType = 'html-fragment' | 'es6-module';
+export declare const bundleTypeExtnames: Map<BundleType, string>;
 /**
  * A bundle is a grouping of files which serve the need of one or more
  * entrypoint files.
@@ -31,7 +32,9 @@ export declare class Bundle {
     inlinedHtmlImports: Set<ResolvedUrl>;
     inlinedScripts: Set<ResolvedUrl>;
     inlinedStyles: Set<ResolvedUrl>;
+    bundledExports: Map<ResolvedUrl, Map<string, string>>;
     constructor(type: BundleType, entrypoints?: Set<ResolvedUrl>, files?: Set<ResolvedUrl>);
+    readonly extname: string | undefined;
 }
 /**
  * Represents a bundle assigned to an output URL.
@@ -74,6 +77,20 @@ export declare function composeStrategies(strategies: BundleStrategy[]): BundleS
  *   `[a]->[a,b,d], [e]->[e,f], [a,e]->[c]`
  */
 export declare function generateBundles(depsIndex: TransitiveDependenciesMap): Bundle[];
+/**
+ * Instances of `<script type="module">` generate synthetic entrypoints in the
+ * depsIndex and are treated as entrypoints during the initial phase of
+ * `generateBundles`.  Any bundle which provides dependencies to a single
+ * synthetic entrypoint of this type (aka a single entrypoint sub-bundle) are
+ * merged back into the bundle for the HTML containing the script tag.
+ *
+ * For example, the following bundles:
+ *   `[a]->[a], [a>1]->[x], [a>1,a>2]->[y], [a>2]->[z]`
+ *
+ * Would be merged into the following set of bundles:
+ *   `[a]->[a,x,z], [a>1,a>2]->[y]`
+ */
+export declare function mergeSingleEntrypointSubBundles(bundles: Bundle[]): void;
 /**
  * Creates a bundle URL mapper function which takes a prefix and appends an
  * incrementing value, starting with `1` to the filename.
@@ -123,11 +140,14 @@ export declare function generateShellMergeStrategy(shell: ResolvedUrl, maybeMinE
 export declare function generateNoBackLinkStrategy(urls: ResolvedUrl[]): BundleStrategy;
 /**
  * Given an Array of bundles, produce a single bundle with the entrypoints and
- * files of all bundles represented.
+ * files of all bundles represented.  By default, bundles of different types
+ * can not be merged, but this constraint can be skipped by providing
+ * `ignoreTypeCheck` argument with value `true`.
  */
-export declare function mergeBundles(bundles: Bundle[]): Bundle;
+export declare function mergeBundles(bundles: Bundle[], ignoreTypeCheck?: boolean): Bundle;
 /**
- * Return a new bundle array where all bundles within it matching the predicate
- * are merged.
+ * Return a new bundle array where bundles within it matching the predicate
+ * are merged together.  Note that merge operations are segregated by type so
+ * that no attempt to merge bundles of different types will occur.
  */
 export declare function mergeMatchingBundles(bundles: Bundle[], predicate: (bundle: Bundle) => boolean): Bundle[];

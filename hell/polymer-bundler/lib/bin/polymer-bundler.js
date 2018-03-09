@@ -118,6 +118,15 @@ const optionDefinitions = [
         description: 'The root of the package/project being bundled.  Defaults to the ' +
             'current working folder.'
     },
+    {
+        name: 'module-resolution',
+        alias: 'm',
+        type: String,
+        typeLabel: '"node"',
+        description: 'Module resolution strategy for non-relative-path specifiers in ' +
+            'module import declarations.  Set to "node" if you want to use ' +
+            'node/npm style resolution.'
+    }
 ];
 const usage = [
     { header: 'Usage', content: ['polymer-bundler [options...] <in-html>'] },
@@ -172,8 +181,12 @@ options.implicitStrip = !options['no-implicit-strip'];
 options.inlineScripts = Boolean(options['inline-scripts']);
 options.inlineCss = Boolean(options['inline-css']);
 options.rewriteUrlsInTemplates = Boolean(options['rewrite-urls-in-templates']);
+options.moduleResolution = options['module-resolution'];
+const { moduleResolution } = options;
 const fsUrlLoader = new polymer_analyzer_1.FSUrlLoader(projectRoot);
-const packageUrlResolver = new polymer_analyzer_1.PackageUrlResolver({ packageDir: projectRoot });
+const packageUrlResolver = new polymer_analyzer_1.PackageUrlResolver({
+    packageDir: projectRoot,
+});
 const projectRootUrl = url_utils_1.getFileUrl(projectRoot);
 if (options.redirect) {
     const redirections = options.redirect
@@ -187,6 +200,7 @@ if (options.redirect) {
     const loaders = redirections.map((r) => new polymer_analyzer_1.FSUrlLoader(url_utils_1.resolvePath(r.path)));
     if (redirections.length > 0) {
         options.analyzer = new polymer_analyzer_1.Analyzer({
+            moduleResolution,
             urlResolver: new polymer_analyzer_1.MultiUrlResolver([...resolvers, packageUrlResolver]),
             urlLoader: new polymer_analyzer_1.MultiUrlLoader([...loaders, fsUrlLoader]),
         });
@@ -194,6 +208,7 @@ if (options.redirect) {
 }
 if (!options.analyzer) {
     options.analyzer = new polymer_analyzer_1.Analyzer({
+        moduleResolution,
         urlResolver: packageUrlResolver,
         urlLoader: fsUrlLoader,
     });

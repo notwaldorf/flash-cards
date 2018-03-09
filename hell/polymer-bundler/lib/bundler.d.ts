@@ -46,7 +46,7 @@ export declare class Bundler {
      * Analyze a URL using the given contents in place of what would otherwise
      * have been loaded.
      */
-    analyzeContents(url: ResolvedUrl, contents: string): Promise<Document>;
+    analyzeContents(url: ResolvedUrl, contents: string, permanent?: boolean): Promise<Document>;
     /**
      * Given a manifest describing the bundles, produce a collection of bundled
      * documents with HTML imports, external stylesheets and external scripts

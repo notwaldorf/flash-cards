@@ -27,6 +27,13 @@ function find(items, predicate) {
 }
 exports.find = find;
 /**
+ * Converts string like `abc-xyz__omg` to `abcXyzOmg`.
+ */
+function camelCase(text) {
+    return text.replace(/([a-z0-9])[^a-z0-9]+([a-z])/gi, (m) => m[0] + m[2].toUpperCase());
+}
+exports.camelCase = camelCase;
+/**
  * Returns a set of unique/distinct values returned by calling the given
  * function on each item.
  */

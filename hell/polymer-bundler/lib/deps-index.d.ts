@@ -12,9 +12,7 @@
  * http://polymer.github.io/PATENTS.txt
  */
 import { Analyzer, ResolvedUrl } from 'polymer-analyzer';
-export interface DepsIndex {
-    entrypointToDeps: Map<ResolvedUrl, Set<ResolvedUrl>>;
-}
+export declare type DepsIndex = Map<ResolvedUrl, Set<ResolvedUrl>>;
 /**
  * Analyzes all entrypoints and determines each of their transitive
  * dependencies.
@@ -24,3 +22,14 @@ export interface DepsIndex {
  *     were discovered as lazy entrypoints in the graph.
  */
 export declare function buildDepsIndex(entrypoints: ResolvedUrl[], analyzer: Analyzer): Promise<DepsIndex>;
+/**
+ * Constructs a ResolvedUrl to identify a sub bundle, which is a concatenation
+ * of the super bundle or containing file's URL and an id for the sub-bundle.
+ */
+export declare function getSubBundleUrl(superBundleUrl: ResolvedUrl, id: string): ResolvedUrl;
+/**
+ * Strips the sub-bundle id off the end of a URL to return the super bundle or
+ * containing file's URL.  If there is no sub-bundle id on the provided URL, the
+ * result is essentially a NOOP, since nothing will have been stripped.
+ */
+export declare function getSuperBundleUrl(subBundleUrl: string): ResolvedUrl;

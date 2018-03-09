@@ -27,6 +27,7 @@ const parse5_1 = require("parse5");
 const polymer_analyzer_1 = require("polymer-analyzer");
 const analyzer_utils_1 = require("./analyzer-utils");
 const constants_1 = require("./constants");
+const es6_module_utils_1 = require("./es6-module-utils");
 const matchers = require("./matchers");
 const parse5_utils_1 = require("./parse5-utils");
 const source_map_1 = require("./source-map");
@@ -45,8 +46,8 @@ class HtmlBundler {
             this.document = yield this._prepareBundleDocument();
             let ast = clone(this.document.parsedDocument.ast);
             dom5.removeFakeRootElements(ast);
-            this._injectHtmlImportsForBundle(ast);
             this._rewriteAstToEmulateBaseTag(ast, this.assignedBundle.url);
+            this._injectHtmlImportsForBundle(ast);
             // Re-analyzing the document using the updated ast to refresh the scanned
             // imports, since we may now have appended some that were not initially
             // present.
@@ -55,6 +56,10 @@ class HtmlBundler {
             yield this._inlineHtmlImports(ast);
             if (this.bundler.enableScriptInlining) {
                 yield this._inlineScripts(ast);
+                this.document = yield this.bundler.analyzeContents(this.assignedBundle.url, parse5_1.serialize(ast));
+                ast = this.document.parsedDocument.ast;
+                dom5.removeFakeRootElements(ast);
+                yield this._rollupInlineScripts();
             }
             if (this.bundler.enableCssInlining) {
                 yield this._inlineStylesheetLinks(ast);
@@ -166,9 +171,13 @@ class HtmlBundler {
         const existingImportDependencies = new Map(existingImports.map((existingImport) => [existingImport.document.url, [
                 ...existingImport.document.getFeatures({ kind: 'html-import', imported: true, noLazyImports: true })
             ].filter((i) => !i.lazy).map((feature) => feature.document.url)]));
-        // Every file in the bundle is a candidate for injection into the
+        // Every HTML file in the bundle is a candidate for injection into the
         // document.
         for (const importUrl of this.assignedBundle.bundle.files) {
+            // We only want to inject an HTML import to an HTML file.
+            if (url_utils_1.getFileExtension(importUrl) !== '.html') {
+                continue;
+            }
             // We don't want to inject the bundle into itself.
             if (this.assignedBundle.url === importUrl) {
                 continue;
@@ -184,8 +193,8 @@ class HtmlBundler {
             // We are only concerned with imports that are not of files in this
             // bundle.
             for (const existingImport of existingImports.filter((e) => !this.assignedBundle.bundle.files.has(e.document.url))) {
-                // If the existing import has a dependency on the import we are about
-                // to inject, it may be our new target.
+                // If the existing import has a dependency on the import we are
+                // about to inject, it may be our new target.
                 if (existingImportDependencies.get(existingImport.document.url)
                     .indexOf(importUrl) !== -1) {
                     const newPrependTarget = dom5.query(ast, (node) => parse5_utils_1.isSameNode(node, existingImport.astNode));
@@ -352,7 +361,6 @@ class HtmlBundler {
                 this.assignedBundle.bundle.missingImports.add(resolvedImportUrl);
                 return;
             }
-            // Second argument 'true' tells encodeString to escape <script> tags.
             let scriptContent = scriptImport.document.parsedDocument.contents;
             if (this.bundler.sourcemaps) {
                 // it's easier to calculate offsets if the external script contents
@@ -361,6 +369,7 @@ class HtmlBundler {
                 scriptContent = yield source_map_1.addOrUpdateSourcemapComment(this.bundler.analyzer, resolvedImportUrl, '\n' + scriptContent, -1, 0, 1, 0);
             }
             dom5.removeAttribute(scriptTag, 'src');
+            // Second argument 'true' tells encodeString to escape the <script> content.
             dom5.setTextContent(scriptTag, encode_string_1.default(scriptContent, true));
             // Record that the inlining took place.
             this.assignedBundle.bundle.inlinedScripts.add(resolvedImportUrl);
@@ -530,10 +539,10 @@ class HtmlBundler {
         }
     }
     /**
-     * Generate a fresh document (ASTNode) to bundle contents into.
-     * If we're building a bundle which is based on an existing file, we
-     * should load that file and prepare it as the bundle document, otherwise
-     * we'll create a clean/empty html document.
+     * Generate a fresh document to bundle contents into.  If we're building
+     * a bundle which is based on an existing file, we should load that file and
+     * prepare it as the bundle document, otherwise we'll create a clean/empty
+     * HTML document.
      */
     _prepareBundleDocument() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -663,6 +672,25 @@ class HtmlBundler {
                 this._rewriteCssTextBaseUrl(styleText, oldBaseUrl, newBaseUrl);
             dom5.setTextContent(node, styleText);
         }
+    }
+    _rollupInlineScripts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const es6Rewriter = new es6_module_utils_1.Es6Rewriter(this.bundler, this.manifest, this.assignedBundle);
+            const inlineModuleScripts = [...this.document.getFeatures({
+                    kind: 'js-document',
+                    imported: false,
+                    externalPackages: true,
+                    excludeBackreferences: true,
+                })]
+                .filter((f) => f.isInline &&
+                f.parsedDocument.parsedAsSourceType === 'module');
+            for (const inlineModuleScript of inlineModuleScripts) {
+                const { code } = yield es6Rewriter.rollup(this.document.parsedDocument.baseUrl, inlineModuleScript.parsedDocument.contents);
+                // Second argument 'true' tells encodeString to escape the <script>
+                // content.
+                dom5.setTextContent(inlineModuleScript.astNode.node, encode_string_1.default(`\n${code}\n`, true));
+            }
+        });
     }
     /**
      * Set the assetpath attribute of all imported dom-modules which don't yet

@@ -41,6 +41,9 @@ suite('BundleManifest', () => {
         const files = Array.from(bundle.files).sort().join();
         return `[${entrypoints}]->[${files}]`;
     }
+    function serializeWithType(bundle) {
+        return serializeBundle(bundle) + `.${bundle.type}`;
+    }
     suite('mergeBundles()', () => {
         test('can not work unless at least one Bundle provided', () => {
             assert.throws(() => bundle_manifest_1.mergeBundles([]));
@@ -62,21 +65,21 @@ suite('BundleManifest', () => {
         const bundles = [
             '[A]->[A,C]',
             '[B]->[B,D]',
-            '[A,B]->[E]'
+            '[A,B]->[E,F]',
         ].map(deserializeBundle);
         const underscoreJoinMapper = bundle_manifest_1.generateSharedBundleUrlMapper((bundles) => bundles.map((b) => Array.from(b.entrypoints).join('_')));
         test('maps bundles to urls based on given mapper', () => {
             const manifest = new bundle_manifest_1.BundleManifest(bundles, underscoreJoinMapper);
-            assert.equal(serializeBundle(manifest.bundles.get(test_utils_1.resolvedUrl `A_B`)), '[A,B]->[E]');
+            assert.equal(serializeBundle(manifest.bundles.get(test_utils_1.resolvedUrl `A_B`)), '[A,B]->[E,F]');
         });
         test('enables bundles to be found by constituent file', () => {
             const manifest = new bundle_manifest_1.BundleManifest(bundles, underscoreJoinMapper);
             assert.equal(manifest.getBundleForFile(test_utils_1.resolvedUrl `E`).url, 'A_B');
-            assert.equal(serializeBundle(manifest.getBundleForFile(test_utils_1.resolvedUrl `E`).bundle), '[A,B]->[E]');
+            assert.equal(serializeBundle(manifest.getBundleForFile(test_utils_1.resolvedUrl `E`).bundle), '[A,B]->[E,F]');
         });
         test('generateCountingSharedBundleUrlMapper allows a custom prefix', () => {
             const manifest = new bundle_manifest_1.BundleManifest(bundles, bundle_manifest_1.generateCountingSharedBundleUrlMapper(test_utils_1.resolvedUrl `path/to/shared`));
-            assert.equal(serializeBundle(manifest.bundles.get(test_utils_1.resolvedUrl `path/to/shared1.html`)), '[A,B]->[E]');
+            assert.equal(serializeBundle(manifest.bundles.get(test_utils_1.resolvedUrl `path/to/shared1.html`)), '[A,B]->[E,F]');
         });
     });
     suite('generateBundles', () => {
@@ -92,6 +95,27 @@ suite('BundleManifest', () => {
                 '[A]->[A,C]',
                 '[D]->[D,E]',
                 '[F]->[F]'
+            ]);
+        });
+        test('merges bundles for single script tags back into HTML bundle', () => {
+            const depsIndex = new Map();
+            depsIndex.set(test_utils_1.resolvedUrl `A`, new Set([test_utils_1.resolvedUrl `A`]));
+            depsIndex.set(test_utils_1.resolvedUrl `A>1`, new Set([test_utils_1.resolvedUrl `X`]));
+            depsIndex.set(test_utils_1.resolvedUrl `A>2`, new Set([test_utils_1.resolvedUrl `Y`]));
+            depsIndex.set(test_utils_1.resolvedUrl `B`, new Set([test_utils_1.resolvedUrl `B`]));
+            depsIndex.set(test_utils_1.resolvedUrl `B>1`, new Set([test_utils_1.resolvedUrl `Y`]));
+            const bundles = bundle_manifest_1.generateBundles(depsIndex);
+            assert.deepEqual(bundles.map(serializeBundle).sort(), [
+                '[A>1]->[X]',
+                '[A>2,B>1]->[Y]',
+                '[A]->[A]',
+                '[B]->[B]',
+            ]);
+            bundle_manifest_1.mergeSingleEntrypointSubBundles(bundles);
+            assert.deepEqual(bundles.map(serializeBundle).sort(), [
+                '[A>2,B>1]->[Y]',
+                '[A]->[A,X]',
+                '[B]->[B]',
             ]);
         });
     });
@@ -331,6 +355,28 @@ suite('BundleManifest', () => {
                     '[B,D]->[6,D]'
                 ]);
             });
+        });
+    });
+    suite('Bundle types', () => {
+        test('inferred properly from resolved URLs of entrypoints', () => {
+            const depsIndex = new Map();
+            depsIndex.set(test_utils_1.resolvedUrl `page1.html`, new Set([test_utils_1.resolvedUrl `page1.html`]));
+            depsIndex.set(test_utils_1.resolvedUrl `page1.html>inline#1>es6-module`, new Set([test_utils_1.resolvedUrl `shared-1.js`, test_utils_1.resolvedUrl `shared-2.js`]));
+            depsIndex.set(test_utils_1.resolvedUrl `page1.html>inline#2>es6-module`, new Set([test_utils_1.resolvedUrl `shared-1.js`, test_utils_1.resolvedUrl `shared-2.js`]));
+            depsIndex.set(test_utils_1.resolvedUrl `page2.html`, new Set([test_utils_1.resolvedUrl `page2.html`]));
+            depsIndex.set(test_utils_1.resolvedUrl `page2.html>inline#1>es6-module`, new Set([test_utils_1.resolvedUrl `page2-only.js`, test_utils_1.resolvedUrl `shared-2.js`]));
+            depsIndex.set(test_utils_1.resolvedUrl `dynamic-import.js`, new Set([test_utils_1.resolvedUrl `dynamic-import.js`]));
+            const expected = [
+                '[dynamic-import.js]->[dynamic-import.js].es6-module',
+                '[page1.html>inline#1>es6-module,page1.html>inline#2>es6-module,page2.html>inline#1>es6-module]->[shared-2.js].es6-module',
+                '[page1.html>inline#1>es6-module,page1.html>inline#2>es6-module]->[shared-1.js].es6-module',
+                '[page1.html]->[page1.html].html-fragment',
+                '[page2.html>inline#1>es6-module]->[page2-only.js].es6-module',
+                '[page2.html]->[page2.html].html-fragment',
+            ];
+            const bundles = bundle_manifest_1.generateBundles(depsIndex);
+            const serializedBundles = bundles.map(serializeWithType).sort();
+            assert.deepEqual(serializedBundles, expected);
         });
     });
     suite('Shop example', () => {

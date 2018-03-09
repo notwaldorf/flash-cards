@@ -18,6 +18,10 @@
  */
 export declare function find<T>(items: Iterable<T>, predicate: (item: T) => boolean): T | undefined;
 /**
+ * Converts string like `abc-xyz__omg` to `abcXyzOmg`.
+ */
+export declare function camelCase(text: string): string;
+/**
  * Returns a set of unique/distinct values returned by calling the given
  * function on each item.
  */

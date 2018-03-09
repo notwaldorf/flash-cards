@@ -18,6 +18,8 @@ import * as bundleManifestLib from './bundle-manifest';
 import {Bundle, BundleManifest, BundleStrategy, BundleUrlMapper} from './bundle-manifest';
 import * as depsIndexLib from './deps-index';
 import {BundledDocument, DocumentCollection} from './document-collection';
+import {Es6ModuleBundler} from './es6-module-bundler';
+import {reserveBundleModuleExportNames} from './es6-module-utils';
 import {HtmlBundler} from './html-bundler';
 import {resolvePath} from './url-utils';
 
@@ -110,11 +112,23 @@ export class Bundler {
    * Analyze a URL using the given contents in place of what would otherwise
    * have been loaded.
    */
-  async analyzeContents(url: ResolvedUrl, contents: string): Promise<Document> {
+  async analyzeContents(
+      url: ResolvedUrl,
+      contents: string,
+      permanent?: boolean): Promise<Document> {
     this._overlayUrlLoader.urlContentsMap.set(url, contents);
     await this.analyzer.filesChanged([url]);
     const analysis = await this.analyzer.analyze([url]);
-    return getAnalysisDocument(analysis, url);
+    const document = getAnalysisDocument(analysis, url);
+    // Unless we explicitly want to make this analysis permanent, we remove the
+    // entry from the overlay and tell analyzer to forget what it just analyzed.
+    // This is because logic in many parts of the bundler assume the documents
+    // and features will be of the original content.
+    if (!permanent) {
+      this._overlayUrlLoader.urlContentsMap.delete(url);
+      await this.analyzer.filesChanged([url]);
+    }
+    return document;
   }
 
   /**
@@ -129,12 +143,22 @@ export class Bundler {
         new Map<ResolvedUrl, BundledDocument>();
     manifest = manifest.fork();
 
-    for (const bundleEntry of manifest.bundles) {
-      const bundleUrl = bundleEntry[0];
-      const bundle = {url: bundleUrl, bundle: bundleEntry[1]};
-      if (bundle.url.endsWith('.html')) {
-        documents.set(
-            bundleUrl, await(new HtmlBundler(this, bundle, manifest).bundle()));
+    reserveBundleModuleExportNames(this.analyzer, manifest);
+
+    for (const [url, bundle] of manifest.bundles) {
+      const assignedBundle = {url, bundle};
+      switch (bundle.type) {
+        case 'html-fragment':
+          documents.set(
+              url,
+              await(new HtmlBundler(this, assignedBundle, manifest).bundle()));
+          break;
+        case 'es6-module':
+          documents.set(
+              url,
+              await(new Es6ModuleBundler(this, assignedBundle, manifest)
+                        .bundle()));
+          break;
       }
     }
 
@@ -156,8 +180,12 @@ export class Bundler {
   async generateManifest(entrypoints: ResolvedUrl[]): Promise<BundleManifest> {
     const dependencyIndex =
         await depsIndexLib.buildDepsIndex(entrypoints, this.analyzer);
-    let bundles =
-        bundleManifestLib.generateBundles(dependencyIndex.entrypointToDeps);
+    let bundles = bundleManifestLib.generateBundles(dependencyIndex);
+    // Merge single-entrypoint sub-bundles into their containing documents so
+    // that inlining code can knows which module scripts can be inlined.
+    if (this.enableScriptInlining) {
+      bundleManifestLib.mergeSingleEntrypointSubBundles(bundles);
+    }
     this._filterExcludesFromBundles(bundles);
     bundles = this.strategy(bundles);
     return new BundleManifest(bundles, this.urlMapper);

@@ -128,6 +128,16 @@ const optionDefinitions = [
         'The root of the package/project being bundled.  Defaults to the ' +
         'current working folder.'
   },
+  {
+    name: 'module-resolution',
+    alias: 'm',
+    type: String,
+    typeLabel: '"node"',
+    description:
+        'Module resolution strategy for non-relative-path specifiers in ' +
+        'module import declarations.  Set to "node" if you want to use ' +
+        'node/npm style resolution.'
+  }
 ];
 
 const usage = [
@@ -195,9 +205,13 @@ options.implicitStrip = !options['no-implicit-strip'];
 options.inlineScripts = Boolean(options['inline-scripts']);
 options.inlineCss = Boolean(options['inline-css']);
 options.rewriteUrlsInTemplates = Boolean(options['rewrite-urls-in-templates']);
+options.moduleResolution = options['module-resolution'];
 
+const {moduleResolution} = options;
 const fsUrlLoader = new FSUrlLoader(projectRoot);
-const packageUrlResolver = new PackageUrlResolver({packageDir: projectRoot});
+const packageUrlResolver = new PackageUrlResolver({
+  packageDir: projectRoot,
+});
 const projectRootUrl = getFileUrl(projectRoot);
 
 type Redirection = {
@@ -220,6 +234,7 @@ if (options.redirect) {
       (r: Redirection) => new FSUrlLoader(resolvePath(r.path)));
   if (redirections.length > 0) {
     options.analyzer = new Analyzer({
+      moduleResolution,
       urlResolver: new MultiUrlResolver([...resolvers, packageUrlResolver]),
       urlLoader: new MultiUrlLoader([...loaders, fsUrlLoader]),
     });
@@ -228,6 +243,7 @@ if (options.redirect) {
 
 if (!options.analyzer) {
   options.analyzer = new Analyzer({
+    moduleResolution,
     urlResolver: packageUrlResolver,
     urlLoader: fsUrlLoader,
   });

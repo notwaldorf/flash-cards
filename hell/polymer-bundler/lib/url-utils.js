@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -11,13 +13,25 @@
  * subject to an additional IP rights grant found at
  * http://polymer.github.io/PATENTS.txt
  */
-// jshint node:true
-'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const url = require("url");
-const constants_1 = require("./constants");
 const vscode_uri_1 = require("vscode-uri");
+const constants_1 = require("./constants");
+/**
+ * Given a string representing a relative path of some form, ensure a `./`
+ * leader if it doesn't already start with dot-based path leader or a scheme
+ * (like, you wouldn't want to change `file:///example.js` into
+ * `./file:///example.js`)
+ */
+function ensureLeadingDot(href) {
+    const hrefString = href;
+    if (!vscode_uri_1.default.parse(hrefString).scheme &&
+        !(hrefString.startsWith('./') || hrefString.startsWith('../'))) {
+        return './' + href;
+    }
+    return href;
+}
+exports.ensureLeadingDot = ensureLeadingDot;
 /**
  * Given a string representing a URL or path of some form, append a `/`
  * character if it doesn't already end with one.
@@ -27,6 +41,21 @@ function ensureTrailingSlash(href) {
     return hrefString.endsWith('/') ? href : (href + '/');
 }
 exports.ensureTrailingSlash = ensureTrailingSlash;
+/**
+ * Parses the URL and returns the extname of the path.
+ */
+function getFileExtension(url_) {
+    return path.extname(getFileName(url_));
+}
+exports.getFileExtension = getFileExtension;
+/**
+ * Parses the URL and returns only the filename part of the path.
+ */
+function getFileName(url_) {
+    const uri = vscode_uri_1.default.parse(url_);
+    return uri.path.split(/\//).pop() || '';
+}
+exports.getFileName = getFileName;
 /**
  * Returns a WHATWG ResolvedURL for a filename on local filesystem.
  */
@@ -125,6 +154,9 @@ function rewriteHrefBaseUrl(href, oldBaseUrl, newBaseUrl) {
     return relativeUrl;
 }
 exports.rewriteHrefBaseUrl = rewriteHrefBaseUrl;
+/**
+ * Ensures a leading slash on given string.
+ */
 function makeAbsolutePath(path) {
     return path.startsWith('/') ? path : '/' + path;
 }

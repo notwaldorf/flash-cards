@@ -112,10 +112,10 @@ export declare class HtmlBundler {
      */
     private _moveUnhiddenHtmlImportsIntoHiddenDiv(ast);
     /**
-     * Generate a fresh document (ASTNode) to bundle contents into.
-     * If we're building a bundle which is based on an existing file, we
-     * should load that file and prepare it as the bundle document, otherwise
-     * we'll create a clean/empty html document.
+     * Generate a fresh document to bundle contents into.  If we're building
+     * a bundle which is based on an existing file, we should load that file and
+     * prepare it as the bundle document, otherwise we'll create a clean/empty
+     * HTML document.
      */
     private _prepareBundleDocument();
     /**
@@ -149,6 +149,7 @@ export declare class HtmlBundler {
      * on the relationship of the old base URL to the new base URL.
      */
     private _rewriteStyleTagsBaseUrl(ast, oldBaseUrl, newBaseUrl);
+    private _rollupInlineScripts();
     /**
      * Set the assetpath attribute of all imported dom-modules which don't yet
      * have them if the base URLs are different.
