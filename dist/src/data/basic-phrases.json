@@ -1,0 +1,15 @@
+[
+  {"en": "good morning",	"jp":"おはようございます", "say": "ohayou gozaimasu"},
+  {"en": "good afternoon",	"jp":"こんにちは", "say": "konnichiwa"},
+  {"en": "goodbye",	"jp":"さようなら", "say": "sayonara"},
+  {"en": "take care",	"jp":"お元気で", "say": "o genki de"},
+  {"en": "what is your name",	"jp":"お名前は何ですか？", "say": "o namae wa nan desu ka"},
+  {"en": "i like it",	"jp":"好きです", "say": "suki desu"},
+  {"en": "it's good",	"jp":"いいですよ", "say": "ii desu yo"},
+  {"en": "it's not good",	"jp":"ダメです", "say": "dame desu"},
+  {"en": "thank you",	"jp":"ありがとうございます", "say": "arigatou gozaimasu"},
+  {"en": "you're welcome",	"jp":"どういたしまして", "say": "douitashimashite"},
+  {"en": "please",	"jp":"ください", "say": "kudasai"},
+  {"en": "excuse me", "jp":"すみません", "say": "sumimasen"},
+  {"en": "i'm sorry", "jp":"ごめんなさい", "say": "gomen nasai"}
+]
