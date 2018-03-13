@@ -73,6 +73,8 @@ class ACard extends LitElement {
 
      <div class="question">${props.question}</div>
      <input autofocus
+        autocomplete="off" spellcheck="false"
+        autocorrect="off" autocapitalize="none"
         placeholder="${props.showAnswer ? props.answer : 'answer'}"
         on-keypress="${(e) => this._inputKeypress(e)}"
         value="${props._inputValue}">
