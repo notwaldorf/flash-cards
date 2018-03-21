@@ -10,6 +10,10 @@ Apart from several game options, `flash-cards` also comes with a stats page that
 <img width="400" alt="screenshot of stats screen" src="https://user-images.githubusercontent.com/1369170/37738328-e6392c34-2d13-11e8-949f-bdd4e8aae76e.png">
 
 ## Features/highlights
+- uses Redux to handle the application's state
+- this state is also stored and loaded from `localStorage`, so that the last question asked and the stats are persisted across refreshes
+- uses the [SpeechSynthesis API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) to read out the question being asked
+- the actual cards data is loaded from arbitrary `json` files, so the app can be extended to work for any language and any set of words being learnt
 
 ## Setup
 
