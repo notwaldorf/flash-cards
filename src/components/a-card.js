@@ -1,11 +1,11 @@
-import { LitElement, html, renderAttributes } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { LitElement, html, renderAttributes } from '@polymer/lit-element';
 import { audioIcon } from './my-icons.js';
 
 class ACard extends LitElement {
   render(props) {
     renderAttributes(this, {
-      'correct': props.isAnswered && props.correct,
-      'incorrect': props.isAnswered && !props.correct
+      'correct': props._isAnswered && props._correct,
+      'incorrect': props._isAnswered && !props._correct
     });
 
     return html`
@@ -86,7 +86,7 @@ class ACard extends LitElement {
           ${audioIcon}
       </button>
      </div>
-     <button class="green" on-click="${() => this.submit()}">${props.isAnswered ? 'next' : 'submit'}</button>
+     <button class="green" on-click="${() => this.submit()}">${props._isAnswered ? 'next' : 'submit'}</button>
     `;
   }
 
@@ -97,8 +97,8 @@ class ACard extends LitElement {
       hint: String,
       answer: String,
       // State of the card.
-      isAnswered: String,
-      correct: Boolean,
+      _isAnswered: String,
+      _correct: Boolean,
       // App settings.
       showAnswer: Boolean,
       saySettings: String,
@@ -110,7 +110,7 @@ class ACard extends LitElement {
 
   constructor() {
     super();
-    this.isAnswered = false;
+    this._isAnswered = false;
   }
   ready() {
     super.ready();
@@ -150,13 +150,13 @@ class ACard extends LitElement {
   }
 
   submit() {
-    if (this.isAnswered) {  // next answer
+    if (this._isAnswered) {  // next answer
       this._inputValue = '';
       this._input.focus();
       this.dispatchEvent(new CustomEvent('next-question',
         {bubbles: true, composed: true}));
     } else {  // submit answer
-      this.correct = this._input.value === this.answer;
+      this._correct = this._input.value === this.answer;
       this._inputValue = this.answer;
       this._button.focus();
 
@@ -165,9 +165,9 @@ class ACard extends LitElement {
       }
 
       this.dispatchEvent(new CustomEvent('answered',
-        {bubbles: false, composed: true, detail: {correct: this.correct}}));
+        {bubbles: false, composed: true, detail: {correct: this._correct}}));
     }
-    this.isAnswered = !this.isAnswered;
+    this._isAnswered = !this._isAnswered;
   }
 
   _say() {

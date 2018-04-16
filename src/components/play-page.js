@@ -1,6 +1,6 @@
-import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
-import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
-import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
+import { LitElement, html } from '@polymer/lit-element';
+import { connect } from 'pwa-helpers/connect-mixin.js';
+import { repeat } from 'lit-html/lib/repeat.js';
 import { store } from '../store.js';
 import { settingsIcon } from './my-icons.js';
 import './a-card.js';
@@ -12,17 +12,17 @@ import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/
 class FlashCards extends connect(store)(LitElement) {
   static get properties() {
     return {
-      cards: Object,
-      card: Object,
-      showAnswer: Boolean,
-      showSettings: String,
-      saySettings: String,
-      categories: Array,
-      showSettingsPage: Boolean
+      _cards: Object,
+      _card: Object,
+      _showAnswer: Boolean,
+      _showSettings: String,
+      _saySettings: String,
+      _categories: Array,
+      _showSettingsPage: Boolean
     }
   }
 
-  render({card, cards, showAnswer, showSettings, saySettings, categories, showSettingsPage}) {
+  render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
     return html`
       <style>
       :host {
@@ -68,94 +68,93 @@ class FlashCards extends connect(store)(LitElement) {
       </style>
       <button class="settings-btn" on-click=${() => this._toggleShowSettings()}">${settingsIcon}</button>
 
-      <div id="settings" hidden?="${!showSettingsPage}">
-        <check-box id="answer" label="show answer" checked="${showAnswer}"></check-box>
+      <div id="settings" hidden?="${!_showSettingsPage}">
+        <check-box id="answer" label="show answer" checked="${_showAnswer}"></check-box>
 
         <h4>Pick from</h4>
-        ${repeat(Object.keys(cards), kind =>
+        ${repeat(Object.keys(_cards), kind =>
           html`
-            <check-box label="${kind}" checked="${categories.indexOf(kind)!==-1}" class="categories"></check-box>
+            <check-box label="${kind}" checked="${_categories.indexOf(kind)!==-1}" class="categories"></check-box>
           `
         )}
 
         <h4>Ask me...</h4>
         <check-box id="all" class="show-settings"
             label="all cards"
-            checked="${showSettings == 'all'}">
+            checked="${_showSettings == 'all'}">
         </check-box><br>
         <check-box id="onlyNew" class="show-settings"
             label="only cards I haven't seen"
-            checked="${showSettings == 'onlyNew'}">
+            checked="${_showSettings == 'onlyNew'}">
         </check-box><br>
         <check-box id="mostlyWrong" class="show-settings"
             label="only cards I've gotten mostly wrong"
-            checked="${showSettings == 'mostlyWrong'}">
+            checked="${_showSettings == 'mostlyWrong'}">
         </check-box><br>
         <check-box id="mostlyRight" class="show-settings"
             label="only cards I've gotten mostly right"
-            checked="${showSettings == 'mostlyRight'}">
+            checked="${_showSettings == 'mostlyRight'}">
         </check-box>
 
         <h4>Read answer...</h4>
         <check-box id="start" class="say-settings"
             label="when card is shown"
-            checked="${saySettings == 'start'}">
+            checked="${_saySettings == 'start'}">
         </check-box><br>
         <check-box id="end" class="say-settings"
             label="before next card is shown"
-            checked="${saySettings == 'end'}">
+            checked="${_saySettings == 'end'}">
         </check-box><br>
         <check-box id="demand" class="say-settings"
             label="only when I want to"
-            checked="${saySettings == 'demand'}">
+            checked="${_saySettings == 'demand'}">
 
       </div>
 
-      <a-card hidden?="${showSettingsPage}"
-        question="${card.question}"
-        answer="${card.answer}"
-        hint="${card.hint}"
-        showAnswer="${showAnswer}"
-        saySettings="${saySettings}">
+      <a-card hidden?="${_showSettingsPage}"
+        question="${_card.question}"
+        answer="${_card.answer}"
+        hint="${_card.hint}"
+        showAnswer="${_showAnswer}"
+        saySettings="${_saySettings}">
       </a-card>
     `;
   }
 
   constructor() {
     super();
-    this.card = {question: '', answer: '', hint: ''};
-    this.showSettingsPage = false;
+    this._card = {question: '', answer: '', hint: ''};
+    this._showSettingsPage = false;
   }
 
   ready() {
     // Ready to render!
     super.ready();
-    this._card = this.shadowRoot.querySelector('a-card');
 
     this.addEventListener('checked-changed', (e) => this._checkedChanged(e.composedPath()[0]))
     this.addEventListener('next-question', () => store.dispatch(showNewCard()));
     this.addEventListener('answered', (e) => {
-      store.dispatch(e.detail.correct ? getRight(this.card) : getWrong(this.card));
+      store.dispatch(e.detail.correct ? getRight(this._card) : getWrong(this._card));
     });
   }
 
   stateChanged(state) {
-    this.showAnswer = state.app.showAnswer;
-    this.cards = state.data.cards;
-    this.categories = state.data.categories;
-    this.showSettings = state.app.showSettings;
-    this.saySettings = state.app.saySettings;
+    this._showAnswer = state.app.showAnswer;
+    this._cards = state.data.cards;
+    this._categories = state.data.categories;
+    this._showSettings = state.app.showSettings;
+    this._saySettings = state.app.saySettings;
 
     const activeCard = state.data.activeCard;  // {hint, index}
 
     if (activeCard && activeCard.index !== undefined) {
-      if (!this.cards[activeCard.hint]) {
+      if (!this._cards[activeCard.hint]) {
         // Oops, you're in an error state. This card doesn't exist anymore.
         store.dispatch(showNewCard());
         return;
       }
-      const activeCardData = this.cards[activeCard.hint][activeCard.index];
-      this.card = {
+      const activeCardData = this._cards[activeCard.hint][activeCard.index];
+      this._card = {
         question: activeCardData.jp,
         answer: activeCardData.en,
         hint: activeCard.hint
@@ -183,7 +182,7 @@ class FlashCards extends connect(store)(LitElement) {
   }
 
   _toggleShowSettings() {
-    this.showSettingsPage = !this.showSettingsPage;
+    this._showSettingsPage = !this._showSettingsPage;
   }
 }
 

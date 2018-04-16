@@ -1,11 +1,11 @@
-import { html } from '../../node_modules/@polymer/lit-element/lit-element.js';
+import { html } from '@polymer/lit-element';
 import { PageViewElement } from './page-view-element.js';
 import { SharedStyles } from './shared-styles.js';
 
 class AboutPage extends PageViewElement {
   render(props) {
     return html`
-      <style>${SharedStyles}</style>
+      ${SharedStyles}
       <h2>About</h2>
       <p>
         <b>Theory</b>: much like presentation-slides-in-javascript libraries, every
