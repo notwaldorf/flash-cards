@@ -1,13 +1,13 @@
-import { html } from '../../node_modules/@polymer/lit-element/lit-element.js';
+import { html } from '@polymer/lit-element';
 import { PageViewElement } from './page-view-element.js';
-import { connect } from '../../node_modules/pwa-helpers/connect-mixin.js';
-import { repeat } from '../../node_modules/lit-html/lib/repeat.js';
+import { connect } from 'pwa-helpers/connect-mixin.js';
+import { repeat } from 'lit-html/lib/repeat.js';
 
 // This element is connected to the redux store.
 import { store } from '../store.js';
 
 class StatsPage extends connect(store)(PageViewElement) {
-  render({cards, stats}) {
+  render({_cards, _stats}) {
     return html`
       <style>
         :host {
@@ -60,15 +60,15 @@ class StatsPage extends connect(store)(PageViewElement) {
       </style>
 
       <div class="columns">
-      ${repeat(Object.keys(cards), kind =>
+      ${repeat(Object.keys(_cards), kind =>
         html`
         <div class="column">
           <h3>${kind}</h3>
           <div class="list">
-            ${repeat(Object.keys(cards[kind]), entry => html`
-              <div style$="${this._getColor(kind, cards[kind][entry].jp, stats)}">
-                <div class="jp ellipsis" title="${cards[kind][entry].jp}">${cards[kind][entry].jp}</div>
-                <div class="en ellipsis" title="${cards[kind][entry].en}">${cards[kind][entry].en}</div>
+            ${repeat(Object.keys(_cards[kind]), entry => html`
+              <div style$="${this._getColor(kind, _cards[kind][entry].jp, _stats)}">
+                <div class="jp ellipsis" title="${_cards[kind][entry].jp}">${_cards[kind][entry].jp}</div>
+                <div class="en ellipsis" title="${_cards[kind][entry].en}">${_cards[kind][entry].en}</div>
               </div>
             `)}
           </div>
@@ -79,13 +79,13 @@ class StatsPage extends connect(store)(PageViewElement) {
     `;
   }
   static get properties() { return {
-    stats: Object,
-    cards: Object,
+    _stats: Object,
+    _cards: Object,
   }}
 
   stateChanged(state) {
-    this.cards = state.data.cards;
-    this.stats = state.data.stats;
+    this._cards = state.data.cards;
+    this._stats = state.data.stats;
   }
 
   _getColor(kind, jp, stats) {

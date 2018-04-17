@@ -1,4 +1,4 @@
-import { LitElement, html } from '../../node_modules/@polymer/lit-element/lit-element.js'
+import { LitElement, html } from '@polymer/lit-element';
 
 class CheckBox extends LitElement {
   render({label, checked}) {
