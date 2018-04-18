@@ -28,7 +28,7 @@ class ACard extends LitElement {
        }
        .hint {
          font-size: 1em;
-         color: #499FFA;
+         color: #1976D2;
        }
        input {
          font-size: 3rem;
@@ -47,8 +47,8 @@ class ACard extends LitElement {
          cursor: pointer;
        }
        button.green {
-         background: #4CAF50;
-         color: white;
+         background: #8BC34A;
+         color: black;
          font-size: 1em;
          text-transform: uppercase;
          font-weight: bold;
@@ -73,6 +73,7 @@ class ACard extends LitElement {
 
      <div class="question">${props.question}</div>
      <input autofocus
+        title="your guess"
         autocomplete="off" spellcheck="false"
         autocorrect="off" autocapitalize="none"
         placeholder="${props.showAnswer ? props.answer : 'answer'}"

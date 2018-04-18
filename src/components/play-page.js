@@ -67,7 +67,11 @@ class FlashCards extends connect(store)(PageViewElement) {
         line-height: 1;
       }
       </style>
-      <button class="settings-btn" on-click=${() => this._toggleShowSettings()}">${settingsIcon}</button>
+      <button class="settings-btn"
+          title="settings"
+          on-click=${() => this._toggleShowSettings()}">
+        ${settingsIcon}
+      </button>
 
       <div id="settings" hidden?="${!_showSettingsPage}">
         <check-box id="answer" label="show answer" checked="${_showAnswer}"></check-box>
