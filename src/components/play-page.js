@@ -4,6 +4,7 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 import { repeat } from 'lit-html/lib/repeat.js';
 import { store } from '../store.js';
 import { settingsIcon } from './my-icons.js';
+import { SharedStyles } from './shared-styles.js';
 import './a-card.js';
 import './check-box.js';
 
@@ -26,11 +27,15 @@ class FlashCards extends connect(store)(PageViewElement) {
   render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
     return html`
       <style>
+      ${SharedStyles}
+
       :host {
         display: block;
         box-sizing: border-box;
-        padding: 60px 20px;
         position: relative;
+        /* Override shared styles */
+        margin: 60px 40px !important;
+        padding: 0!important;
       }
 
       [hidden] {
@@ -39,8 +44,8 @@ class FlashCards extends connect(store)(PageViewElement) {
 
       .settings-btn {
         position: absolute;
-        right: 40px;
-        top: 40px;
+        right: -20px;
+        top: -20px;
         background-color: #FAE1D6;
         text-align: center;
         border-radius: 50%;

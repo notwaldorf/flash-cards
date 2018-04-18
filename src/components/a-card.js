@@ -73,7 +73,7 @@ class ACard extends LitElement {
 
      <div class="question">${props.question}</div>
      <input autofocus
-        title="your guess"
+        title="your answer"
         autocomplete="off" spellcheck="false"
         autocorrect="off" autocapitalize="none"
         placeholder="${props.showAnswer ? props.answer : 'answer'}"
