@@ -67,12 +67,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       store.addReducers({data});
 
       suite('views a11y tests', function() {
-        setup(function(done) {
+        setup(function() {
           store.dispatch(loadAll());
-
-          setTimeout(function() {
-            done();
-          }, 1000)
         });
 
         test('play', function() {
