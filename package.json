@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/notwaldorf/flash-cards.git"
   },
-  "author": "",
+  "author": "Monica Dinculescu <noms@google.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/notwaldorf/flash-cards/issues"
