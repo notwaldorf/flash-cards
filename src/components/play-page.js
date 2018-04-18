@@ -154,7 +154,12 @@ class FlashCards extends connect(store)(PageViewElement) {
     this._showSettings = state.app.showSettings;
     this._saySettings = state.app.saySettings;
 
-    const activeCard = state.data.activeCard;  // {hint, index}
+    let activeCard;
+    if (window.location.hash === '#test') {
+      activeCard = {hint: 'hiragana', index: 0}
+    } else {
+      activeCard = state.data.activeCard;  // {hint, index}
+    }
 
     if (activeCard && activeCard.index !== undefined) {
       if (!this._cards[activeCard.hint]) {
