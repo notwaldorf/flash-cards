@@ -1,0 +1,86 @@
+<!--
+@license
+Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>views a11y</title>
+
+    <script>
+      // Redux assumes `process.env.NODE_ENV` exists in the ES module build.
+      // https://github.com/reactjs/redux/issues/2907
+      window.process = { env: { NODE_ENV: 'production' } };
+    </script>
+
+    <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../node_modules/wct-browser-legacy/browser.js"></script>
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <div>
+          <play-page id="play" active></play-page>
+          <stats-page id="stats" active></stats-page>
+        </div>
+      </template>
+    </test-fixture>
+
+    <script type="module">
+      import '../../src/components/play-page.js';
+      import '../../src/components/stats-page.js';
+
+      import 'axe-core/axe.min.js';
+      import {axeReport} from 'pwa-helpers/axe-report.js';
+
+      // Store setup from my-app.js.
+      import { store } from '../../src/store.js';
+      import { loadAll } from '../../src/actions/data.js';
+      import data from '../../src/reducers/data.js';
+      store.addReducers({data});
+
+      suite('views a11y tests', function() {
+        let f, play, stats;
+        setup(function(done) {
+          store.dispatch(loadAll());
+
+          f = fixture('basic');
+          play = f.children[0];
+          stats = f.children[1];
+
+          setTimeout(function() {
+            done();
+          }, 1000)
+        });
+
+        test('play', function() {
+          play.active = true;
+          return axeReport(play);
+        });
+
+        test('stats', function() {
+          return axeReport(stats);
+        });
+
+        // test('about', function() {
+        //   el._page = 'about';
+        //   return axeReport(el);
+        // });
+        //
+        // test('my-view404', function() {
+        //   el._page = 'view404';
+        //   return axeReport(el);
+        // });
+      });
+    </script>
+  </body>
+</html>
