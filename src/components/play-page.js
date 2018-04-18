@@ -1,4 +1,5 @@
-import { LitElement, html } from '@polymer/lit-element';
+import { html } from '@polymer/lit-element';
+import { PageViewElement } from './page-view-element.js';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { repeat } from 'lit-html/lib/repeat.js';
 import { store } from '../store.js';
@@ -9,7 +10,7 @@ import './check-box.js';
 import { saveShowAnswer, saveShowSettings, saveSaySettings } from '../actions/app.js';
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
-class FlashCards extends connect(store)(LitElement) {
+class FlashCards extends connect(store)(PageViewElement) {
   static get properties() {
     return {
       _cards: Object,
@@ -108,7 +109,6 @@ class FlashCards extends connect(store)(LitElement) {
         <check-box id="demand" class="say-settings"
             label="only when I want to"
             checked="${_saySettings == 'demand'}">
-
       </div>
 
       <a-card hidden?="${_showSettingsPage}"
