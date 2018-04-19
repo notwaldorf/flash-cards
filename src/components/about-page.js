@@ -2,7 +2,7 @@ import { html } from '@polymer/lit-element';
 import { PageViewElement } from './page-view-element.js';
 import { SharedStyles } from './shared-styles.js';
 
-class AboutPage extends PageViewElement {
+export class AboutPage extends PageViewElement {
   render(props) {
     return html`
       ${SharedStyles}

@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "polymer serve",
-    "build": "gulp copy",
+    "start": "polymer serve --entrypoint index.html",
+    "build:static": "polymer build --preset es6-bundled --js-transform-modules-to-amd",
+    "serve:static": "polymer serve build/es6-bundled",
     "test": "npm run test:unit && npm run test:integration",
     "test:integration": "mocha test/integration --timeout=10000",
     "test:unit": "wct --module-resolution=node --npm -l chrome",
@@ -15,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/notwaldorf/flash-cards.git"
   },
-  "author": "",
+  "author": "Monica Dinculescu <noms@google.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/notwaldorf/flash-cards/issues"

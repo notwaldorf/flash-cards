@@ -2,13 +2,13 @@
   "entrypoint": "index.html",
   "shell": "src/components/my-app.js",
   "sources": [
-    "images/**/*"
+    "images/**/*",
+    "src/data/*"
   ],
   "extraDependencies": [
     "manifest.json",
     "node_modules/@webcomponents/webcomponentsjs/**"
   ],
-  "autoBasePath": true,
   "builds": [
     {
       "name": "esm-bundled",
