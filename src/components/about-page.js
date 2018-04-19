@@ -12,7 +12,7 @@ export class AboutPage extends PageViewElement {
         developer will eventually write their own flash cards app.
       </p>
         This app is built on top of
-        <a href="https://github.com/PolymerLabs/pwa-starter-kit">pwa-starer-kit</a>,
+        <a href="https://github.com/PolymerLabs/pwa-starter-kit">pwa-starter-kit</a>,
         with Web Components, Redux and <a href="https://github.com/polymer/lit-html">lit-html</a>.
         Find the code on <a href="https://github.com/notwaldorf/flash-cards">GitHub</a>.
       </p>

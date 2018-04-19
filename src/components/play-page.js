@@ -1,15 +1,17 @@
-import { LitElement, html } from '@polymer/lit-element';
+import { html } from '@polymer/lit-element';
+import { PageViewElement } from './page-view-element.js';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { repeat } from 'lit-html/lib/repeat.js';
 import { store } from '../store.js';
 import { settingsIcon } from './my-icons.js';
+import { SharedStyles } from './shared-styles.js';
 import './a-card.js';
 import './check-box.js';
 
 import { saveShowAnswer, saveShowSettings, saveSaySettings } from '../actions/app.js';
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
-export class FlashCards extends connect(store)(LitElement) {
+export class FlashCards extends connect(store)(PageViewElement) {
   static get properties() {
     return {
       _cards: Object,
@@ -25,11 +27,15 @@ export class FlashCards extends connect(store)(LitElement) {
   render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
     return html`
       <style>
+      ${SharedStyles}
+
       :host {
         display: block;
         box-sizing: border-box;
-        padding: 60px 20px;
         position: relative;
+        /* Override shared styles */
+        margin: 60px 40px !important;
+        padding: 0!important;
       }
 
       [hidden] {
@@ -38,8 +44,8 @@ export class FlashCards extends connect(store)(LitElement) {
 
       .settings-btn {
         position: absolute;
-        right: 40px;
-        top: 40px;
+        right: -20px;
+        top: -20px;
         background-color: #FAE1D6;
         text-align: center;
         border-radius: 50%;
@@ -66,7 +72,11 @@ export class FlashCards extends connect(store)(LitElement) {
         line-height: 1;
       }
       </style>
-      <button class="settings-btn" on-click=${() => this._toggleShowSettings()}">${settingsIcon}</button>
+      <button class="settings-btn"
+          title="settings"
+          on-click=${() => this._toggleShowSettings()}">
+        ${settingsIcon}
+      </button>
 
       <div id="settings" hidden?="${!_showSettingsPage}">
         <check-box id="answer" label="show answer" checked="${_showAnswer}"></check-box>
@@ -108,7 +118,6 @@ export class FlashCards extends connect(store)(LitElement) {
         <check-box id="demand" class="say-settings"
             label="only when I want to"
             checked="${_saySettings == 'demand'}">
-
       </div>
 
       <a-card hidden?="${_showSettingsPage}"
@@ -145,7 +154,12 @@ export class FlashCards extends connect(store)(LitElement) {
     this._showSettings = state.app.showSettings;
     this._saySettings = state.app.saySettings;
 
-    const activeCard = state.data.activeCard;  // {hint, index}
+    let activeCard;
+    if (window.location.hash === '#test') {
+      activeCard = {hint: 'hiragana', index: 0}
+    } else {
+      activeCard = state.data.activeCard;  // {hint, index}
+    }
 
     if (activeCard && activeCard.index !== undefined) {
       if (!this._cards[activeCard.hint]) {

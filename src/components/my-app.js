@@ -30,7 +30,7 @@ class MyApp extends connect(store)(LitElement) {
         --app-drawer-width: 256px;
         display: block;
 
-        --app-primary-color: #E91E63;
+        --app-primary-color: #C3134E;
         --app-dark-text-color: #293237;
 
         --app-header-background-color: #FAE1D6;

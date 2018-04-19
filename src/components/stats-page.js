@@ -2,6 +2,7 @@ import { html } from '@polymer/lit-element';
 import { PageViewElement } from './page-view-element.js';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { repeat } from 'lit-html/lib/repeat.js';
+import { SharedStyles } from './shared-styles.js';
 
 // This element is connected to the redux store.
 import { store } from '../store.js';
@@ -9,6 +10,8 @@ import { store } from '../store.js';
 export class StatsPage extends connect(store)(PageViewElement) {
   render({_cards, _stats}) {
     return html`
+      ${SharedStyles}
+
       <style>
         :host {
           display: block;

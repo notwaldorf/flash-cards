@@ -16,14 +16,14 @@ const fs = require('fs');
 const PNG = require('pngjs').PNG;
 const pixelmatch = require('pixelmatch');
 
-const currentDir = `${process.cwd()}/test/screenshots-current`;
-const baselineDir = `${process.cwd()}/test/screenshots-baseline`;
+const currentDir = `${process.cwd()}/test/integration/screenshots-current`;
+const baselineDir = `${process.cwd()}/test/integration/screenshots-baseline`;
 
 describe('👀 page screenshots are correct', function() {
   let polyserve, browser, page;
 
   before(async function() {
-    polyserve = await startServer({port:4444, root:path.join(__dirname, '..')});
+    polyserve = await startServer({port:4444, root:path.join(__dirname, '../..'), moduleResolution:'node'});
 
     // Create the test directory if needed.
     if (!fs.existsSync(currentDir)){
@@ -55,14 +55,14 @@ describe('👀 page screenshots are correct', function() {
     it('/index.html', async function() {
       return takeAndCompareScreenshot(page, '', 'wide');
     });
-    it('/view1', async function() {
-      return takeAndCompareScreenshot(page, 'view1', 'wide');
+    it('/play', async function() {
+      return takeAndCompareScreenshot(page, 'play', 'wide');
     });
-    it('/view2', async function() {
-      return takeAndCompareScreenshot(page, 'view2', 'wide');
+    it('/stats', async function() {
+      return takeAndCompareScreenshot(page, 'stats', 'wide');
     });
-    it('/view3', async function() {
-      return takeAndCompareScreenshot(page, 'view3', 'wide');
+    it('/about', async function() {
+      return takeAndCompareScreenshot(page, 'about', 'wide');
     });
     it('/404', async function() {
       return takeAndCompareScreenshot(page, 'batmanNotAView', 'wide');
@@ -77,14 +77,14 @@ describe('👀 page screenshots are correct', function() {
     it('/index.html', async function() {
       return takeAndCompareScreenshot(page, '', 'narrow');
     });
-    it('/view1', async function() {
-      return takeAndCompareScreenshot(page, 'view1', 'narrow');
+    it('/play', async function() {
+      return takeAndCompareScreenshot(page, 'play', 'narrow');
     });
-    it('/view2', async function() {
-      return takeAndCompareScreenshot(page, 'view2', 'narrow');
+    it('/stats', async function() {
+      return takeAndCompareScreenshot(page, 'stats', 'narrow');
     });
-    it('/view3', async function() {
-      return takeAndCompareScreenshot(page, 'view3', 'narrow');
+    it('/about', async function() {
+      return takeAndCompareScreenshot(page, 'about', 'narrow');
     });
     it('/404', async function() {
       return takeAndCompareScreenshot(page, 'batmanNotAView', 'narrow');
@@ -96,13 +96,21 @@ async function takeAndCompareScreenshot(page, route, filePrefix) {
   // If you didn't specify a file, use the name of the route.
   let fileName = filePrefix + '/' + (route ? route : 'index');
 
-  await page.goto(`http://127.0.0.1:4444/${route}`);
+  await page.goto(`http://127.0.0.1:4444/${route}#test`);
   await page.screenshot({path: `${currentDir}/${fileName}.png`});
   return compareScreenshots(fileName);
 }
 
 function compareScreenshots(view) {
   return new Promise((resolve, reject) => {
+    // Note: for debugging, you can dump the screenshotted img as base64.
+    // fs.createReadStream(`${currentDir}/${view}.png`, { encoding: 'base64' })
+    //   .on('data', function (data) {
+    //     console.log('got data', data)
+    //   })
+    //   .on('end', function () {
+    //     console.log('\n\n')
+    //   });
     const img1 = fs.createReadStream(`${currentDir}/${view}.png`).pipe(new PNG()).on('parsed', doneReading);
     const img2 = fs.createReadStream(`${baselineDir}/${view}.png`).pipe(new PNG()).on('parsed', doneReading);
 
@@ -122,8 +130,13 @@ function compareScreenshots(view) {
       // noise on some machines :/
       const numDiffPixels = pixelmatch(img1.data, img2.data, diff.data,
           img1.width-1, img1.height-1, {threshold: 0.2});
-      //diff.pack().pipe(fs.createWriteStream(`${currentDir}/${view}-diff.png`));
+      const percentDiff = numDiffPixels/(img2.height*img1.height)*100;
 
+      const stats = fs.statSync(`${currentDir}/${view}.png`);
+      const fileSizeInBytes = stats.size;
+      console.log(`📸 ${view}.png => ${fileSizeInBytes} bytes, ${percentDiff}% different`);
+
+      //diff.pack().pipe(fs.createWriteStream(`${currentDir}/${view}-diff.png`));
       expect(numDiffPixels, 'number of different pixels').equal(0);
       resolve();
     }
