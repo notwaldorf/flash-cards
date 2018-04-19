@@ -9,7 +9,7 @@ import './check-box.js';
 import { saveShowAnswer, saveShowSettings, saveSaySettings } from '../actions/app.js';
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
-class FlashCards extends connect(store)(LitElement) {
+export class FlashCards extends connect(store)(LitElement) {
   static get properties() {
     return {
       _cards: Object,

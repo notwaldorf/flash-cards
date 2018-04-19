@@ -6,7 +6,7 @@ import { repeat } from 'lit-html/lib/repeat.js';
 // This element is connected to the redux store.
 import { store } from '../store.js';
 
-class StatsPage extends connect(store)(PageViewElement) {
+export class StatsPage extends connect(store)(PageViewElement) {
   render({_cards, _stats}) {
     return html`
       <style>
