@@ -26,9 +26,8 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
   _render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
     return html`
-      <style>
       ${SharedStyles}
-
+      <style>
       :host {
         display: block;
         box-sizing: border-box;
