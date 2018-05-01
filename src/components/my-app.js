@@ -137,13 +137,12 @@ class MyApp extends connect(store)(LitElement) {
   }
 
   _firstRendered() {
-    super._firstRendered();
     installRouter((location) => this._locationChanged(location));
     installOfflineWatcher((offline) => this._offlineChanged(offline));
     store.dispatch(loadAll());
   }
 
-  did_render(properties, changeList) {
+  _didRender(properties, changeList) {
     if ('_page' in changeList) {
       const pageTitle = properties.appTitle + ' - ' + changeList._page;
       updateMetadata({

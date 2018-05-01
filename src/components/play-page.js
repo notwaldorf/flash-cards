@@ -137,8 +137,6 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
   _firstRendered() {
     // Ready to render!
-    super._firstRendered();
-
     this.addEventListener('checked-changed', (e) => this._checkedChanged(e.composedPath()[0]))
     this.addEventListener('next-question', () => store.dispatch(showNewCard()));
     this.addEventListener('answered', (e) => {

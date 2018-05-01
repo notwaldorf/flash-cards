@@ -114,8 +114,6 @@ class ACard extends LitElement {
     this._isAnswered = false;
   }
   _firstRendered() {
-    super._firstRendered();
-
     // Save these for later;
     this._button = this.shadowRoot.querySelector('button.green');
     this._input = this.shadowRoot.querySelector('input');
@@ -130,7 +128,7 @@ class ACard extends LitElement {
     }
   }
 
-  did_render(properties, changeList) {
+  _didRender(properties, changeList) {
     if ('question' in changeList && this.saySettings === 'start') {
       this._say();
     }
