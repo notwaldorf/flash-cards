@@ -19,8 +19,10 @@ Apart from several game options, `flash-cards` also comes with a stats page that
 git clone https://github.com/notwaldorf/flash-cards
 cd flash-cards
 npm install
-npm run start
+npm start
 ```
+
+To run the tests, you can run `npm run test`.
 
 ## Build and deploy
 
@@ -34,7 +36,7 @@ npm run serve
 For deployment, I used [Netlify](https://www.netlify.com/)'s 
 pretty much out-of-the-box setup. These are my deploy settings (so that the app is rebuilt and
 the bundled app is redeployed every time there's a new commit to master):
-<img width="400" alt="screenshot of netlify settings" src="https://user-images.githubusercontent.com/1369170/37738873-989129b2-2d15-11e8-95cb-c17f75691e00.png">
+<img width="400" alt="screenshot of netlify settings" src="https://user-images.githubusercontent.com/1369170/39498608-eb2abe78-4d5d-11e8-9cca-40f75aa9d754.png">
 
 Since this app is structured as an `app-shell` (the `index.html` knows how to display the correct route based on the URL, but each URL does not correspond to a standalone view you can just load), I've also added a [`_redirects file`](https://github.com/notwaldorf/flash-cards/blob/master/_redirects) used by the Netlify server tohandle these redirects (read more about that [here](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps))
 
