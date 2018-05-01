@@ -2,7 +2,7 @@ import { LitElement, html, renderAttributes } from '@polymer/lit-element';
 import { audioIcon } from './my-icons.js';
 
 class ACard extends LitElement {
-  render(props) {
+  _render(props) {
     renderAttributes(this, {
       'correct': props._isAnswered && props._correct,
       'incorrect': props._isAnswered && !props._correct
@@ -113,8 +113,8 @@ class ACard extends LitElement {
     super();
     this._isAnswered = false;
   }
-  ready() {
-    super.ready();
+  _firstRendered() {
+    super._firstRendered();
 
     // Save these for later;
     this._button = this.shadowRoot.querySelector('button.green');
@@ -130,7 +130,7 @@ class ACard extends LitElement {
     }
   }
 
-  didRender(properties, changeList) {
+  did_render(properties, changeList) {
     if ('question' in changeList && this.saySettings === 'start') {
       this._say();
     }

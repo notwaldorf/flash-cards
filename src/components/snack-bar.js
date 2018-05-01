@@ -15,7 +15,7 @@ class SnackBar extends LitElement {
     active: Boolean,
   }};
 
-  render(props) {
+  _render(props) {
     return html`
       <style>
       :host {

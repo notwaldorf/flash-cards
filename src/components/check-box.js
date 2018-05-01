@@ -1,7 +1,7 @@
 import { LitElement, html } from '@polymer/lit-element';
 
 class CheckBox extends LitElement {
-  render({label, checked}) {
+  _render({label, checked}) {
     return html`
       <style>
         :host {

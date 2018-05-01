@@ -3,7 +3,7 @@ import { PageViewElement } from './page-view-element.js';
 import { SharedStyles } from './shared-styles.js';
 
 class MyView404 extends PageViewElement {
-  render(props) {
+  _render(props) {
     return html`
       ${SharedStyles}
       <h2>Oops! You hit a 404!</h2>

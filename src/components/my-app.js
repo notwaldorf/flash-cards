@@ -23,7 +23,7 @@ import './snack-bar.js'
 store.addReducers({data});
 
 class MyApp extends connect(store)(LitElement) {
-  render({appTitle, _page, _snackbarOpened, _offline}) {
+  _render({appTitle, _page, _snackbarOpened, _offline}) {
     return html`
     <style>
       :host {
@@ -136,14 +136,14 @@ class MyApp extends connect(store)(LitElement) {
     }
   }
 
-  ready() {
-    super.ready();
+  _firstRendered() {
+    super._firstRendered();
     installRouter((location) => this._locationChanged(location));
     installOfflineWatcher((offline) => this._offlineChanged(offline));
     store.dispatch(loadAll());
   }
 
-  didRender(properties, changeList) {
+  did_render(properties, changeList) {
     if ('_page' in changeList) {
       const pageTitle = properties.appTitle + ' - ' + changeList._page;
       updateMetadata({
@@ -153,7 +153,7 @@ class MyApp extends connect(store)(LitElement) {
     }
   }
 
-  stateChanged(state) {
+  _stateChanged(state) {
     this._page = state.app.page;
     this._offline = state.app.offline;
     this._snackbarOpened = state.app.snackbarOpened;

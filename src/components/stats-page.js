@@ -8,7 +8,7 @@ import { SharedStyles } from './shared-styles.js';
 import { store } from '../store.js';
 
 export class StatsPage extends connect(store)(PageViewElement) {
-  render({_cards, _stats}) {
+  _render({_cards, _stats}) {
     return html`
       ${SharedStyles}
 
@@ -86,7 +86,7 @@ export class StatsPage extends connect(store)(PageViewElement) {
     _cards: Object,
   }}
 
-  stateChanged(state) {
+  _stateChanged(state) {
     this._cards = state.data.cards;
     this._stats = state.data.stats;
   }

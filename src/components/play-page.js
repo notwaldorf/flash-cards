@@ -24,7 +24,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
     }
   }
 
-  render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
+  _render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
     return html`
       <style>
       ${SharedStyles}
@@ -136,9 +136,9 @@ export class FlashCards extends connect(store)(PageViewElement) {
     this._showSettingsPage = false;
   }
 
-  ready() {
+  _firstRendered() {
     // Ready to render!
-    super.ready();
+    super._firstRendered();
 
     this.addEventListener('checked-changed', (e) => this._checkedChanged(e.composedPath()[0]))
     this.addEventListener('next-question', () => store.dispatch(showNewCard()));
@@ -147,7 +147,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
     });
   }
 
-  stateChanged(state) {
+  _stateChanged(state) {
     this._showAnswer = state.app.showAnswer;
     this._cards = state.data.cards;
     this._categories = state.data.categories;
