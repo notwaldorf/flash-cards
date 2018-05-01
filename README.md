@@ -19,17 +19,16 @@ Apart from several game options, `flash-cards` also comes with a stats page that
 git clone https://github.com/notwaldorf/flash-cards
 cd flash-cards
 npm install
-polymer serve   # or a different local server
+npm run start
 ```
 
 ## Build and deploy
 
-To build the app, run `npm run build`. This will create a `dist` folder that has all the minified 
-bundles and assets you need to deploy. If you want to test that the build output works, you can just
-start a local server from that output folder:
+To build the app, run `npm run build`. This will create a `build` folder that has all the minified 
+bundles and assets you need to deploy. If you want to test that the build output works, you can run
+
 ```
-cd dist
-polymer serve   # or a different local server
+npm run serve
 ```
 
 For deployment, I used [Netlify](https://www.netlify.com/)'s 
