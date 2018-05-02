@@ -52,8 +52,7 @@ const stats = (state = {}, action) => {
   switch (action.type) {
     case GET_RIGHT:
     case GET_WRONG:
-      state[action.card.hint] = byHint(state[action.card.hint], action);
-      return Object.assign({}, state);
+      return Object.assign({}, state, {[action.card.hint]: byHint(state[action.card.hint], action)});
       // return {
       //   ...state,
       //   [action.card.hint]: byHint(state[action.card.hint], action)
@@ -72,8 +71,7 @@ const byHint = (state = {}, action) => {
       if (card.question === '') {
         return state;
       }
-      state[card.question] = question(state[card.question], action);
-      return Object.assign({}, state);
+      return Object.assign({}, state, {[card.question]: question(state[card.question], action)});
       // return {
       //   ...state,
       //   [card.question]: question(state[card.question], action)
