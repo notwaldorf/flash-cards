@@ -5,22 +5,19 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_CARDS:
-      state.cards[action.hint] = action.cards;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {[action.hint]: action.cards});
       // return {
       //   ...state,
       //   cards: {...state.cards, [action.hint]: action.cards}
       // }
     case LOAD_STATS:
-      state.stats = action.stats;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {stats: action.stats});
       // return {
       //   ...state,
       //   stats: action.stats
       // }
     case SHOW_CARD:
-      state.activeCard = action.card;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {activeCard: action.card});
       // return {
       //   ...state,
       //   activeCard: action.card
@@ -30,17 +27,14 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
       // Save the stats to local storage. It doesn't matter that we overwrite
       // the previous state, that's the whole point of Redux :)
       const newStats = stats(state.stats, action);
-      state.stats = newStats;
-      state.activeCard = null;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {stats: newStats, activeCard: null});
       // return {
       //   ...state,
       //   stats: newStats,
       //   activeCard: null
       // }
     case SAVE_CHOICES:
-      state.categories = action.categories;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {categories: action.categories});
       // return {
       //   ...state,
       //   categories: action.categories

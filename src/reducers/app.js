@@ -16,36 +16,31 @@ const app = (state = {showSettings:'all', saySettings:'demand'}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_PAGE:
-      state.page = action.page;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {page: action.page});
       // return {
       //   ...state,
       //   page: action.page
       // };
     case UPDATE_OFFLINE:
-      state.offline = action.offline;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {offline: action.offline});
       // return {
       //   ...state,
       //   offline: action.offline
       // };
     case OPEN_SNACKBAR:
-      state.snackbarOpened = true;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {snackbarOpened: true});
       // return {
       //   ...state,
       //   snackbarOpened: true
       // };
     case CLOSE_SNACKBAR:
-      state.snackbarOpened = false;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {snackbarOpened: false});
       // return {
       //   ...state,
       //   snackbarOpened: false
       // };
     case SAVE_SHOW_ANSWER:
-      state.showAnswer = action.shouldShow;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {showAnswer: action.shouldShow});
       // return {
       //   ...state,
       //   showAnswer: action.shouldShow
@@ -57,8 +52,7 @@ const app = (state = {showSettings:'all', saySettings:'demand'}, action) => {
           showSettings !== 'mostlyRight' && showSettings !== 'mostlyWrong') {
         showSettings = 'all';
       }
-      state.showSettings = showSettings;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {showSettings:showSettings});
       // return {
       //   ...state,
       //   showSettings
@@ -70,8 +64,7 @@ const app = (state = {showSettings:'all', saySettings:'demand'}, action) => {
           saySettings !== 'end') {
         saySettings = 'demand';
       }
-      state.saySettings = saySettings;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {saySettings:saySettings});
       // return {
       //   ...state,
       //   saySettings
