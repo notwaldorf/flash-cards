@@ -16,30 +16,40 @@ const app = (state = {showSettings:'all', saySettings:'demand'}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_PAGE:
-      return {
-        ...state,
-        page: action.page
-      };
+      state.page = action.page;
+      return Object.assign({}, state);
+      // return {
+      //   ...state,
+      //   page: action.page
+      // };
     case UPDATE_OFFLINE:
-      return {
-        ...state,
-        offline: action.offline
-      };
+      state.offline = action.offline;
+      return Object.assign({}, state);
+      // return {
+      //   ...state,
+      //   offline: action.offline
+      // };
     case OPEN_SNACKBAR:
-      return {
-        ...state,
-        snackbarOpened: true
-      };
+      state.snackbarOpened = true;
+      return Object.assign({}, state);
+      // return {
+      //   ...state,
+      //   snackbarOpened: true
+      // };
     case CLOSE_SNACKBAR:
-      return {
-        ...state,
-        snackbarOpened: false
-      };
+      state.snackbarOpened = false;
+      return Object.assign({}, state);
+      // return {
+      //   ...state,
+      //   snackbarOpened: false
+      // };
     case SAVE_SHOW_ANSWER:
-      return {
-        ...state,
-        showAnswer: action.shouldShow
-      };
+      state.showAnswer = action.shouldShow;
+      return Object.assign({}, state);
+      // return {
+      //   ...state,
+      //   showAnswer: action.shouldShow
+      // };
     case SAVE_SHOW_SETTINGS:
       let showSettings = action.showSettings;
       // If we saved a garbage value (from an old version of the app), reset.
@@ -47,10 +57,12 @@ const app = (state = {showSettings:'all', saySettings:'demand'}, action) => {
           showSettings !== 'mostlyRight' && showSettings !== 'mostlyWrong') {
         showSettings = 'all';
       }
-      return {
-        ...state,
-        showSettings
-      };
+      state.showSettings = showSettings;
+      return Object.assign({}, state);
+      // return {
+      //   ...state,
+      //   showSettings
+      // };
     case SAVE_SAY_SETTINGS:
       let saySettings = action.saySettings;
       // If we saved a garbage value (from an old version of the app), reset.
@@ -58,10 +70,12 @@ const app = (state = {showSettings:'all', saySettings:'demand'}, action) => {
           saySettings !== 'end') {
         saySettings = 'demand';
       }
-      return {
-        ...state,
-        saySettings
-      };
+      state.saySettings = saySettings;
+      return Object.assign({}, state);
+      // return {
+      //   ...state,
+      //   saySettings
+      // };
     default:
       return state;
   }
