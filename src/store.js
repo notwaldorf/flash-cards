@@ -10,12 +10,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { createStore, compose as origCompose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { lazyReducerEnhancer } from 'pwa-helpers/lazy-reducer-enhancer.js';
-
 import app from './reducers/app.js';
 import { loadState, saveState } from './localStorage.js';
 
+// HACK: reenable this when https://github.com/Polymer/tools/issues/173 is fixed.
+//import { lazyReducerEnhancer } from 'pwa-helpers/lazy-reducer-enhancer.js';
+
 const compose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || origCompose;
+
+// GIANT HACK.
+// Remove this when the bundle supports the ... operator correctly.
+// See: https://github.com/Polymer/tools/issues/173
+const lazyReducerEnhancer = function(combineReducers) {
+  return (nextCreator) => {
+    return (origReducer, preloadedState) => {
+      let lazyReducers = {};
+      const nextStore = nextCreator(origReducer, preloadedState)
+      function addReducers(newReducers) {
+        this.replaceReducer(combineReducers(lazyReducers =
+          Object.assign({}, lazyReducers, newReducers)
+        ));
+      };
+      return Object.assign({}, nextStore, {addReducers});
+    }
+  }
+}
 
 export const store = createStore(
   (state, action) => state,

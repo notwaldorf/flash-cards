@@ -5,36 +5,44 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_CARDS:
-      return {
-        ...state,
-        cards: {...state.cards, [action.hint]: action.cards}
-      }
+      return Object.assign({}, state, {
+        cards: Object.assign({}, state.cards, {
+          [action.hint]: action.cards
+        })}
+      );
+      // return {
+      //   ...state,
+      //   cards: {...state.cards, [action.hint]: action.cards}
+      // }
     case LOAD_STATS:
-      return {
-        ...state,
-        stats: action.stats
-      }
+      return Object.assign({}, state, {stats: action.stats});
+      // return {
+      //   ...state,
+      //   stats: action.stats
+      // }
     case SHOW_CARD:
-      return {
-        ...state,
-        activeCard: action.card
-      }
+      return Object.assign({}, state, {activeCard: action.card});
+      // return {
+      //   ...state,
+      //   activeCard: action.card
+      // }
     case GET_RIGHT:
     case GET_WRONG:
       // Save the stats to local storage. It doesn't matter that we overwrite
       // the previous state, that's the whole point of Redux :)
       const newStats = stats(state.stats, action);
-      return {
-        ...state,
-        stats: newStats,
-        activeCard: null
-      }
-      return state;
+      return Object.assign({}, state, {stats: newStats, activeCard: null});
+      // return {
+      //   ...state,
+      //   stats: newStats,
+      //   activeCard: null
+      // }
     case SAVE_CHOICES:
-      return {
-        ...state,
-        categories: action.categories
-      }
+      return Object.assign({}, state, {categories: action.categories});
+      // return {
+      //   ...state,
+      //   categories: action.categories
+      // }
     default:
       return state;
   }
@@ -48,11 +56,11 @@ const stats = (state = {}, action) => {
   switch (action.type) {
     case GET_RIGHT:
     case GET_WRONG:
-      var f = {
-        ...state,
-        [action.card.hint]: byHint(state[action.card.hint], action)
-      };
-      return f;
+      return Object.assign({}, state, {[action.card.hint]: byHint(state[action.card.hint], action)});
+      // return {
+      //   ...state,
+      //   [action.card.hint]: byHint(state[action.card.hint], action)
+      // };
     default:
       return state;
   }
@@ -67,10 +75,11 @@ const byHint = (state = {}, action) => {
       if (card.question === '') {
         return state;
       }
-      return {
-        ...state,
-        [card.question]: question(state[card.question], action)
-      };
+      return Object.assign({}, state, {[card.question]: question(state[card.question], action)});
+      // return {
+      //   ...state,
+      //   [card.question]: question(state[card.question], action)
+      // };
     default:
       return state;
   }
