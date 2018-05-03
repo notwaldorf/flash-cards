@@ -75,12 +75,7 @@ const byHint = (state = {}, action) => {
       if (card.question === '') {
         return state;
       }
-      return Object.assign({}, state, {
-        card: Object.assign({}, state.card, {
-          [card.question]: question(state[card.question], action)
-        })}
-      );
-
+      return Object.assign({}, state, {[card.question]: question(state[card.question], action)});
       // return {
       //   ...state,
       //   [card.question]: question(state[card.question], action)
