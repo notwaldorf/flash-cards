@@ -80,7 +80,7 @@ class CheckBox extends LitElement {
 
   _checkedChanged(event) {
     this.checked = event.currentTarget.checked
-    this.dispatchEvent(new CustomEvent('checked-changed', {bubbles: false, composed: true}));
+    this.dispatchEvent(new CustomEvent('checked-changed', {bubbles: true, composed: true}));
   }
 }
 window.customElements.define('check-box', CheckBox);

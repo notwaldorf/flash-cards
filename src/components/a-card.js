@@ -164,7 +164,7 @@ class ACard extends LitElement {
       }
 
       this.dispatchEvent(new CustomEvent('answered',
-        {bubbles: false, composed: true, detail: {correct: this._correct}}));
+        {bubbles: true, composed: true, detail: {correct: this._correct}}));
     }
     this._isAnswered = !this._isAnswered;
   }
