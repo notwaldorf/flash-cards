@@ -25,9 +25,7 @@
       "html": {
         "minify": true
       },
-      "bundle": {
-        "inlineScripts": false
-      },
+      "bundle": true,
       "addServiceWorker": true
     },
     {
@@ -36,6 +34,7 @@
         "es2015"
       ],
       "js": {
+        "compile": "es2015",
         "minify": true,
         "transformModulesToAmd": true
       },
@@ -45,16 +44,14 @@
       "html": {
         "minify": true
       },
-      "bundle": {
-        "inlineScripts": false
-      },
+      "bundle": true,
       "addServiceWorker": true
     },
     {
       "name": "es5-bundled",
       "js": {
+        "compile": "es5",
         "minify": true,
-        "compile": true,
         "transformModulesToAmd": true
       },
       "css": {
@@ -63,9 +60,7 @@
       "html": {
         "minify": true
       },
-      "bundle": {
-        "inlineScripts": false
-      },
+      "bundle": true,
       "addServiceWorker": true
     }
   ],
