@@ -40,3 +40,5 @@ the bundled app is redeployed every time there's a new commit to master):
 
 Since this app is structured as an `app-shell` (the `index.html` knows how to display the correct route based on the URL, but each URL does not correspond to a standalone view you can just load), I've also added a [`_redirects file`](https://github.com/notwaldorf/flash-cards/blob/master/_redirects) used by the Netlify server tohandle these redirects (read more about that [here](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps))
 
+## Known issues
+The tests are broken right now. Will fix after I/O!
