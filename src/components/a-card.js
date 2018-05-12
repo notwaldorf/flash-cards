@@ -111,7 +111,7 @@ class ACard extends LitElement {
       // What's being displayed.
       question: String,
       category: String,
-      answer: String,
+      answers: Array,
       mnemonic: String,
       // State of the card.
       _isAnswered: String,
@@ -178,8 +178,8 @@ class ACard extends LitElement {
       this.dispatchEvent(new CustomEvent('next-question',
         {bubbles: true, composed: true}));
     } else {  // submit answer
-      this._correct = this._input.value === this.answer;
-      this._inputValue = this.answer;
+      this._correct = this.answers.includes(this._input.value);
+      this._inputValue = this.answers[0];
       this._button.focus();
 
       if (this.saySettings === 'end') {
