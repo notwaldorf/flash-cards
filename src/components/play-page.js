@@ -122,7 +122,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
       <a-card hidden?="${_showSettingsPage}"
         question="${_card.question}"
         answer="${_card.answer}"
-        hint="${_card.hint}"
+        category="${_card.category}"
         showAnswer="${_showAnswer}"
         saySettings="${_saySettings}">
       </a-card>
@@ -131,7 +131,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
   constructor() {
     super();
-    this._card = {question: '', answer: '', hint: ''};
+    this._card = {question: '', answer: '', category: ''};
     this._showSettingsPage = false;
   }
 
@@ -153,22 +153,22 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
     let activeCard;
     if (window.location.hash === '#test') {
-      activeCard = {hint: 'hiragana', index: 0}
+      activeCard = {category: 'hiragana', index: 0}
     } else {
-      activeCard = state.data.activeCard;  // {hint, index}
+      activeCard = state.data.activeCard;  // {category, index}
     }
 
     if (activeCard && activeCard.index !== undefined) {
-      if (!this._cards[activeCard.hint]) {
+      if (!this._cards[activeCard.category]) {
         // Oops, you're in an error state. This card doesn't exist anymore.
         store.dispatch(showNewCard());
         return;
       }
-      const activeCardData = this._cards[activeCard.hint][activeCard.index];
+      const activeCardData = this._cards[activeCard.category][activeCard.index];
       this._card = {
         question: activeCardData.jp,
         answer: activeCardData.en,
-        hint: activeCard.hint
+        category: activeCard.category
       }
     }
   }

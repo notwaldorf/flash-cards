@@ -26,7 +26,7 @@ class ACard extends LitElement {
          font-weight: bold;
          xfont-family: "Noto Sans Japanese";
        }
-       .hint {
+       .category {
          font-size: 1em;
          color: #1976D2;
        }
@@ -79,8 +79,8 @@ class ACard extends LitElement {
         placeholder="${props.showAnswer ? props.answer : 'answer'}"
         on-keypress="${(e) => this._inputKeypress(e)}"
         value="${props._inputValue}">
-     <div class="hint">
-       ${props.hint}
+     <div class="category">
+       ${props.category}
        <button class="say"
           hidden?="${!props._hasSpeechSynthesis}"
           on-click="${() => this._say()}">
@@ -95,7 +95,7 @@ class ACard extends LitElement {
     return {
       // What's being displayed.
       question: String,
-      hint: String,
+      category: String,
       answer: String,
       // State of the card.
       _isAnswered: String,

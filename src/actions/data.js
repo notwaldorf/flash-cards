@@ -20,7 +20,7 @@ async function loadFile(name) {
   return {
     type: UPDATE_CARDS,
     cards: data,
-    hint: name
+    category: name
   }
 }
 
@@ -67,7 +67,7 @@ function getNewCard(state) {
 
   // If we didn't have any cards from this category, try again from
   while (randomCard.index === null && categories.length !== 0) {
-    categories = categories.filter(item => item !== randomCard.hint);
+    categories = categories.filter(item => item !== randomCard.category);
     if (categories.length !== 0)
       randomCard = pickCardFromCategories(cards, state.data.stats, categories, showSettings);
   }
@@ -82,11 +82,11 @@ function getNewCard(state) {
   if (categories.length === 0) {
     categories = Object.keys(cards);
     const pickedCategory = Math.floor(Math.random() * categories.length);
-    const hint = categories[pickedCategory];
-    const filteredCards = cards[hint];
+    const category = categories[pickedCategory];
+    const filteredCards = cards[category];
     const whichOne = Math.floor(Math.random() * filteredCards.length);
-    const index = getIndexOfCard(filteredCards[whichOne], cards[hint]);
-    return {hint: hint, index:index};
+    const index = getIndexOfCard(filteredCards[whichOne], cards[category]);
+    return {category: category, index:index};
   }
 }
 
@@ -100,9 +100,9 @@ function getIndexOfCard(card, cards) {
 
 function pickCardFromCategories(cards, stats, categories, showSettings) {
   let pickedCategory = Math.floor(Math.random() * categories.length);
-  let hint = categories[pickedCategory];
-  let cardsForCategory = cards[hint];
-  let statsForCategory = stats ? stats[hint] : [];
+  let category = categories[pickedCategory];
+  let cardsForCategory = cards[category];
+  let statsForCategory = stats ? stats[category] : [];
 
   let filteredCards;
   if (showSettings === 'onlyNew') {
@@ -119,10 +119,10 @@ function pickCardFromCategories(cards, stats, categories, showSettings) {
   // If there are no available cards, return the category so that we can try
   // again from a different category.
   if (filteredCards.length === 0) {
-    return {hint: hint, index:null};
+    return {category: category, index:null};
   }
 
   const whichOne = Math.floor(Math.random() * filteredCards.length);
   const index = getIndexOfCard(filteredCards[whichOne], cardsForCategory);
-  return {hint: hint, index:index};
+  return {category: category, index:index};
 }

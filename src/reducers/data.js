@@ -7,12 +7,12 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
     case UPDATE_CARDS:
       return Object.assign({}, state, {
         cards: Object.assign({}, state.cards, {
-          [action.hint]: action.cards
+          [action.category]: action.cards
         })}
       );
       // return {
       //   ...state,
-      //   cards: {...state.cards, [action.hint]: action.cards}
+      //   cards: {...state.cards, [action.category]: action.cards}
       // }
     case LOAD_STATS:
       return Object.assign({}, state, {stats: action.stats});
@@ -56,17 +56,17 @@ const stats = (state = {}, action) => {
   switch (action.type) {
     case GET_RIGHT:
     case GET_WRONG:
-      return Object.assign({}, state, {[action.card.hint]: byHint(state[action.card.hint], action)});
+      return Object.assign({}, state, {[action.card.category]: byCategory(state[action.card.category], action)});
       // return {
       //   ...state,
-      //   [action.card.hint]: byHint(state[action.card.hint], action)
+      //   [action.card.category]: byCategory(state[action.card.category], action)
       // };
     default:
       return state;
   }
 }
 
-const byHint = (state = {}, action) => {
+const byCategory = (state = {}, action) => {
   // example: { も:{right:2,wrong:7}, に:{right:1} }
   const card = action.card;
   switch (action.type) {
