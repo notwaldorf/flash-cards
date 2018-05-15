@@ -104,13 +104,13 @@ async function takeAndCompareScreenshot(page, route, filePrefix) {
 function compareScreenshots(view) {
   return new Promise((resolve, reject) => {
     // Note: for debugging, you can dump the screenshotted img as base64.
-    // fs.createReadStream(`${currentDir}/${view}.png`, { encoding: 'base64' })
-    //   .on('data', function (data) {
-    //     console.log('got data', data)
-    //   })
-    //   .on('end', function () {
-    //     console.log('\n\n')
-    //   });
+    fs.createReadStream(`${currentDir}/${view}.png`, { encoding: 'base64' })
+      .on('data', function (data) {
+        console.log('got data', data)
+      })
+      .on('end', function () {
+        console.log('\n\n')
+      });
     const img1 = fs.createReadStream(`${currentDir}/${view}.png`).pipe(new PNG()).on('parsed', doneReading);
     const img2 = fs.createReadStream(`${baselineDir}/${view}.png`).pipe(new PNG()).on('parsed', doneReading);
 

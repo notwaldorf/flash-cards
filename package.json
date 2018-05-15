@@ -4,8 +4,8 @@
   "description": "A PWA that teaches you Japanese with flash cards",
   "main": "index.js",
   "scripts": {
-    "start": "polymer serve --entrypoint index.html",
-    "build": "polymer build --preset es6-bundled --js-transform-modules-to-amd",
+    "start": "polymer serve",
+    "build": "polymer build",
     "serve": "polymer serve build/es6-bundled",
     "test": "npm run test:unit && npm run test:integration",
     "test:integration": "mocha test/integration --timeout=10000",
