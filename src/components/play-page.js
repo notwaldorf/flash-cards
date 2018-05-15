@@ -5,6 +5,7 @@ import { repeat } from 'lit-html/lib/repeat.js';
 import { store } from '../store.js';
 import { settingsIcon } from './my-icons.js';
 import { SharedStyles } from './shared-styles.js';
+import { FabStyles } from './fab-styles.js';
 import './a-card.js';
 import './check-box.js';
 
@@ -27,6 +28,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
   _render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
     return html`
       ${SharedStyles}
+      ${FabStyles}
       <style>
       :host {
         display: block;
@@ -39,19 +41,6 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
       [hidden] {
         display: none !important;
-      }
-
-      .settings-btn {
-        position: absolute;
-        right: -20px;
-        top: -20px;
-        background-color: #FAE1D6;
-        text-align: center;
-        border-radius: 50%;
-        padding: 6px;
-        border: 6px solid #fff;
-        cursor: pointer;
-        z-index: 1;
       }
       #settings {
         min-height: 540px;
@@ -71,7 +60,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
         line-height: 1;
       }
       </style>
-      <button class="settings-btn"
+      <button class="floating-btn"
           title="settings"
           on-click=${() => this._toggleShowSettings()}">
         ${settingsIcon}

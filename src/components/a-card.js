@@ -1,5 +1,6 @@
 import { LitElement, html, renderAttributes } from '@polymer/lit-element';
 import { audioIcon } from './my-icons.js';
+import { FabStyles } from './fab-styles.js';
 
 class ACard extends LitElement {
   _render(props) {
@@ -9,6 +10,7 @@ class ACard extends LitElement {
     });
 
     return html`
+    ${FabStyles}
     <style>
       :host {
         display: block;
@@ -58,8 +60,8 @@ class ACard extends LitElement {
          border-radius: 4px;
        }
        button.say {
-         background: transparent;
-         vertical-align: middle;
+         left: -20px;
+         top: -20px;
        }
        :host([correct]) {
         outline: 20px solid #64D989;
@@ -71,7 +73,14 @@ class ACard extends LitElement {
        }
      </style>
 
+     <button class="say floating-btn"
+        hidden?="${!props._hasSpeechSynthesis}"
+        on-click="${() => this._say()}">
+        ${audioIcon}
+     </button>
+
      <div class="question">${props.question}</div>
+
      <input autofocus
         title="your answer"
         autocomplete="off" spellcheck="false"
@@ -81,11 +90,6 @@ class ACard extends LitElement {
         value="${props._inputValue}">
      <div class="category">
        ${props.category}
-       <button class="say"
-          hidden?="${!props._hasSpeechSynthesis}"
-          on-click="${() => this._say()}">
-          ${audioIcon}
-      </button>
      </div>
      <button class="green" on-click="${() => this.submit()}">${props._isAnswered ? 'next' : 'submit'}</button>
     `;
