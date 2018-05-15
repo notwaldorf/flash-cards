@@ -153,7 +153,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
     let activeCard;
     if (window.location.hash === '#test') {
-      activeCard = {hint: 'hiragana', index: 0}
+      activeCard = {hint: 'hiragana', index: 0};
     } else {
       activeCard = state.data.activeCard;  // {hint, index}
     }
