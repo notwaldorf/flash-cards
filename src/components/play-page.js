@@ -5,10 +5,11 @@ import { repeat } from 'lit-html/lib/repeat.js';
 import { store } from '../store.js';
 import { settingsIcon } from './my-icons.js';
 import { SharedStyles } from './shared-styles.js';
+import { FabStyles } from './fab-styles.js';
 import './a-card.js';
 import './check-box.js';
 
-import { saveShowAnswer, saveShowSettings, saveSaySettings } from '../actions/app.js';
+import { saveShowAnswer, saveShowMnemonic, saveShowSettings, saveSaySettings } from '../actions/app.js';
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
 export class FlashCards extends connect(store)(PageViewElement) {
@@ -17,6 +18,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
       _cards: Object,
       _card: Object,
       _showAnswer: Boolean,
+      _showMnemonic: Boolean,
       _showSettings: String,
       _saySettings: String,
       _categories: Array,
@@ -24,9 +26,11 @@ export class FlashCards extends connect(store)(PageViewElement) {
     }
   }
 
-  _render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
+  _render({_card, _cards, _showAnswer, _showMnemonic, _showSettings,
+           _saySettings, _categories, _showSettingsPage}) {
     return html`
       ${SharedStyles}
+      ${FabStyles}
       <style>
       :host {
         display: block;
@@ -39,19 +43,6 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
       [hidden] {
         display: none !important;
-      }
-
-      .settings-btn {
-        position: absolute;
-        right: -20px;
-        top: -20px;
-        background-color: #FAE1D6;
-        text-align: center;
-        border-radius: 50%;
-        padding: 6px;
-        border: 6px solid #fff;
-        cursor: pointer;
-        z-index: 1;
       }
       #settings {
         min-height: 540px;
@@ -71,20 +62,18 @@ export class FlashCards extends connect(store)(PageViewElement) {
         line-height: 1;
       }
       </style>
-      <button class="settings-btn"
-          title="settings"
-          on-click=${() => this._toggleShowSettings()}">
-        ${settingsIcon}
-      </button>
 
       <div id="settings" hidden?="${!_showSettingsPage}">
         <check-box id="answer" label="show answer" checked="${_showAnswer}"></check-box>
+        <check-box id="mnemonic" label="show mnemonic" checked="${_showMnemonic}"></check-box>
 
         <h4>Pick from</h4>
         ${repeat(Object.keys(_cards), kind =>
+          kind &&
           html`
             <check-box label="${kind}" checked="${_categories.indexOf(kind)!==-1}" class="categories"></check-box>
           `
+
         )}
 
         <h4>Ask me...</h4>
@@ -118,20 +107,27 @@ export class FlashCards extends connect(store)(PageViewElement) {
             label="only when I want to"
             checked="${_saySettings == 'demand'}">
       </div>
-
       <a-card hidden?="${_showSettingsPage}"
         question="${_card.question}"
         answer="${_card.answer}"
-        hint="${_card.hint}"
+        mnemonic="${_card.mnemonic}"
+        category="${_card.category}"
         showAnswer="${_showAnswer}"
+        showMnemonic="${_showMnemonic}"
         saySettings="${_saySettings}">
       </a-card>
+
+      <button class="floating-btn"
+          title="settings"
+          on-click=${() => this._toggleShowSettings()}">
+        ${settingsIcon}
+      </button>
     `;
   }
 
   constructor() {
     super();
-    this._card = {question: '', answer: '', hint: ''};
+    this._card = {question: '', answer: '', category: '', mnemonic: ''};
     this._showSettingsPage = false;
   }
 
@@ -146,6 +142,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
   _stateChanged(state) {
     this._showAnswer = state.app.showAnswer;
+    this._showMnemonic = state.app.showMnemonic;
     this._cards = state.data.cards;
     this._categories = state.data.categories;
     this._showSettings = state.app.showSettings;
@@ -155,20 +152,22 @@ export class FlashCards extends connect(store)(PageViewElement) {
     if (window.location.hash === '#test') {
       activeCard = {hint: 'hiragana', index: 0};
     } else {
-      activeCard = state.data.activeCard;  // {hint, index}
+      activeCard = state.data.activeCard;  // {category, index}
     }
 
     if (activeCard && activeCard.index !== undefined) {
-      if (!this._cards[activeCard.hint]) {
+      if (!this._cards[activeCard.category]) {
         // Oops, you're in an error state. This card doesn't exist anymore.
         store.dispatch(showNewCard());
         return;
       }
-      const activeCardData = this._cards[activeCard.hint][activeCard.index];
+      const activeCardData = this._cards[activeCard.category][activeCard.index];
+
       this._card = {
         question: activeCardData.jp,
         answer: activeCardData.en,
-        hint: activeCard.hint
+        category: activeCard.category,
+        mnemonic: activeCardData.mnemonic
       }
     }
   }
@@ -176,6 +175,8 @@ export class FlashCards extends connect(store)(PageViewElement) {
   _checkedChanged(target) {
     if (target.id === 'answer') {
       store.dispatch(saveShowAnswer(target.checked));
+    } if (target.id === 'mnemonic') {
+      store.dispatch(saveShowMnemonic(target.checked));
     } if (target.classList.contains('show-settings')) {
       store.dispatch(saveShowSettings(target.id, target.checked));
     } if (target.classList.contains('say-settings')) {
