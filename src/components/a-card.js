@@ -63,6 +63,7 @@ class ACard extends LitElement {
        button.say {
          left: -20px;
          top: -20px;
+         right: auto;
        }
        :host([correct]) {
         outline: 20px solid #64D989;
