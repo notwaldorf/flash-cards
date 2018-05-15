@@ -9,7 +9,7 @@ import { FabStyles } from './fab-styles.js';
 import './a-card.js';
 import './check-box.js';
 
-import { saveShowAnswer, saveShowSettings, saveSaySettings } from '../actions/app.js';
+import { saveShowAnswer, saveShowMnemonic, saveShowSettings, saveSaySettings } from '../actions/app.js';
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
 
 export class FlashCards extends connect(store)(PageViewElement) {
@@ -18,6 +18,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
       _cards: Object,
       _card: Object,
       _showAnswer: Boolean,
+      _showMnemonic: Boolean,
       _showSettings: String,
       _saySettings: String,
       _categories: Array,
@@ -25,7 +26,8 @@ export class FlashCards extends connect(store)(PageViewElement) {
     }
   }
 
-  _render({_card, _cards, _showAnswer, _showSettings, _saySettings, _categories, _showSettingsPage}) {
+  _render({_card, _cards, _showAnswer, _showMnemonic, _showSettings,
+           _saySettings, _categories, _showSettingsPage}) {
     return html`
       ${SharedStyles}
       ${FabStyles}
@@ -68,6 +70,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
       <div id="settings" hidden?="${!_showSettingsPage}">
         <check-box id="answer" label="show answer" checked="${_showAnswer}"></check-box>
+        <check-box id="mnemonic" label="show mnemonic" checked="${_showMnemonic}"></check-box>
 
         <h4>Pick from</h4>
         ${repeat(Object.keys(_cards), kind =>
@@ -113,6 +116,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
         answer="${_card.answer}"
         category="${_card.category}"
         showAnswer="${_showAnswer}"
+        showMnemonic="${_showMnemonic}"
         saySettings="${_saySettings}">
       </a-card>
     `;
@@ -135,6 +139,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
   _stateChanged(state) {
     this._showAnswer = state.app.showAnswer;
+    this._showMnemonic = state.app.showMnemonic;
     this._cards = state.data.cards;
     this._categories = state.data.categories;
     this._showSettings = state.app.showSettings;
@@ -165,6 +170,8 @@ export class FlashCards extends connect(store)(PageViewElement) {
   _checkedChanged(target) {
     if (target.id === 'answer') {
       store.dispatch(saveShowAnswer(target.checked));
+    } if (target.id === 'mnemonic') {
+      store.dispatch(saveShowMnemonic(target.checked));
     } if (target.classList.contains('show-settings')) {
       store.dispatch(saveShowSettings(target.id, target.checked));
     } if (target.classList.contains('say-settings')) {

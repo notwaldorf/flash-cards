@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { html } from '@polymer/lit-element';
 
+/* A FAB is a floating action button. That's fabulous. */
 export const FabStyles = html`
 <style>
   .floating-btn {

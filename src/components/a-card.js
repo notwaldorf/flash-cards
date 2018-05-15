@@ -88,8 +88,10 @@ class ACard extends LitElement {
         placeholder="${props.showAnswer ? props.answer : 'answer'}"
         on-keypress="${(e) => this._inputKeypress(e)}"
         value="${props._inputValue}">
-     <div class="category">
-       ${props.category}
+     <div class="category">${props.category}</div>
+     <div class="category"
+          hidden?="${!(props.showMnemonic && props.mnemonic)}">
+        ${props.mnemonic}
      </div>
      <button class="green" on-click="${() => this.submit()}">${props._isAnswered ? 'next' : 'submit'}</button>
     `;
@@ -101,11 +103,13 @@ class ACard extends LitElement {
       question: String,
       category: String,
       answer: String,
+      mnemonic: String,
       // State of the card.
       _isAnswered: String,
       _correct: Boolean,
       // App settings.
       showAnswer: Boolean,
+      showMnemonic: Boolean,
       saySettings: String,
       // Private vars to make things easier.
       _hasSpeechSynthesis: Boolean,
