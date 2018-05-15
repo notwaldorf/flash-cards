@@ -49,8 +49,8 @@ This app uses the `es6-bundled` bundle -- this means that it will not work on IE
 <img width="827" alt="screen shot 2018-05-15 at 3 12 38 pm" src="https://user-images.githubusercontent.com/1369170/40086267-834daa7c-5852-11e8-95a8-b98b8eca835a.png">
 
 ### WebPageTest:
-[Full test results](https://www.webpagetest.org/result/180515_ZH_744d89edf78869d0c934d72ee7bab994/). [
+[Full test results](https://www.webpagetest.org/result/180515_ZH_744d89edf78869d0c934d72ee7bab994/). 
 <img width="964" alt="screen shot 2018-05-15 at 3 18 40 pm" src="https://user-images.githubusercontent.com/1369170/40086471-48e2ab5c-5853-11e8-83e3-0bd413164f87.png">
 
-
-
+## Known Issues
+There's a problem with the SpeechSyntesis API on Windows, where I bail out early if I don't find a Voice I can recognize (because there don't seem to be any Japanese languages installed by default on Windows). Should prolly figure out something around this.
