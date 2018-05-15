@@ -3,7 +3,8 @@
   "shell": "src/components/my-app.js",
   "sources": [
     "images/**/*",
-    "src/data/*"
+    "src/data/*",
+    "_redirects"
   ],
   "extraDependencies": [
     "manifest.json",
