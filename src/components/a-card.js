@@ -88,10 +88,10 @@ class ACard extends LitElement {
         placeholder="${props.showAnswer ? props.answer : 'answer'}"
         on-keypress="${(e) => this._inputKeypress(e)}"
         value="${props._inputValue}">
-     <div class="category">${props.category}</div>
-     <div class="category"
-          hidden?="${!(props.showMnemonic && props.mnemonic)}">
-        ${props.mnemonic}
+     <div class="category">${props.category}
+       <span class="category" hidden?="${!(props.showMnemonic && props.mnemonic)}">
+          — ${props.mnemonic}
+       </span>
      </div>
      <button class="green" on-click="${() => this.submit()}">${props._isAnswered ? 'next' : 'submit'}</button>
     `;

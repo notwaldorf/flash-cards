@@ -110,10 +110,10 @@ export class FlashCards extends connect(store)(PageViewElement) {
             label="only when I want to"
             checked="${_saySettings == 'demand'}">
       </div>
-
       <a-card hidden?="${_showSettingsPage}"
         question="${_card.question}"
         answer="${_card.answer}"
+        mnemonic="${_card.mnemonic}"
         category="${_card.category}"
         showAnswer="${_showAnswer}"
         showMnemonic="${_showMnemonic}"
@@ -124,7 +124,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
   constructor() {
     super();
-    this._card = {question: '', answer: '', category: ''};
+    this._card = {question: '', answer: '', category: '', mnemonic: ''};
     this._showSettingsPage = false;
   }
 
@@ -159,10 +159,12 @@ export class FlashCards extends connect(store)(PageViewElement) {
         return;
       }
       const activeCardData = this._cards[activeCard.category][activeCard.index];
+      console.log(activeCardData)
       this._card = {
         question: activeCardData.jp,
         answer: activeCardData.en,
-        category: activeCard.category
+        category: activeCard.category,
+        mnemonic: activeCardData.mnemonic
       }
     }
   }
