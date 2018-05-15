@@ -1,7 +1,7 @@
 {
   "name": "flash-cards",
   "version": "0.8.0",
-  "description": "A PWA that teaches you Japanese with flash cards",
+  "description": "Learn Japanese with flash cards",
   "main": "index.js",
   "scripts": {
     "start": "polymer serve",
