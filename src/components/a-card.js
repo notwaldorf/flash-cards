@@ -82,6 +82,7 @@ class ACard extends LitElement {
      </style>
 
      <button class="say floating-btn"
+        title="say question"
         hidden?="${!props._hasSpeechSynthesis}"
         on-click="${() => this._say()}">
         ${audioIcon}
