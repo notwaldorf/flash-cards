@@ -109,7 +109,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
       </div>
       <a-card hidden?="${_showSettingsPage}"
         question="${_card.question}"
-        answer="${_card.answer}"
+        answers="${_card.answers}"
         mnemonic="${_card.mnemonic}"
         category="${_card.category}"
         showAnswer="${_showAnswer}"
@@ -127,7 +127,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
   constructor() {
     super();
-    this._card = {question: '', answer: '', category: '', mnemonic: ''};
+    this._card = {question: '', answers: [], category: '', mnemonic: ''};
     this._showSettingsPage = false;
   }
 
@@ -162,10 +162,11 @@ export class FlashCards extends connect(store)(PageViewElement) {
         return;
       }
       const activeCardData = this._cards[activeCard.category][activeCard.index];
+      const answers = [].concat(activeCardData.en);
 
       this._card = {
         question: activeCardData.jp,
-        answer: activeCardData.en,
+        answers: answers,
         category: activeCard.category,
         mnemonic: activeCardData.mnemonic
       }
