@@ -62,11 +62,6 @@ export class FlashCards extends connect(store)(PageViewElement) {
         line-height: 1;
       }
       </style>
-      <button class="floating-btn"
-          title="settings"
-          on-click=${() => this._toggleShowSettings()}">
-        ${settingsIcon}
-      </button>
 
       <div id="settings" hidden?="${!_showSettingsPage}">
         <check-box id="answer" label="show answer" checked="${_showAnswer}"></check-box>
@@ -119,6 +114,12 @@ export class FlashCards extends connect(store)(PageViewElement) {
         showMnemonic="${_showMnemonic}"
         saySettings="${_saySettings}">
       </a-card>
+
+      <button class="floating-btn"
+          title="settings"
+          on-click=${() => this._toggleShowSettings()}">
+        ${settingsIcon}
+      </button>
     `;
   }
 
@@ -147,7 +148,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
     let activeCard;
     if (window.location.hash === '#test') {
-      activeCard = {category: 'hiragana', index: 0}
+      activeCard = {hint: 'hiragana', index: 0};
     } else {
       activeCard = state.data.activeCard;  // {category, index}
     }

@@ -42,6 +42,7 @@ class ACard extends LitElement {
          border-bottom: 2px solid #E4E4E4;
          width: 100%;
          text-align: center;
+         font-family: inherit;
        }
        button {
          box-shadow: none;
@@ -70,6 +71,12 @@ class ACard extends LitElement {
        :host([incorrect]) {
         outline: 20px solid #E9404B;
         outline-offset: -20px;
+       }
+       /* HACK: disable the caret in Puppeteer tests since it blinks and you
+       might take the wrong screenshot 😅*/
+       input.no-caret {
+        color: transparent;
+        text-shadow: 0 0 0 #000;
        }
      </style>
 
@@ -125,6 +132,12 @@ class ACard extends LitElement {
     // Save these for later;
     this._button = this.shadowRoot.querySelector('button.green');
     this._input = this.shadowRoot.querySelector('input');
+
+    // HACK: disable the caret in Puppeteer tests since it blinks and you
+    // might take the wrong screenshot.
+    if (window.location.hash === '#test') {
+      this._input.classList.add('no-caret');
+    }
 
     if (!'speechSynthesis' in window) {
       this._hasSpeechSynthesis = false;

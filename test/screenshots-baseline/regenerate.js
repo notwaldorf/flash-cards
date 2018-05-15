@@ -47,6 +47,9 @@ describe('🎁 regenerate screenshots', function() {
   });
 });
 
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 async function generateBaselineScreenshots(page) {
   const breakpoints = [{width: 800, height: 600}, {width: 375, height: 667}];
   const prefixes = ['wide', 'narrow'];
@@ -55,14 +58,24 @@ async function generateBaselineScreenshots(page) {
     const prefix = prefixes[i];
     console.log(prefix + '...');
     page.setViewport(breakpoints[i]);
+
     // Index.
-    await page.goto('http://127.0.0.1:4444/');
+    await page.goto('http://127.0.0.1:4444/#test');
+    // Wait for the json to load.
+    await timeout(500);
     await page.screenshot({path: `${baselineDir}/${prefix}/index.png`});
+
     // Views.
-    for (let i = 1; i <= 3; i++) {
-      await page.goto(`http://127.0.0.1:4444/view${i}`);
-      await page.screenshot({path: `${baselineDir}/${prefix}/view${i}.png`});
-    }
+    await page.goto(`http://127.0.0.1:4444/play#test`);
+    // Wait for the json to load.
+    await timeout(500);
+    await page.screenshot({path: `${baselineDir}/${prefix}/play.png`});
+
+    await page.goto(`http://127.0.0.1:4444/stats`);
+    await page.screenshot({path: `${baselineDir}/${prefix}/stats.png`});
+    await page.goto(`http://127.0.0.1:4444/about`);
+    await page.screenshot({path: `${baselineDir}/${prefix}/about.png`});
+
     // 404.
     await page.goto('http://127.0.0.1:4444/batmanNotAView');
     await page.screenshot({path: `${baselineDir}/${prefix}/batmanNotAView.png`});
