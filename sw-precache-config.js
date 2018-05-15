@@ -14,7 +14,16 @@ module.exports = {
   staticFileGlobs: [
     'index.html',
     'manifest.json',
-    'bower_components/webcomponentsjs/*',
+    'src/**/*'
   ],
-  navigateFallback: 'index.html',
+  runtimeCaching: [
+    {
+      urlPattern: /\/@webcomponents\/webcomponentsjs\//,
+      handler: 'fastest'
+    },
+    {
+      urlPattern: /^https:\/\/fonts.gstatic.com\//,
+      handler: 'fastest'
+    }
+  ]
 };
