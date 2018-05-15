@@ -69,9 +69,11 @@ export class FlashCards extends connect(store)(PageViewElement) {
 
         <h4>Pick from</h4>
         ${repeat(Object.keys(_cards), kind =>
+          kind &&
           html`
             <check-box label="${kind}" checked="${_categories.indexOf(kind)!==-1}" class="categories"></check-box>
           `
+
         )}
 
         <h4>Ask me...</h4>
@@ -160,7 +162,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
         return;
       }
       const activeCardData = this._cards[activeCard.category][activeCard.index];
-      console.log(activeCardData)
+
       this._card = {
         question: activeCardData.jp,
         answer: activeCardData.en,
