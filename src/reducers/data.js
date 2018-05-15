@@ -7,7 +7,7 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
     case UPDATE_CARDS:
       return {
         ...state,
-        cards: {...state.cards, [action.hint]: action.cards}
+        cards: {...state.cards, [action.category]: action.cards}
       }
     case LOAD_STATS:
       return {
@@ -49,7 +49,7 @@ const stats = (state = {}, action) => {
     case GET_WRONG:
       return {
         ...state,
-        [action.card.hint]: byHint(state[action.card.hint], action)
+        [action.card.category]: byCategory(state[action.card.category], action)
       };
     default:
       return state;
