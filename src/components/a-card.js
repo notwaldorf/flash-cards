@@ -94,7 +94,7 @@ class ACard extends LitElement {
         title="your answer"
         autocomplete="off" spellcheck="false"
         autocorrect="off" autocapitalize="none"
-        placeholder="${props.showAnswer ? props.answer : 'answer'}"
+        placeholder="${props.showAnswer ? props.answers[0] : 'answer'}"
         on-keypress="${(e) => this._inputKeypress(e)}"
         value="${props._inputValue}">
      <div class="category">${props.category}
