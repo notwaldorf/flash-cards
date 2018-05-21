@@ -15,7 +15,7 @@ import { installOfflineWatcher } from 'pwa-helpers/network.js';
 import { updateMetadata } from 'pwa-helpers/metadata.js';
 
 import { store } from '../store.js';
-import { navigate, updateOffline, showSnackbar } from '../actions/app.js';
+import { navigate, updateOffline } from '../actions/app.js';
 import data from '../reducers/data.js';
 import { loadAll } from '../actions/data.js';
 import './snack-bar.js'
@@ -139,7 +139,7 @@ class MyApp extends connect(store)(LitElement) {
   _firstRendered() {
     installRouter((location) =>
         store.dispatch(navigate(window.decodeURIComponent(location.pathname))));
-    installOfflineWatcher((offline) => this._offlineChanged(offline));
+    installOfflineWatcher((offline) => store.dispatch(updateOffline(offline)));
     store.dispatch(loadAll());
   }
 
@@ -157,15 +157,6 @@ class MyApp extends connect(store)(LitElement) {
     this._page = state.app.page;
     this._offline = state.app.offline;
     this._snackbarOpened = state.app.snackbarOpened;
-  }
-
-  _offlineChanged(offline) {
-    // Don't show the snackbar on the first load of the page.
-    if (this._offline === undefined || this._offline == offline) {
-      return;
-    }
-    store.dispatch(updateOffline(offline));
-    store.dispatch(showSnackbar());
   }
 }
 
