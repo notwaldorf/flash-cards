@@ -13,7 +13,7 @@ import { UPDATE_PAGE, UPDATE_OFFLINE,
          SAVE_SHOW_ANSWER, SAVE_SHOW_MNEMONIC,
          SAVE_SHOW_SETTINGS, SAVE_SAY_SETTINGS } from '../actions/app.js';
 
-const app = (state = {showSettings:'all', saySettings:'demand'}, action) => {
+const app = (state = {showSettings:'all', saySettings:'demand', offline:false}, action) => {
   let json, value;
   switch (action.type) {
     case UPDATE_PAGE:

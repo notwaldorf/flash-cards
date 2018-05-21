@@ -67,7 +67,7 @@ export const showSnackbar = () => (dispatch) => {
 
 export const updateOffline = (offline) => (dispatch, getState) => {
   // Show the snackbar, unless this is the first load of the page.
-  if (getState().app.offline !== undefined) {
+  if (offline !== getState().app.offline) {
     dispatch(showSnackbar());
   }
   dispatch({

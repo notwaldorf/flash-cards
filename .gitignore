@@ -1,3 +1,4 @@
 node_modules/
 build/
 package-lock.json
+test/integration/screenshots-current/
