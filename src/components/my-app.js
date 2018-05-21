@@ -137,7 +137,8 @@ class MyApp extends connect(store)(LitElement) {
   }
 
   _firstRendered() {
-    installRouter((location) => this._locationChanged(location));
+    installRouter((location) =>
+        store.dispatch(navigate(window.decodeURIComponent(location.pathname))));
     installOfflineWatcher((offline) => this._offlineChanged(offline));
     store.dispatch(loadAll());
   }
@@ -165,10 +166,6 @@ class MyApp extends connect(store)(LitElement) {
     }
     store.dispatch(updateOffline(offline));
     store.dispatch(showSnackbar());
-  }
-
-  _locationChanged(location) {
-    store.dispatch(navigate(window.decodeURIComponent(location.pathname)));
   }
 }
 
