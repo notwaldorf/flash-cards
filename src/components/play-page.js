@@ -11,6 +11,7 @@ import './check-box.js';
 
 import { saveShowAnswer, saveShowMnemonic, saveShowSettings, saveSaySettings } from '../actions/app.js';
 import { showNewCard, getRight, getWrong, saveAvailableTypes } from '../actions/data.js';
+import { cardSelector } from '../reducers/data.js'
 
 export class FlashCards extends connect(store)(PageViewElement) {
   static get properties() {
@@ -161,15 +162,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
         store.dispatch(showNewCard());
         return;
       }
-      const activeCardData = this._cards[activeCard.category][activeCard.index];
-      const answers = [].concat(activeCardData.en);
-
-      this._card = {
-        question: activeCardData.jp,
-        answers: answers,
-        category: activeCard.category,
-        mnemonic: activeCardData.mnemonic
-      }
+      this._card = cardSelector(state);
     }
   }
 

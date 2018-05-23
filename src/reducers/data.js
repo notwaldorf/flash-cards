@@ -1,5 +1,6 @@
 import { UPDATE_CARDS, SHOW_CARD, GET_RIGHT, GET_WRONG, SAVE_CHOICES } from '../actions/data.js';
 import { LOAD_STATS } from '../actions/app.js';
+import { createSelector } from 'reselect';
 
 const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
   let json, value;
@@ -90,5 +91,23 @@ const question = (state = {right: 0, wrong: 0}, action) => {
       return state;
   }
 }
+
+const cardsSelector =  state => state.data.cards;
+const activeCardSelector =  state => state.data.activeCard;
+
+export const cardSelector = createSelector(
+  cardsSelector,
+  activeCardSelector,
+  (cards, activeCard) => {
+    const activeCardData = cards[activeCard.category][activeCard.index];
+
+    return {
+      question: activeCardData.jp,
+      answers: [].concat(activeCardData.en),
+      category: activeCard.category,
+      mnemonic: activeCardData.mnemonic
+    }
+  }
+);
 
 export default app;

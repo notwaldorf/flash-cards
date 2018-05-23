@@ -65,12 +65,16 @@ export const showSnackbar = () => (dispatch) => {
     dispatch({ type: CLOSE_SNACKBAR }), 3000);
 };
 
-export const updateOffline = (offline) => {
-  return {
+export const updateOffline = (offline) => (dispatch, getState) => {
+  // Show the snackbar, unless this is the first load of the page.
+  if (offline !== getState().app.offline) {
+    dispatch(showSnackbar());
+  }
+  dispatch({
     type: UPDATE_OFFLINE,
     offline
-  };
-};
+  });
+}
 
 export const saveShowAnswer = (shouldShow) => {
   return {
