@@ -6,7 +6,7 @@
   "scripts": {
     "start": "polymer serve",
     "build": "polymer build",
-    "serve": "polymer serve build/es6-bundled",
+    "serve": "polymer serve build/es5-bundled",
     "test": "npm run test:unit && npm run test:integration",
     "test:integration": "mocha test/integration --timeout=10000",
     "test:unit": "polymer test --module-resolution=node --npm",
