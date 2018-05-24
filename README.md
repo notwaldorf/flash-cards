@@ -37,12 +37,12 @@ npm run serve
 For deployment, I used [Netlify](https://www.netlify.com/)'s 
 pretty much out-of-the-box setup. These are my deploy settings (so that the app is rebuilt and
 the bundled app is redeployed every time there's a new commit to master):
-<img width="400" alt="screenshot of netlify settings" src="https://user-images.githubusercontent.com/1369170/39498608-eb2abe78-4d5d-11e8-9cca-40f75aa9d754.png">
+<img width="400" alt="screenshot of netlify deploy settings" src="https://user-images.githubusercontent.com/1369170/40515314-27b427a2-5f61-11e8-83de-dd99701d79fe.png">
 
 Since this app is structured as an `app-shell` (the `index.html` knows how to display the correct route based on the URL, but each URL does not correspond to a standalone view you can just load), I've also added a [`_redirects file`](https://github.com/notwaldorf/flash-cards/blob/master/_redirects) used by the Netlify server tohandle these redirects (read more about that [here](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps))
 
 ### Supported browsers
-This app uses the `es6-bundled` bundle -- this means that it will not work on IE11. If you want to deploy this app and have it work on IE11, you must use the `es5-bundled` bundle instead. 
+This app uses the `es5-bundled` bundle, so that it works on browsers up to IE11, as well as Googlebot (so that it can get indexed).
 
 ## Performance
 ### Lighthouse:
