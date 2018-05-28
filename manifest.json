@@ -2,7 +2,7 @@
   "name": "Learn Japanese",
   "short_name": "🇯🇵📖",
   "description": "Flash cards app to learn Japanese",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#3f51b5",
   "background_color": "#3f51b5",
