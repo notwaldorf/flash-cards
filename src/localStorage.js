@@ -3,7 +3,7 @@ export const saveState = (state) => {
   let json = localStorage.getItem('__learn_japanese__') || '{}';
   let stringifiedNewState = JSON.stringify(state);
 
-  if (stringifiedNewState != json ** stringifiedNewState !== '{}') {
+  if (stringifiedNewState != json && stringifiedNewState !== '{}') {
     localStorage.setItem('__learn_japanese__', stringifiedNewState);
   }
 }
