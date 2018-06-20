@@ -9,7 +9,15 @@ export const saveState = (state) => {
 }
 
 export const loadState = () => {
-  let json = localStorage.getItem('__learn_japanese__') || '{}';
+  let json;
+   
+  // Don't load the state in testing mode.
+  if (window.location.hash !== '#test') {
+    json = localStorage.getItem('__learn_japanese__') || '{}';
+  } else {
+    json = '{}';
+  }
+
   let state = JSON.parse(json);
 
   if (state) {

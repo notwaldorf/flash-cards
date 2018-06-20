@@ -16,9 +16,15 @@ const app = (state = {cards:{}, stats:{}, categories:[]}, action) => {
         stats: action.stats
       }
     case SHOW_CARD:
+      let activeCard;
+      if (window.location.hash === '#test') {
+        activeCard = {category: 'hiragana', index: 0};
+      } else {
+        activeCard = action.card;  // {category, index}
+      }
       return {
         ...state,
-        activeCard: action.card
+        activeCard
       }
     case GET_RIGHT:
     case GET_WRONG:
