@@ -129,6 +129,7 @@ class ACard extends LitElement {
   constructor() {
     super();
     this._isAnswered = false;
+    this._inputValue = '';
   }
   _firstRendered() {
     // Save these for later;
