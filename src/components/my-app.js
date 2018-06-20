@@ -40,6 +40,11 @@ class MyApp extends connect(store)(LitElement) {
         height: 100vh;
       }
 
+      /* Workaround for IE11 displaying <main> as inline */
+      main {
+        display: block;
+      }
+
       header {
         position: fixed;
         top: 0;
