@@ -173,6 +173,7 @@ class ACard extends LitElement {
   }
 
   submit() {
+
     if (this._isAnswered) {  // next answer
       this._inputValue = '';
       this._input.focus();
@@ -207,6 +208,7 @@ class ACard extends LitElement {
   _inputKeypress(e) {
     if (e.keyCode == 13) { // enter key
       this.submit();
+      e.preventDefault();
     }
   }
 }
