@@ -14,24 +14,6 @@ export const loadAll = () => async (dispatch, getState) => {
   dispatch(showNewCard(state.data.activeCard));
 }
 
-// Author: Keanu Lee
-// Subset of fetch polyfill for IE11 (supports GET requests for JSON only).
-window.fetch = window.fetch || function(url) {
-  console.log('shim')
-  return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      resolve({
-        json: function() {
-          return Promise.resolve(JSON.parse(xhr.responseText));
-        }
-      });
-    };
-    xhr.open('GET', url);
-    xhr.send();
-  })
-}
-
 async function loadFile(name) {
   const resp = await fetch(`/src/data/${name}.json`);
   const data = await resp.json();

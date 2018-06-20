@@ -179,7 +179,7 @@ class ACard extends LitElement {
       this.dispatchEvent(new CustomEvent('next-question',
         {bubbles: true, composed: true}));
     } else {  // submit answer
-      this._correct = this.answers.includes(this._input.value);
+      this._correct = this.answers.indexOf(this._input.value) !== -1;
       this._inputValue = this.answers[0];
       this._button.focus();
 
