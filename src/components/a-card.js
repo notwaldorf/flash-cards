@@ -129,6 +129,7 @@ class ACard extends LitElement {
   constructor() {
     super();
     this._isAnswered = false;
+    this._inputValue = '';
   }
   _firstRendered() {
     // Save these for later;
@@ -172,13 +173,14 @@ class ACard extends LitElement {
   }
 
   submit() {
+
     if (this._isAnswered) {  // next answer
       this._inputValue = '';
       this._input.focus();
       this.dispatchEvent(new CustomEvent('next-question',
         {bubbles: true, composed: true}));
     } else {  // submit answer
-      this._correct = this.answers.includes(this._input.value);
+      this._correct = this.answers.indexOf(this._input.value) !== -1;
       this._inputValue = this.answers[0];
       this._button.focus();
 
@@ -206,6 +208,7 @@ class ACard extends LitElement {
   _inputKeypress(e) {
     if (e.keyCode == 13) { // enter key
       this.submit();
+      e.preventDefault();
     }
   }
 }

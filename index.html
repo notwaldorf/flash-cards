@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -6,17 +7,6 @@
 
     <title>Learn Japanese</title>
     <meta name="description" content="flash cards app to learn japanese">
-
-    <!--
-      The `<base>` tag below is present to support two advanced deployment options:
-      1) Differential serving. 2) Serving from a non-root path.
-      Instead of manually editing the `<base>` tag yourself, you should generally either:
-      a) Add a `basePath` property to the build configuration in your `polymer.json`.
-      b) Use the `--base-path` command-line option for `polymer build`.
-      Note: If you intend to serve from a non-root path, see [polymer-root-path] below.
-    -->
-    <base href="/">
-
     <link rel="icon" href="images/favicon.ico">
 
     <!-- See https://goo.gl/OOhYW5 -->
@@ -65,6 +55,23 @@
       // Redux assumes `process.env.NODE_ENV` exists in the ES module build.
       // https://github.com/reactjs/redux/issues/2907
       window.process = { env: { NODE_ENV: 'production' } };
+
+      // Author: Keanu Lee
+      // Subset of fetch polyfill for IE11 (supports GET requests for JSON only).
+      window.fetch = window.fetch || function(url) {
+        return new Promise(function(resolve, reject) {
+          var xhr = new XMLHttpRequest();
+          xhr.onload = function() {
+            resolve({
+              json: function() {
+                return Promise.resolve(JSON.parse(xhr.responseText));
+              }
+            });
+          };
+          xhr.open('GET', url);
+          xhr.send();
+        })
+      }
     </script>
 
     <!-- Add any global styles for body, document, etc. -->
