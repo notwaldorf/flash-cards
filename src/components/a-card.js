@@ -142,7 +142,7 @@ class ACard extends LitElement {
       this._input.classList.add('no-caret');
     }
 
-    if (!'speechSynthesis' in window) {
+    if (!('speechSynthesis' in window)) {
       this._hasSpeechSynthesis = false;
     } else {
       speechSynthesis.onvoiceschanged = () => {
