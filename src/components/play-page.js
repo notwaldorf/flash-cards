@@ -3,7 +3,7 @@ import { PageViewElement } from './page-view-element.js';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { repeat } from 'lit-html/lib/repeat.js';
 import { store } from '../store.js';
-import { settingsIcon } from './my-icons.js';
+import { settingsIcon, closeIcon } from './my-icons.js';
 import { SharedStyles } from './shared-styles.js';
 import { FabStyles } from './fab-styles.js';
 import './a-card.js';
@@ -121,7 +121,7 @@ export class FlashCards extends connect(store)(PageViewElement) {
       <button class="floating-btn"
           title="settings"
           on-click=${() => this._toggleShowSettings()}">
-        ${settingsIcon}
+          ${_showSettingsPage ? closeIcon : settingsIcon}
       </button>
     `;
   }
